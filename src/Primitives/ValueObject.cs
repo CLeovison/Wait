@@ -34,7 +34,7 @@ public abstract class ValueObject : IEquatable<ValueObject>
 
     public virtual bool Equals(ValueObject? other) => other is not null && ValuesAreEqual(other);
 
-    // That's the override cames in it.
+    // That's the override cames into it.
     public override bool Equals(object? obj) => obj is ValueObject valueObject && ValuesAreEqual(valueObject);
 
 
