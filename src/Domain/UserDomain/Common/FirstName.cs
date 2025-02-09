@@ -6,7 +6,7 @@ namespace Wait.Domain.UserDomain.Common;
 
 public class FirstName : ValueObject
 {
-    private static readonly Regex NameRegex = new("^[]$");
+    private static readonly Regex NameRegex = new("^[a-z ,.'-]+$");
 
     public FirstName(string value)
     {
@@ -28,6 +28,6 @@ public class FirstName : ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new ArgumentException();
+        yield return Value;
     }
 }
