@@ -10,4 +10,5 @@ public class CreateUserRequest
     public required string Email { get; init; }
     public required bool IsSoftDeleted { get; init; } = false;
     public DateTime CreatedAt { get; init; }
+    public DateTime UpdatedAt { get; init; }
 }

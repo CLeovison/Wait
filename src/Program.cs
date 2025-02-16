@@ -1,6 +1,12 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using Microsoft.EntityFrameworkCore;
+using Wait.Database;
 
-app.MapGet("/", () => "Hello World!");
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
+{
+    optionsBuilder.UseNpgsql(builder.Configuration["ConnectionStrings: DefaultConnection"]!);
+});
+
+var app = builder.Build();
 
 app.Run();
