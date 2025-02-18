@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Wait.Configurations;
 using Wait.Contracts.Data;
 
 namespace Wait.Database;
@@ -31,11 +31,6 @@ public sealed class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new UserDtoConfiguration());
     }
 
-    public sealed class UserDtoConfiguration : IEntityTypeConfiguration<UserDto>{
-        public void Configure(EntityTypeBuilder<UserDto> builder){
-            builder.HasKey(c => c.UserId);
 
-        }
-    }
 
 }
