@@ -22,7 +22,10 @@ public sealed class AppDbContext : DbContext
     {
         Database.EnsureCreated();
     }
-
+    /// <summary>
+    /// A DbSet represents the collection of all entities in the context, or that can be queried from the database, of a given type. 
+    //  DbSet objects are created from a DbContext using the DbContext.Set method.
+    /// </summary>
     public required DbSet<UserDto> UserDto { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

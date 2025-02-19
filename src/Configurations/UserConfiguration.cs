@@ -9,6 +9,9 @@ public sealed class UserDtoConfiguration : IEntityTypeConfiguration<UserDto>
     public void Configure(EntityTypeBuilder<UserDto> builder)
     {
         builder.HasKey(c => c.UserId);
-
+        builder.Property(c => c.UserId);
+        builder.Property(x => x.FirstName).IsRequired();
+        builder.Property(x => x.LastName).IsRequired();
+        
     }
 }
