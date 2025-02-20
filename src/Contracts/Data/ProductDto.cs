@@ -7,5 +7,6 @@ public class ProductDto
     public required string ProductSize { get; init; }
     public int Quantity { get; init; }
 
-    
+    public DateOnly CreatedAt { get; init; }
+
 }

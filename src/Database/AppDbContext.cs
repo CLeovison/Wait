@@ -32,6 +32,7 @@ public sealed class AppDbContext : DbContext
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
         modelBuilder.ApplyConfiguration(new UserDtoConfiguration());
+    
     }
 
 
