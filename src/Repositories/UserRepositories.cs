@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Wait.Contracts.Data;
 using Wait.Database;
@@ -8,17 +9,17 @@ namespace Wait.Repositories;
 public class UserRepositories : IUserRepositories
 {
 
-    private readonly AppDbContext _dbContext;
+    private readonly IDbContextFactory<AppDbContext> _dbContext;
 
 
-    public UserRepositories(AppDbContext dbContext)
+    public UserRepositories(IDbContextFactory<AppDbContext> dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task<UserDto> CreateUser()
+    public async Task<bool> CreateUser(UserDto user, CancellationToken cancellationToken)
     {
-        using var connection = await _dbContext.ConfigureConventions();
-   
+        using var dbContext = _dbContext.CreateDbContextAsync(cancellationToken);
     }
+
 }

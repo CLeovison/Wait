@@ -1,7 +1,9 @@
+using Wait.Contracts.Data;
+
 namespace Wait.Repositories;
 
 
 public interface IUserRepositories
 {
-    Task<bool> CreateUser();
+    Task<bool> CreateUser(UserDto user, CancellationToken cancellationToken);
 }
