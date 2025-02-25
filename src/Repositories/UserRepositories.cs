@@ -17,9 +17,24 @@ public class UserRepositories : IUserRepositories
         _dbContext = dbContext;
     }
 
-    public async Task<bool> CreateUser(UserDto user, CancellationToken cancellationToken)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public async Task CreateUser(UserDto user, CancellationToken cancellationToken)
     {
-        using var dbContext = _dbContext.CreateDbContextAsync(cancellationToken);
+        using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
+        await dbContext.Set<UserDto>().AddAsync(user, cancellationToken);
+
+        if (user is not null)
+        {
+            throw new ArgumentException("The User Is Already Existed");
+        }
+
+        await dbContext.SaveChangesAsync(cancellationToken);
+
     }
 
 }
