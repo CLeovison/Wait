@@ -1,6 +1,5 @@
 namespace Wait.Abstract;
 
-
 public interface IEndpoint
 {
 

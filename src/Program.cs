@@ -9,4 +9,5 @@ builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
 
 var app = builder.Build();
 
+
 app.Run();
