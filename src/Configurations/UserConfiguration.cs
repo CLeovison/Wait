@@ -12,10 +12,7 @@ public sealed class UserDtoConfiguration : IEntityTypeConfiguration<UserDto>
         builder.Property(c => c.UserId);
         builder.Property(x => x.FirstName).IsRequired();
         builder.Property(x => x.LastName).IsRequired();
-        builder.Property(x => x.Username).IsRequired();
-        builder.Property(x => x.Password).IsRequired();
-        builder.Property(x => x.IsSoftDeleted).HasDefaultValue(false);
-        builder.Property(d => d.UpdatedAt).HasDefaultValueSql("getdate()");
+
         builder.Property(d => d.CreatedAt).HasDefaultValueSql("getdate()");
     }
 }
