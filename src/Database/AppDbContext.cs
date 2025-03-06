@@ -27,14 +27,4 @@ public sealed class AppDbContext : DbContext
     //  DbSet objects are created from a DbContext using the DbContext.Set method.
     /// </summary>
     public required DbSet<UserDto> UserDto { get; init; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        ArgumentNullException.ThrowIfNull(modelBuilder);
-        modelBuilder.ApplyConfiguration(new UserDtoConfiguration());
-
-    }
-
-
-
 }
