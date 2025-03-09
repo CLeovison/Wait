@@ -7,7 +7,7 @@ public class CreateUserEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("", async () =>
+        app.MapPost("",  () =>
         {
 
         });
