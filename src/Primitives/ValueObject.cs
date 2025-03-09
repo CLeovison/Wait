@@ -31,7 +31,7 @@ public abstract class ValueObject : IEquatable<ValueObject>
     public static bool operator !=(ValueObject? a, ValueObject? b) => !(a == b);
 
     // The Virtual Keyword Represents as A Parent Class, but if you want a specialized implementation or Value into it 
-
+    
     public virtual bool Equals(ValueObject? other) => other is not null && ValuesAreEqual(other);
 
     // That's the override cames into it.

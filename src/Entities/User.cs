@@ -1,6 +1,4 @@
-using Wait.Domain.UserDomain.Common;
-
-namespace Wait.Domain.UserDomain;
+namespace Wait.Entities;
 
 /// <summary>
 /// This Class Is The Entity Based Class of the User

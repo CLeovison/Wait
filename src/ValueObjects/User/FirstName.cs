@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Wait.Primitives;
 
-namespace Wait.Domain.UserDomain.Common;
+namespace Wait.ValueObjects.User;
 
 public class FirstName : ValueObject
 {
