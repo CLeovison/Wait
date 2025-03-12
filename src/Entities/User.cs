@@ -1,3 +1,5 @@
+using Wait.Enums;
+
 namespace Wait.Entities;
 
 /// <summary>
@@ -10,6 +12,7 @@ public class User
     public required string Password { get; init; }
     public required string FirstName { get; init; }
     public DateOnly Birthday { get; init; }
+    public Role Role { get; init; }
     public required string LastName { get; init; }
     public required string Email { get; init; }
     public DateOnly CreatedAt { get; init; }
