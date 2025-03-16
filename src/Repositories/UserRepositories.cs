@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Wait.Contracts.Data;
 using Wait.Database;
+using Wait.Entities;
 
 namespace Wait.Repositories;
 
@@ -23,10 +22,10 @@ public class UserRepositories : IUserRepositories
     /// <param name="user"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task CreateUser(UserDto user, CancellationToken cancellationToken)
+    public async Task CreateUser(User user, CancellationToken cancellationToken)
     {
         using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
-        await dbContext.Set<UserDto>().AddAsync(user, cancellationToken);
+        await dbContext.Set<User>().AddAsync(user, cancellationToken);
 
         if (user is not null)
         {
