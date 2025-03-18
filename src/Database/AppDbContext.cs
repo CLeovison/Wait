@@ -3,7 +3,7 @@ using Wait.Entities;
 
 namespace Wait.Database;
 
-public sealed class AppDbContext : DbContext
+public sealed class AppDbContext(DbContextOptions options) : DbContext(options)
 {
 
     /// <summary>
@@ -17,13 +17,10 @@ public sealed class AppDbContext : DbContext
     // The Database.EnsureCreated method must be use only during development and not in production
     /// </summary>
     /// <param name="options"></param>
-    public AppDbContext(DbContextOptions options) : base(options)
-    {
-        Database.EnsureCreated();
-    }
+
     /// <summary>
     /// A DbSet represents the collection of all entities in the context, or that can be queried from the database, of a given type. 
     //  DbSet objects are created from a DbContext using the DbContext.Set method.
     /// </summary>
-    public required DbSet<User> UserDto { get; init; }
+    public required DbSet<User> User { get; init; }
 }
