@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Wait.Configurations;
 using Wait.Entities;
 
 namespace Wait.Database;
@@ -23,4 +24,9 @@ public sealed class AppDbContext(DbContextOptions options) : DbContext(options)
     //  DbSet objects are created from a DbContext using the DbContext.Set method.
     /// </summary>
     public required DbSet<User> User { get; init; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        new UserConfiguration().Configure(modelBuilder.Entity<User>());
+    }
 }

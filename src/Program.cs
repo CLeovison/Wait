@@ -8,7 +8,7 @@ using Wait.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
 {
-    optionsBuilder.UseNpgsql(builder.Configuration["ConnectionStrings: DefaultConnection"]!);
+    optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionStrings:DefaultConnection"));
 });
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
@@ -28,10 +28,11 @@ app.MapPost("/api/create", async (CreateUserRequest request, AppDbContext dbCont
         FirstName = request.FirstName,
         LastName = request.LastName,
 
+
     };
 
     dbContext.User.Add(user);
     await dbContext.SaveChangesAsync(cancellationToken);
 
-    return Results.Created();
+    return Results.Ok();
 });
