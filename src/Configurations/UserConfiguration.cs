@@ -10,7 +10,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.HasKey(c => c.UserId);
-        builder.Property(c => c.UserId);
+        builder.Property(c => c.UserId).ValueGeneratedNever();
         builder.Property(x => x.FirstName).IsRequired();
         builder.Property(x => x.LastName).IsRequired();
 

@@ -12,7 +12,7 @@ using Wait.Database;
 namespace src.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250319141545_InitialCreate")]
+    [Migration("20250321192147_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -28,7 +28,6 @@ namespace src.Migrations
             modelBuilder.Entity("Wait.Entities.User", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("FirstName")
