@@ -8,7 +8,7 @@ using Wait.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
 {
-    optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionStrings:DefaultConnection"));
+    optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
 });
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
@@ -26,7 +26,7 @@ app.MapPost("/api/create", async (CreateUserRequest request, AppDbContext dbCont
     {
         UserId = Guid.NewGuid(),
         FirstName = request.FirstName,
-        LastName = request.LastName,
+        LastName = request.LastName
 
 
     };

@@ -25,7 +25,9 @@ namespace src.Migrations
             modelBuilder.Entity("Wait.Entities.User", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
