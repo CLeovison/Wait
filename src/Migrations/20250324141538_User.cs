@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace src.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class User : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +23,11 @@ namespace src.Migrations
                 {
                     table.PrimaryKey("PK_User", x => x.UserId);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_UserId",
+                table: "User",
+                column: "UserId");
         }
 
         /// <inheritdoc />

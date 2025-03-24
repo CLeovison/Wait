@@ -16,11 +16,7 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 var app = builder.Build();
 app.Endpoint();
 
-
-app.Run();
-
-
-app.MapPost("/api/create", async (CreateUserRequest request, AppDbContext dbContext, CancellationToken cancellationToken) =>
+app.MapPost("/create", async (CreateUserRequest request, AppDbContext dbContext, CancellationToken cancellationToken) =>
 {
     User user = new()
     {
@@ -36,3 +32,6 @@ app.MapPost("/api/create", async (CreateUserRequest request, AppDbContext dbCont
 
     return Results.Ok();
 });
+app.Run();
+
+

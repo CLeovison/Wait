@@ -12,8 +12,8 @@ using Wait.Database;
 namespace src.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250323150817_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250324154849_Users")]
+    partial class Users
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,15 +34,19 @@ namespace src.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("UserId");
 
-                    b.ToTable("User");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Users", (string)null);
                 });
 #pragma warning restore 612, 618
         }
