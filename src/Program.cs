@@ -33,8 +33,9 @@ app.MapPost("/create", async (CreateUserRequest request, AppDbContext dbContext,
 
     return Results.Ok();
 });
-app.MapGet("/", async (AppDbContext dbContext) =>
-{   var user = await dbContext.User.ToListAsync();
+app.MapGet("/api", async (AppDbContext dbContext) =>
+{
+    await dbContext.User.ToListAsync();
     return Results.Ok();
 
 });

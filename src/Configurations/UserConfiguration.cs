@@ -7,27 +7,40 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        // Set the primary key
+
         builder.HasKey(c => c.UserId);
 
-        // Add an index for UserId
         builder.HasIndex(c => c.UserId);
 
-        // Configure UserId to use a default UUID generator (PostgreSQL-specific)
         builder.Property(c => c.UserId)
             .HasDefaultValueSql("gen_random_uuid()")
             .ValueGeneratedOnAdd();
 
-        // Configure FirstName and LastName as required with length constraints
         builder.Property(x => x.FirstName)
             .IsRequired()
-            .HasMaxLength(100); // Adjust length as needed
+            .HasMaxLength(100);
 
         builder.Property(x => x.LastName)
             .IsRequired()
-            .HasMaxLength(100); // Adjust length as needed
+            .HasMaxLength(100);
 
-        // Optionally, specify the table name explicitly
+        builder.Property(x => x.Username)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(x => x.Password)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(x => x.Email)
+            .IsRequired();
+
+        builder.Property(d => d.CreatedAt)
+            .HasDefaultValueSql("current_date");
+            
+        builder.Property(d => d.UpdatedAt)
+            .HasDefaultValueSql("current_date");
+
         builder.ToTable("Users");
     }
 }
