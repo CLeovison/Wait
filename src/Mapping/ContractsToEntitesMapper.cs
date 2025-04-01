@@ -18,7 +18,7 @@ public static class ContractsToEntitesMapper
             Username = request.Username,
             Password = request.Password,
             Email = request.Email,
-            IsSoftDeleted = request.IsSoftDeleted
+
         };
     }
 
@@ -32,9 +32,7 @@ public static class ContractsToEntitesMapper
             Username = request.Username,
             Password = request.Password,
             Email = request.Email,
-            IsSoftDeleted = request.IsSoftDeleted
-
         };
     }
-    
+
 }
