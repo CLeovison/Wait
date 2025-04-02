@@ -50,17 +50,24 @@ app.MapGet("/api", async (AppDbContext dbContext) =>
     return await dbContext.User.ToListAsync();
 });
 
-app.MapGet("/api/{id}", async (int id, AppDbContext dbContext, User user) =>
+app.MapGet("/api/{id}", async (Guid id, AppDbContext dbContext) =>
 {
-    var users = dbContext.User.Find(user.UserId);
 
-    if(users is null){
-        throw new ArgumentException("The user doesn't exist");
-    }
-
-    return await dbContext.User.;
+    return await dbContext.User.FindAsync(id);
 });
 
+app.MapPut("/api/update/{id}", async (Guid id, AppDbContext dbContext, User user) =>
+{
+    dbContext.User.Update(user);
+    return await dbContext.SaveChangesAsync();
+});
+
+
+app.MapDelete("/api/{id}", async (Guid id, AppDbContext dbContext) =>
+{   
+    var result = await dbContext.User.Where(x => x.UserId == id).ExecuteDeleteAsync();
+    return result > 0;
+});
 app.Run();
 
 
