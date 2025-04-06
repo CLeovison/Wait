@@ -13,13 +13,31 @@ public class UserRepositories(IDbContextFactory<AppDbContext> _dbContext) : IUse
         using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
         await dbContext.Set<User>().AddAsync(user, cancellationToken);
 
-        if (user is not null)
-        {
-            throw new ArgumentException("The User Is Already Existed");
-        }
-
         await dbContext.SaveChangesAsync(cancellationToken);
 
     }
+    public async Task<List<User>> GetAllUserAsync(CancellationToken cancellationToken)
+    {
+        using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
+        return await dbContext.User.ToListAsync();
+    }
+
+    public async Task GetSearchUserAsync(string searchTerm, CancellationToken cancellationToken)
+    {
+        using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
+
+        var searchUser = await dbContext.User
+        .Where(x => x.Username.Contains(searchTerm)
+        || x.FirstName.Contains(searchTerm)
+        || x.LastName.Contains(searchTerm))
+        .Select(n => new
+        {
+            n.Username,
+            n.FirstName,
+            n.LastName,
+
+        }).ToListAsync();
+    }
+
 
 }
