@@ -5,7 +5,7 @@ namespace Wait.Entities;
 /// <summary>
 /// This Class Is The Entity Based Class of the User
 /// </summary>
-public sealed class User
+public sealed class Users
 {
     public Guid UserId { get; init; }
     public required string FirstName { get; init; }

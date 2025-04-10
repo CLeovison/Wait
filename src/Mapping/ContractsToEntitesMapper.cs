@@ -7,10 +7,10 @@ namespace Wait.Mapping;
 public static class ContractsToEntitesMapper
 {
 
-    public static User ToCreateUser(this CreateUserRequest request)
+    public static Users ToCreateUser(this CreateUserRequest request)
     {
 
-        return new User
+        return new Users
         {
             UserId = request.UserId,
             FirstName = request.FirstName,
@@ -22,9 +22,9 @@ public static class ContractsToEntitesMapper
         };
     }
 
-    public static User ToUpdateUser(this UpdateUserRequest request)
+    public static Users ToUpdateUser(this UpdateUserRequest request)
     {
-        return new User
+        return new Users
         {
             UserId = request.UserId,
             FirstName = request.FirstName,

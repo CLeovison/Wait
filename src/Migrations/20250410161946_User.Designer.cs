@@ -12,7 +12,7 @@ using Wait.Database;
 namespace src.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250401145850_User")]
+    [Migration("20250410161946_User")]
     partial class User
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace src.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Wait.Entities.User", b =>
+            modelBuilder.Entity("Wait.Entities.Users", b =>
                 {
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()

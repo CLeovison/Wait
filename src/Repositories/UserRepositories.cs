@@ -8,15 +8,15 @@ namespace Wait.Repositories;
 public class UserRepositories(IDbContextFactory<AppDbContext> _dbContext) : IUserRepositories
 {
 
-    public async Task CreateUserAsync(User user, CancellationToken cancellationToken)
+    public async Task CreateUserAsync(Users user, CancellationToken cancellationToken)
     {
         using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
-        await dbContext.Set<User>().AddAsync(user, cancellationToken);
+        await dbContext.Set<Users>().AddAsync(user, cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
     }
-    public async Task<List<User>> GetAllUserAsync(CancellationToken cancellationToken)
+    public async Task<List<Users>> GetAllUserAsync(CancellationToken cancellationToken)
     {
         using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
         return await dbContext.User.ToListAsync();
@@ -44,15 +44,15 @@ public class UserRepositories(IDbContextFactory<AppDbContext> _dbContext) : IUse
         await dbContext.User.FindAsync(id);
     }
 
-    public async Task<User?> UpdateUserAsync(User user, CancellationToken cancellationToken)
+    public async Task<Users?> UpdateUserAsync(Users users, CancellationToken cancellationToken)
     {
         using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
-        var userUpdate = dbContext.User.Update(user);
+        var userUpdate = dbContext.User.Update(users);
 
         await dbContext.SaveChangesAsync(cancellationToken);
         return userUpdate.Entity;
     }
-    public async Task<User?> DeleteUserAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Users?> DeleteUserAsync(Guid id, CancellationToken cancellationToken)
     {
         using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
         var userToDelete = await dbContext.User.FirstOrDefaultAsync(x => x.UserId == id, cancellationToken);

@@ -1,9 +1,13 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Wait.Contracts.Request.UserRequest;
+
+using Wait.Contracts.Data;
 using Wait.Database;
 using Wait.Entities;
 using Wait.Extensions;
+using Wait.Repositories;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
@@ -16,58 +20,26 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 var app = builder.Build();
 app.Endpoint();
 
-app.MapPost("/api/create", async (CreateUserRequest request, AppDbContext dbContext, CancellationToken cancellationToken) =>
+app.MapPost("/api/create", async (UserRepositories repositories,
+            IDbContextFactory<AppDbContext> dbContext,
+            UserDto dto,
+            CancellationToken cancellationToken) =>
 {
-
-    User user = new()
+    var connection = await dbContext.CreateDbContextAsync(cancellationToken);
+    Users users = new Users
     {
-        UserId = Guid.NewGuid(),
-        Username = request.Username,
-        Password = request.Password,
-        Email = request.Email,
-        FirstName = request.FirstName,
-        LastName = request.LastName
+        FirstName = dto.FirstName,
+        LastName = dto.LastName,
+        Username = dto.Username,
+        Password = dto.Password,
+        Email = dto.Email,
     };
 
-    dbContext.User.Add(user);
-    await dbContext.SaveChangesAsync(cancellationToken);
-    var existingUser = dbContext.User.Find(request.UserId);
+    await connection.User.AddAsync(users, cancellationToken);
+    await connection.SaveChangesAsync();
 
-
-    if (existingUser is not null)
-    {
-        throw new ArgumentException("The User already exist");
-    }
-    else
-    {
-        return Results.Ok();
-    }
 });
 
-
-app.MapGet("/api", async (AppDbContext dbContext) =>
-{
-    return await dbContext.User.ToListAsync();
-});
-
-app.MapGet("/api/{id}", async (Guid id, AppDbContext dbContext) =>
-{
-
-    return await dbContext.User.FindAsync(id);
-});
-
-app.MapPut("/api/update/{id}", async (Guid id, AppDbContext dbContext, User user) =>
-{
-    dbContext.User.Update(user);
-    return await dbContext.SaveChangesAsync();
-});
-
-
-app.MapDelete("/api/{id}", async (Guid id, AppDbContext dbContext) =>
-{   
-    var result = await dbContext.User.Where(x => x.UserId == id).ExecuteDeleteAsync();
-    return result > 0;
-});
 app.Run();
 
 
