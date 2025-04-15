@@ -2,18 +2,25 @@ using Microsoft.EntityFrameworkCore;
 using Wait.Database;
 using Wait.Entities;
 
+
+
 namespace Wait.Repositories;
 
 
-public class UserRepositories(IDbContextFactory<AppDbContext> _dbContext) : IUserRepositories
+public class UserRepositories : IUserRepositories
 {
+    private readonly IDbContextFactory<AppDbContext> _dbContext;
 
-    public async Task CreateUserAsync(Users user, CancellationToken cancellationToken)
+    public UserRepositories(IDbContextFactory<AppDbContext> dbContext)
     {
-        using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
-        await dbContext.Set<Users>().AddAsync(user, cancellationToken);
+        _dbContext = dbContext;
+    }
+    public async Task CreateUserAsync(Users user)
+    {
+        using var dbContext = await _dbContext.CreateDbContextAsync();
+        await dbContext.Set<Users>().AddAsync(user);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync();
 
     }
     public async Task<List<Users>> GetAllUserAsync(CancellationToken cancellationToken)
@@ -38,10 +45,10 @@ public class UserRepositories(IDbContextFactory<AppDbContext> _dbContext) : IUse
 
         }).ToListAsync();
     }
-    public async Task GetUserIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Users?> GetUserIdAsync(Guid id)
     {
-        using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
-        await dbContext.User.FindAsync(id);
+        using var dbContext = await _dbContext.CreateDbContextAsync();
+        return await dbContext.User.Where(x => x.UserId == id).FirstOrDefaultAsync();
     }
 
     public async Task<Users?> UpdateUserAsync(Users users, CancellationToken cancellationToken)

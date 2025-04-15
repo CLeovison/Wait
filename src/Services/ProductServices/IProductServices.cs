@@ -1,0 +1,1 @@
+namespace Wait.Services.ProductServices;

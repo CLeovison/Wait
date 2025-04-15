@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Wait.Abstract;
 
 namespace Wait.Extensions;
@@ -9,10 +10,11 @@ public static class EndpointExtensions
     public static IServiceCollection AddEndpoints(this IServiceCollection services, Assembly assembly)
     {
         ServiceDescriptor[] serviceDescriptors = assembly.DefinedTypes
-        .Where(type => type is { IsAbstract: false, IsInterface: false } && type.IsAssignableFrom(typeof(IEndpoint)))
+        .Where(type => type is { IsAbstract: false, IsInterface: false } && type.IsAssignableTo(typeof(IEndpoint)))
         .Select(type => ServiceDescriptor.Transient(typeof(IEndpoint), type))
         .ToArray();
 
+        services.TryAddEnumerable(serviceDescriptors);
         return services;
     }
 
@@ -29,7 +31,8 @@ public static class EndpointExtensions
         return app;
     }
 
-    public static RouteHandlerBuilder HasPermission(this RouteHandlerBuilder app, string permission){
+    public static RouteHandlerBuilder HasPermission(this RouteHandlerBuilder app, string permission)
+    {
         return app.RequireAuthorization(permission);
 
     }

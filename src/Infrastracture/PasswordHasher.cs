@@ -1,6 +1,6 @@
 namespace Wait.Infrastracture;
 
-public class PasswordHasher
+public sealed class PasswordHasher
 {
 
 }

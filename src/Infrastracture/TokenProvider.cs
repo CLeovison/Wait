@@ -1,6 +1,6 @@
 namespace Wait.Infrastracture;
 
-public class TokenProvider
+public sealed class TokenProvider
 {
 
 }
