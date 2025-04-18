@@ -2,8 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Wait.Database;
 using Wait.Entities;
 
-
-
 namespace Wait.Repositories;
 
 
@@ -42,7 +40,6 @@ public class UserRepositories : IUserRepositories
             n.Username,
             n.FirstName,
             n.LastName,
-
         }).ToListAsync();
     }
     public async Task<Users?> GetUserIdAsync(Guid id)
@@ -59,18 +56,22 @@ public class UserRepositories : IUserRepositories
         await dbContext.SaveChangesAsync(cancellationToken);
         return userUpdate.Entity;
     }
-    public async Task<Users?> DeleteUserAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Users?> DeleteUserAsync(Guid id)
     {
-        using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
-        var userToDelete = await dbContext.User.FirstOrDefaultAsync(x => x.UserId == id, cancellationToken);
-
+        using var dbContext = await _dbContext.CreateDbContextAsync();
+        var userToDelete = await dbContext.User.FirstOrDefaultAsync(x => x.UserId == id);
         if (userToDelete != null)
         {
             dbContext.User.Remove(userToDelete);
-            await dbContext.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync();
         }
-
         return userToDelete;
+    }
+
+    public async Task<bool> ExistingUserAsync(string username, string email)
+    {
+        using var dbContext = await _dbContext.CreateDbContextAsync();
+        return await dbContext.User.AnyAsync(x => x.Username == username || x.Email == email);
     }
 
 }

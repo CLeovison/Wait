@@ -7,21 +7,40 @@ namespace Wait.Services.UserServices;
 public class UserServices : IUserServices
 {
     private readonly IUserRepositories _userRepositories;
+
     public UserServices(IUserRepositories userRepositories)
     {
         _userRepositories = userRepositories;
     }
-    public async Task CreateUserAsync(Users user)
-    {
-        var existingUser = _userRepositories.GetUserIdAsync(user.UserId);
 
-        if (existingUser is null)
+    public async Task CreateUserAsync(Users users)
+    {
+
+        if (await _userRepositories.ExistingUserAsync(users.Username, users.Email))
         {
-            var userMessage = $"A user with {user.UserId} already exists";
-            throw new ArgumentException(userMessage);
+            throw new ArgumentException("The User Already exist");
         }
 
-        await _userRepositories.CreateUserAsync(user);
+        await _userRepositories.CreateUserAsync(users);
 
+    }
+
+    public async Task<List<Users>> GetAllUserAsync(CancellationToken ct)
+    {
+        var getAllUser = await _userRepositories.GetAllUserAsync(ct);
+        return getAllUser;
+    }
+
+    public async Task<bool> DeleteUserAsync(Guid id)
+    {
+        var userDelete = await _userRepositories.DeleteUserAsync(id);
+
+        if (userDelete is null)
+        {
+            var message = $"This User {id} does not exists";
+            throw new ArgumentNullException(message);
+        }
+
+        return userDelete is not null;
     }
 }

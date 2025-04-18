@@ -6,6 +6,8 @@ namespace Wait.Services.UserServices;
 
 public interface IUserServices
 {
-    Task CreateUserAsync(Users user);
+    Task CreateUserAsync(Users users);
+    Task<List<Users>> GetAllUserAsync(CancellationToken ct);
+    Task<bool> DeleteUserAsync(Guid id);
 
 }
