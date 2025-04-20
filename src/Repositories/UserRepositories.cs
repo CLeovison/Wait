@@ -35,12 +35,12 @@ public class UserRepositories : IUserRepositories
         .Where(x => x.Username.Contains(searchTerm)
         || x.FirstName.Contains(searchTerm)
         || x.LastName.Contains(searchTerm))
-        .Select(n => new
-        {
-            n.Username,
-            n.FirstName,
-            n.LastName,
-        }).ToListAsync();
+    .Select(n => new
+    {
+        n.Username,
+        n.FirstName,
+        n.LastName,
+    }).ToListAsync();
     }
     public async Task<Users?> GetUserIdAsync(Guid id)
     {

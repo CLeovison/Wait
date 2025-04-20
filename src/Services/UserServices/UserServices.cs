@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Identity;
 using Wait.Entities;
 using Wait.Repositories;
 
@@ -8,21 +9,31 @@ public class UserServices : IUserServices
 {
     private readonly IUserRepositories _userRepositories;
 
+
     public UserServices(IUserRepositories userRepositories)
     {
         _userRepositories = userRepositories;
     }
 
-    public async Task CreateUserAsync(Users users)
+    public async Task<Users> CreateUserAsync(Users users, IPasswordHasher<Users> passwordHasher)
     {
-
         if (await _userRepositories.ExistingUserAsync(users.Username, users.Email))
         {
-            throw new ArgumentException("The User Already exist");
+            throw new ArgumentException("The User Already exists");
         }
 
-        await _userRepositories.CreateUserAsync(users);
+        var user = new Users
+        {
+            FirstName = users.FirstName,
+            LastName = users.LastName,
+            Username = users.Username,
+            Password = passwordHasher.HashPassword(users, users.Password),
+            Email = users.Email
+        };
 
+        await _userRepositories.CreateUserAsync(user); // Save the hashed password
+
+        return user;
     }
 
     public async Task<List<Users>> GetAllUserAsync(CancellationToken ct)

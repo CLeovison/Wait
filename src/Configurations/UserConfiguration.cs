@@ -30,7 +30,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<Users>
 
         builder.Property(x => x.Password)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasMaxLength(250);
 
         builder.Property(x => x.Email)
             .IsRequired();
