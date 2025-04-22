@@ -48,14 +48,16 @@ public class UserRepositories : IUserRepositories
         return await dbContext.User.Where(x => x.UserId == id).FirstOrDefaultAsync();
     }
 
-    public async Task<Users?> UpdateUserAsync(Users users, CancellationToken cancellationToken)
+    public async Task<bool> UpdateUserAsync(Users users, CancellationToken cancellationToken)
     {
         using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
-        var userUpdate = dbContext.User.Update(users);
 
+        var updatedUser = dbContext.User.Update(users);
         await dbContext.SaveChangesAsync(cancellationToken);
-        return userUpdate.Entity;
+        return updatedUser is null;
     }
+
+
     public async Task<Users?> DeleteUserAsync(Guid id)
     {
         using var dbContext = await _dbContext.CreateDbContextAsync();

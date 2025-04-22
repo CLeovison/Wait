@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Identity;
+using src.Migrations;
 using Wait.Entities;
 using Wait.Repositories;
 
@@ -42,6 +43,10 @@ public class UserServices : IUserServices
         return getAllUser;
     }
 
+    public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)
+    {
+     
+    }
     public async Task<bool> DeleteUserAsync(Guid id)
     {
         var userDelete = await _userRepositories.DeleteUserAsync(id);
