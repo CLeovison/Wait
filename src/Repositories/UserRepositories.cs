@@ -50,20 +50,13 @@ public class UserRepositories : IUserRepositories
 
     public async Task UpdateUserAsync(Guid id, Users users)
     {
-        using var dbContext = await _dbContext.CreateDbContextAsync();
+        await using var dbContext = await _dbContext.CreateDbContextAsync();
         var userUpdate = await dbContext.User.FindAsync(users.UserId);
 
-        if (userUpdate != null)
-        {
-            userUpdate.FirstName = users.FirstName;
-            userUpdate.LastName = users.LastName;
-            userUpdate.Username = users.Username;
-            userUpdate.Password = users.Password;
-            userUpdate.Email = users.Email;
-            dbContext.User.Update(userUpdate);
-            await dbContext.SaveChangesAsync();
-        }
+        if (userUpdate is null) return;
 
+        dbContext.Entry(userUpdate).CurrentValues.SetValues(users);
+        await dbContext.SaveChangesAsync();
     }
 
 
