@@ -7,14 +7,14 @@ namespace Wait.Entities;
 /// </summary>
 public sealed class Users
 {
-    public Guid UserId { get; init; }
-    public required string FirstName { get; init; }
-    public required string LastName { get; init; }
-    public required string Username { get; init; }
-    public required string Password { get; init; }
-    public required string Email { get; init; }
+    public Guid UserId { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
 
-    public DateTime CreatedAt { get; init; }
-    public DateTime UpdatedAt { get; init; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
 }

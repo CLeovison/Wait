@@ -48,13 +48,22 @@ public class UserRepositories : IUserRepositories
         return await dbContext.User.Where(x => x.UserId == id).FirstOrDefaultAsync();
     }
 
-    public async Task<bool> UpdateUserAsync(Users users, CancellationToken cancellationToken)
+    public async Task UpdateUserAsync(Guid id, Users users)
     {
-        using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
+        using var dbContext = await _dbContext.CreateDbContextAsync();
+        var userUpdate = await dbContext.User.FindAsync(users.UserId);
 
-        var updatedUser = dbContext.User.Update(users);
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return updatedUser is null;
+        if (userUpdate != null)
+        {
+            userUpdate.FirstName = users.FirstName;
+            userUpdate.LastName = users.LastName;
+            userUpdate.Username = users.Username;
+            userUpdate.Password = users.Password;
+            userUpdate.Email = users.Email;
+            dbContext.User.Update(userUpdate);
+            await dbContext.SaveChangesAsync();
+        }
+
     }
 
 
@@ -62,11 +71,13 @@ public class UserRepositories : IUserRepositories
     {
         using var dbContext = await _dbContext.CreateDbContextAsync();
         var userToDelete = await dbContext.User.FirstOrDefaultAsync(x => x.UserId == id);
+
         if (userToDelete != null)
         {
             dbContext.User.Remove(userToDelete);
             await dbContext.SaveChangesAsync();
         }
+
         return userToDelete;
     }
 

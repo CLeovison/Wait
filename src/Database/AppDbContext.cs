@@ -9,7 +9,7 @@ public sealed class AppDbContext(DbContextOptions options) : DbContext(options)
 
     /// <summary>
     /// The AppDbContext Constructor takes a paramter of DbContextOptions and passes to the
-    /// base class constructor. This paramter is use to configure the context, such as specifying
+    /// base class constructor. This parameter is use to configure the context, such as specifying
     /// the database provider and connection string.
     /// 
     /// The Method Database.EnsureCreated is being called to ensure that the database is 
@@ -23,6 +23,8 @@ public sealed class AppDbContext(DbContextOptions options) : DbContext(options)
     /// A DbSet represents the collection of all entities in the context, or that can be queried from the database, of a given type. 
     //  DbSet objects are created from a DbContext using the DbContext.Set method.
     /// </summary>
+    /// 
+    /// 
     public required DbSet<Users> User { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

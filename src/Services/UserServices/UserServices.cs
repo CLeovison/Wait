@@ -1,6 +1,6 @@
 
 using Microsoft.AspNetCore.Identity;
-using src.Migrations;
+
 using Wait.Entities;
 using Wait.Repositories;
 
@@ -43,9 +43,19 @@ public class UserServices : IUserServices
         return getAllUser;
     }
 
-    public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)
+    public async Task<Users?> UpdateUserAsync(Guid id, Users users)
     {
-     
+        var existingUser = await _userRepositories.GetUserIdAsync(id) ?? throw new ArgumentException("The user doesn't exist");
+
+        existingUser.Username = users.Username;
+        existingUser.Password = users.Password;
+        existingUser.FirstName = users.FirstName;
+        existingUser.LastName = users.LastName;
+        existingUser.Email = users.Email;
+
+        await _userRepositories.UpdateUserAsync(id, existingUser); // Assuming this method exists to save changes
+
+        return existingUser;
     }
     public async Task<bool> DeleteUserAsync(Guid id)
     {

@@ -16,9 +16,9 @@ public class UpdateUserEndpoint : IEndpoint
     }
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("/api/update{id}", async (Guid id, Users users, CancellationToken ct) =>
+        app.MapPut("/api/update/{id}", async (Guid id, Users users) =>
         {
-            await _userServices.UpdateUserAsync(id, users, ct);
+            await _userServices.UpdateUserAsync(id, users);
         });
     }
 }
