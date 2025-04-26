@@ -7,68 +7,57 @@ namespace Wait.Repositories;
 
 public class UserRepositories : IUserRepositories
 {
-    private readonly IDbContextFactory<AppDbContext> _dbContext;
+    private readonly AppDbContext _dbContext;
 
-    public UserRepositories(IDbContextFactory<AppDbContext> dbContext)
+    public UserRepositories(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
     public async Task CreateUserAsync(Users user)
     {
-        using var dbContext = await _dbContext.CreateDbContextAsync();
-        await dbContext.Set<Users>().AddAsync(user);
 
-        await dbContext.SaveChangesAsync();
+        await _dbContext.Set<Users>().AddAsync(user);
+
+        await _dbContext.SaveChangesAsync();
 
     }
     public async Task<List<Users>> GetAllUserAsync(CancellationToken cancellationToken)
     {
-        using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
-        return await dbContext.User.ToListAsync();
+
+        return await _dbContext.User.ToListAsync(cancellationToken);
     }
 
-    public async Task GetSearchUserAsync(string searchTerm, CancellationToken cancellationToken)
-    {
-        using var dbContext = await _dbContext.CreateDbContextAsync(cancellationToken);
 
-        var searchUser = await dbContext.User
-        .Where(x => x.Username.Contains(searchTerm)
-        || x.FirstName.Contains(searchTerm)
-        || x.LastName.Contains(searchTerm))
-    .Select(n => new
-    {
-        n.Username,
-        n.FirstName,
-        n.LastName,
-    }).ToListAsync();
-    }
+
     public async Task<Users?> GetUserIdAsync(Guid id)
     {
-        using var dbContext = await _dbContext.CreateDbContextAsync();
-        return await dbContext.User.Where(x => x.UserId == id).FirstOrDefaultAsync();
+
+        return await _dbContext.User.Where(x => x.UserId == id).FirstOrDefaultAsync();
     }
 
-    public async Task UpdateUserAsync(Guid id, Users users)
+    public async Task<bool> UpdateUserAsync(Guid id, Users users)
     {
-        await using var dbContext = await _dbContext.CreateDbContextAsync();
-        var userUpdate = await dbContext.User.FindAsync(users.UserId);
 
-        if (userUpdate is null) return;
+        var userUpdate = await _dbContext.User.FindAsync(users.UserId);
 
-        dbContext.Entry(userUpdate).CurrentValues.SetValues(users);
-        await dbContext.SaveChangesAsync();
+        if (userUpdate is null) return false;
+
+        _dbContext.Entry(userUpdate).CurrentValues.SetValues(users);
+        await _dbContext.SaveChangesAsync();
+
+        return true;
     }
 
 
     public async Task<Users?> DeleteUserAsync(Guid id)
     {
-        using var dbContext = await _dbContext.CreateDbContextAsync();
-        var userToDelete = await dbContext.User.FirstOrDefaultAsync(x => x.UserId == id);
+ 
+        var userToDelete = await _dbContext.User.FirstOrDefaultAsync(x => x.UserId == id);
 
         if (userToDelete != null)
         {
-            dbContext.User.Remove(userToDelete);
-            await dbContext.SaveChangesAsync();
+            _dbContext.User.Remove(userToDelete);
+            await _dbContext.SaveChangesAsync();
         }
 
         return userToDelete;
@@ -76,8 +65,8 @@ public class UserRepositories : IUserRepositories
 
     public async Task<bool> ExistingUserAsync(string username, string email)
     {
-        using var dbContext = await _dbContext.CreateDbContextAsync();
-        return await dbContext.User.AnyAsync(x => x.Username == username || x.Email == email);
+   
+        return await _dbContext.User.AnyAsync(x => x.Username == username || x.Email == email);
     }
 
 }

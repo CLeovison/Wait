@@ -6,9 +6,9 @@ public interface IUserRepositories
 {
     Task CreateUserAsync(Users user);
     Task<List<Users>> GetAllUserAsync(CancellationToken cancellationToken);
-    Task GetSearchUserAsync(string searchTerm, CancellationToken cancellationToken);
+
     Task<Users?> GetUserIdAsync(Guid id);
-    Task UpdateUserAsync(Guid id, Users user);
+    Task<bool> UpdateUserAsync(Guid id, Users user);
     Task<Users?> DeleteUserAsync(Guid id);
     Task<bool> ExistingUserAsync(string username, string email);
 }
