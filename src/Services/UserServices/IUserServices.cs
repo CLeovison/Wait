@@ -7,9 +7,9 @@ namespace Wait.Services.UserServices;
 
 public interface IUserServices
 {
-    Task<Users> CreateUserAsync(Users users, IPasswordHasher<Users> passwordHasher);
+    Task<bool> CreateUserAsync(Users users, IPasswordHasher<Users> passwordHasher);
 
-    Task<List<Users>> GetAllUserAsync(CancellationToken ct);
+    Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct);
     Task<Users?> UpdateUserAsync(Guid id, Users users);
     Task<bool> DeleteUserAsync(Guid id);
 

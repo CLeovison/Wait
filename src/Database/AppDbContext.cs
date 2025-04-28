@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Wait.Configurations;
+
 using Wait.Entities;
 
 namespace Wait.Database;
