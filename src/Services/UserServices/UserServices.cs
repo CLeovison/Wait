@@ -1,9 +1,10 @@
 
-using Microsoft.AspNetCore.Http.HttpResults;
+using Wait.Mapping;
 using Microsoft.AspNetCore.Identity;
 
 using Wait.Entities;
 using Wait.Repositories;
+using Wait.Contracts.Request.UserRequest;
 
 namespace Wait.Services.UserServices;
 
@@ -17,7 +18,7 @@ public class UserServices : IUserServices
         _userRepositories = userRepositories;
     }
 
-    public async Task<bool> CreateUserAsync(Users users, IPasswordHasher<Users> passwordHasher)
+    public async Task<bool> CreateUserAsync(Users users, IPasswordHasher<Users> passwordHasher, CreateUserRequest request)
     {
 
         var existingUser = await _userRepositories.ExistingUserAsync(users.Username, users.Email);
@@ -26,15 +27,7 @@ public class UserServices : IUserServices
             throw new ArgumentException("The User Already exists");
         }
 
-        var user = new Users
-        {
-            FirstName = users.FirstName,
-            LastName = users.LastName,
-            Username = users.Username,
-            Password = passwordHasher.HashPassword(users, users.Password),
-            Email = users.Email
-        };
-
+        var user = users.ToCreateUser(request, passwordHasher);
 
 
         return await _userRepositories.CreateUserAsync(user); // Save the hashed password

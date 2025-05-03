@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Wait.Abstract;
+using Wait.Contracts.Request.UserRequest;
 using Wait.Entities;
 using Wait.Services.UserServices;
 
@@ -15,9 +16,9 @@ public class CreateUserEndpoint : IEndpoint
     }
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/create", async (Users users, CancellationToken ct, IPasswordHasher<Users> passwordHasher) =>
+        app.MapPost("/api/create", async (Users users, CreateUserRequest request, IPasswordHasher<Users> passwordHasher) =>
         {
-            await _userServices.CreateUserAsync(users,passwordHasher);
+            await _userServices.CreateUserAsync(users, passwordHasher, request);
         });
     }
 }
