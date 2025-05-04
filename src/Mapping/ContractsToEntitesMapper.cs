@@ -8,7 +8,7 @@ namespace Wait.Mapping;
 public static class ContractsToEntitesMapper
 {
 
-    public static Users ToCreateUser(this Users users, CreateUserRequest request, IPasswordHasher<Users> passwordHasher )
+    public static Users ToCreateUser(this CreateUserRequest request)
     {
 
         return new Users
@@ -17,7 +17,7 @@ public static class ContractsToEntitesMapper
             FirstName = request.FirstName,
             LastName = request.LastName,
             Username = request.Username,
-            Password = passwordHasher.HashPassword(users, request.Password),
+            Password = request.Password,
             Email = request.Email,
 
         };

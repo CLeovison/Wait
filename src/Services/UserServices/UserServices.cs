@@ -18,7 +18,7 @@ public class UserServices : IUserServices
         _userRepositories = userRepositories;
     }
 
-    public async Task<bool> CreateUserAsync(Users users, IPasswordHasher<Users> passwordHasher, CreateUserRequest request)
+    public async Task<bool> CreateUserAsync(Users users, IPasswordHasher<Users> passwordHasher)
     {
 
         var existingUser = await _userRepositories.ExistingUserAsync(users.Username, users.Email);
@@ -27,10 +27,10 @@ public class UserServices : IUserServices
             throw new ArgumentException("The User Already exists");
         }
 
-        var user = users.ToCreateUser(request, passwordHasher);
+        users.Password = passwordHasher.HashPassword(users, users.Password); // Hash the password
+ 
 
-
-        return await _userRepositories.CreateUserAsync(user); // Save the hashed password
+        return await _userRepositories.CreateUserAsync(users); // Save the hashed password
 
 
     }
