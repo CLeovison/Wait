@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Entities;
 
