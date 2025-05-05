@@ -1,21 +1,22 @@
-using Wait.Contracts.Request.UserRequest;
+
+using Wait.Contracts.Response.UserResponse;
 using Wait.Entities;
+
+
 
 namespace Wait.Mapping;
 
 
 public static class EntitiesToContractsMapper
 {
-    public static CreateUserRequest ToEntities(this Users users)
+    public static UserResponse ToResponse(this Users users)
     {
-        return new CreateUserRequest
+        return new UserResponse
         {
             FirstName = users.FirstName,
             LastName = users.LastName,
-            Username = users.LastName,
-            Password = users.Password,
+            Username = users.Username,
             Email = users.Email
-
         };
     }
 }

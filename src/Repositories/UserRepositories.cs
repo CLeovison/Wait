@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+
+using Wait.Contracts.Request.UserRequest;
 using Wait.Database;
 using Wait.Entities;
 
@@ -7,58 +9,67 @@ namespace Wait.Repositories;
 
 public class UserRepositories : IUserRepositories
 {
-    private readonly AppDbContext _dbContext;
+    private readonly IDbContextFactory<AppDbContext> _dbContext;
 
-    public UserRepositories(AppDbContext dbContext)
+    public UserRepositories(IDbContextFactory<AppDbContext> dbContext)
     {
         _dbContext = dbContext;
     }
-    public async Task CreateUserAsync(Users user)
+    public async Task<bool> CreateUserAsync(CreateUserRequest request)
     {
-        await _dbContext.Set<Users>().AddAsync(user);
-        await _dbContext.SaveChangesAsync();
+        using var dbContext = _dbContext.CreateDbContext();
+        var createUser = await dbContext.Set<CreateUserRequest>().AddAsync(request);
 
+        return request is not null;
     }
-    public async Task<List<Users>> GetAllUsersAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Users>> GetAllUsersAsync(CancellationToken cancellationToken)
+
     {
-        return await _dbContext.User.ToListAsync(cancellationToken);
+        using var dbContext = _dbContext.CreateDbContext();
+        return await dbContext.User.ToListAsync(cancellationToken);
     }
 
     public async Task<Users?> GetUsersByIdAsync(Guid id)
     {
-        return await _dbContext.User.Where(x => x.UserId == id).FirstOrDefaultAsync();
+        using var dbContext = _dbContext.CreateDbContext();
+        return await dbContext.User.Where(x => x.UserId == id).FirstOrDefaultAsync();
     }
 
     public async Task<bool> UpdateUserAsync(Guid id, Users users)
+
     {
-        var userUpdate = await _dbContext.User.FindAsync(users.UserId);
+        using var dbContext = _dbContext.CreateDbContext();
+        var userUpdate = await dbContext.User.FindAsync(users.UserId);
 
         if (userUpdate is null) return false;
 
-        _dbContext.Entry(userUpdate).CurrentValues.SetValues(users);
-        await _dbContext.SaveChangesAsync();
+        dbContext.Entry(userUpdate).CurrentValues.SetValues(users);
+        await dbContext.SaveChangesAsync();
 
         return true;
     }
 
     public async Task<bool> DeleteUserAsync(Guid id)
     {
-        var userToDelete = await _dbContext.User.FirstOrDefaultAsync(x => x.UserId == id);
+        using var dbContext = _dbContext.CreateDbContext();
+        var userToDelete = await dbContext.User.FirstOrDefaultAsync(x => x.UserId == id);
 
         if (userToDelete is null)
         {
             return false;
         }
 
-        _dbContext.User.Remove(userToDelete);
-        await _dbContext.SaveChangesAsync();
+        dbContext.User.Remove(userToDelete);
+        await dbContext.SaveChangesAsync();
 
         return true;
     }
 
     public async Task<bool> ExistingUserAsync(string username, string email)
+
     {
-        return await _dbContext.User.AnyAsync(x => x.Username == username || x.Email == email);
+        using var dbContext = _dbContext.CreateDbContext();
+        return await dbContext.User.AnyAsync(x => x.Username == username || x.Email == email);
     }
 
 }

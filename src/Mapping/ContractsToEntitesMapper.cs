@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Entities;
 
@@ -7,7 +8,7 @@ namespace Wait.Mapping;
 public static class ContractsToEntitesMapper
 {
 
-    public static Users ToCreateUser(this CreateUserRequest request)
+    public static Users ToCreateUser(this CreateUserRequest request, IPasswordHasher<Users> passwordHasher, Users users)
     {
 
         return new Users
@@ -16,7 +17,7 @@ public static class ContractsToEntitesMapper
             FirstName = request.FirstName,
             LastName = request.LastName,
             Username = request.Username,
-            Password = request.Password,
+            Password = passwordHasher.HashPassword(users, request.Password),
             Email = request.Email,
 
         };

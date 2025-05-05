@@ -1,8 +1,10 @@
 
+using Wait.Mapping;
 using Microsoft.AspNetCore.Identity;
 
 using Wait.Entities;
 using Wait.Repositories;
+
 
 namespace Wait.Services.UserServices;
 
@@ -16,36 +18,32 @@ public class UserServices : IUserServices
         _userRepositories = userRepositories;
     }
 
-    public async Task<Users> CreateUserAsync(Users users, IPasswordHasher<Users> passwordHasher)
+    public async Task<bool> CreateUserAsync(Users users, IPasswordHasher<Users> passwordHasher)
     {
-        if (await _userRepositories.ExistingUserAsync(users.Username, users.Email))
+
+        var existingUser = await _userRepositories.ExistingUserAsync(users.Username, users.Email);
+        if (existingUser is true)
         {
             throw new ArgumentException("The User Already exists");
         }
 
-        var user = new Users
-        {
-            FirstName = users.FirstName,
-            LastName = users.LastName,
-            Username = users.Username,
-            Password = passwordHasher.HashPassword(users, users.Password),
-            Email = users.Email
-        };
+        var userCreated = users.ToResponse();
 
-        await _userRepositories.CreateUserAsync(user); // Save the hashed password
 
-        return user;
+        return await _userRepositories.CreateUserAsync(); // Save the hashed password
+
+
     }
 
-    public async Task<List<Users>> GetAllUserAsync(CancellationToken ct)
+    public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
     {
-        var getAllUser = await _userRepositories.GetAllUserAsync(ct);
+        var getAllUser = await _userRepositories.GetAllUsersAsync(ct);
         return getAllUser;
     }
 
     public async Task<Users?> UpdateUserAsync(Guid id, Users users)
     {
-        var existingUser = await _userRepositories.GetUserIdAsync(id)
+        var existingUser = await _userRepositories.GetUsersByIdAsync(id)
             ?? throw new ArgumentException("The user doesn't exist");
 
 
@@ -63,12 +61,12 @@ public class UserServices : IUserServices
     {
         var userDelete = await _userRepositories.DeleteUserAsync(id);
 
-        if (userDelete is null)
+        if (!userDelete)
         {
             var message = $"This User {id} does not exists";
             throw new ArgumentNullException(message);
         }
 
-        return userDelete is not null;
+        return userDelete is false;
     }
 }
