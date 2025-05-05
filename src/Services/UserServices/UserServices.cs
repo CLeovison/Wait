@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 using Wait.Entities;
 using Wait.Repositories;
-using Wait.Contracts.Request.UserRequest;
+
 
 namespace Wait.Services.UserServices;
 
@@ -27,10 +27,10 @@ public class UserServices : IUserServices
             throw new ArgumentException("The User Already exists");
         }
 
-        users.Password = passwordHasher.HashPassword(users, users.Password); // Hash the password
- 
+        var userCreated = users.ToResponse();
 
-        return await _userRepositories.CreateUserAsync(users); // Save the hashed password
+
+        return await _userRepositories.CreateUserAsync(); // Save the hashed password
 
 
     }
