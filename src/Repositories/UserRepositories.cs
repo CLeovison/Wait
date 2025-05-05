@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+
+using Wait.Contracts.Request.UserRequest;
 using Wait.Database;
 using Wait.Entities;
 
@@ -13,13 +15,12 @@ public class UserRepositories : IUserRepositories
     {
         _dbContext = dbContext;
     }
-    public async Task<bool> CreateUserAsync(Users user)
+    public async Task<bool> CreateUserAsync(CreateUserRequest request)
     {
         using var dbContext = _dbContext.CreateDbContext();
-        var createUser = await dbContext.Set<Users>().AddAsync(user);
-        await dbContext.SaveChangesAsync();
+        var createUser = await dbContext.Set<CreateUserRequest>().AddAsync(request);
 
-        return createUser is null;
+        return request is not null;
     }
     public async Task<IEnumerable<Users>> GetAllUsersAsync(CancellationToken cancellationToken)
 
