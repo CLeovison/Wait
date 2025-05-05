@@ -4,7 +4,7 @@ namespace Wait.Repositories;
 
 public interface IUserRepositories
 {
-    Task CreateUserAsync(Users user);
+    Task<bool> CreateUserAsync();
     Task<List<Users>> GetAllUsersAsync(CancellationToken cancellationToken);
 
     Task<Users?> GetUsersByIdAsync(Guid id);
