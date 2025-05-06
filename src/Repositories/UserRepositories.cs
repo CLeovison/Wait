@@ -1,75 +1,27 @@
 using Microsoft.EntityFrameworkCore;
-
-using Wait.Contracts.Request.UserRequest;
+using Wait.Contracts.Data;
 using Wait.Database;
 using Wait.Entities;
 
 namespace Wait.Repositories;
 
 
-public class UserRepositories : IUserRepositories
+public sealed class UserRepositories : IUserRepositories
 {
-    private readonly IDbContextFactory<AppDbContext> _dbContext;
+    private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
-    public UserRepositories(IDbContextFactory<AppDbContext> dbContext)
+    public UserRepositories(IDbContextFactory<AppDbContext> dbContextFactory)
     {
-        _dbContext = dbContext;
-    }
-    public async Task<bool> CreateUserAsync(CreateUserRequest request)
-    {
-        using var dbContext = _dbContext.CreateDbContext();
-        var createUser = await dbContext.Set<CreateUserRequest>().AddAsync(request);
-
-        return request is not null;
-    }
-    public async Task<IEnumerable<Users>> GetAllUsersAsync(CancellationToken cancellationToken)
-
-    {
-        using var dbContext = _dbContext.CreateDbContext();
-        return await dbContext.User.ToListAsync(cancellationToken);
+        _dbContextFactory = dbContextFactory;
     }
 
-    public async Task<Users?> GetUsersByIdAsync(Guid id)
+    public async Task<bool> CreateUserAsync(UserDto userDto)
     {
-        using var dbContext = _dbContext.CreateDbContext();
-        return await dbContext.User.Where(x => x.UserId == id).FirstOrDefaultAsync();
+        var dbContext = _dbContextFactory.CreateDbContext();
+        var createUser = await dbContext.Set<UserDto>().AddAsync(userDto);
+
+        return createUser is not null;
     }
 
-    public async Task<bool> UpdateUserAsync(Guid id, Users users)
-
-    {
-        using var dbContext = _dbContext.CreateDbContext();
-        var userUpdate = await dbContext.User.FindAsync(users.UserId);
-
-        if (userUpdate is null) return false;
-
-        dbContext.Entry(userUpdate).CurrentValues.SetValues(users);
-        await dbContext.SaveChangesAsync();
-
-        return true;
-    }
-
-    public async Task<bool> DeleteUserAsync(Guid id)
-    {
-        using var dbContext = _dbContext.CreateDbContext();
-        var userToDelete = await dbContext.User.FirstOrDefaultAsync(x => x.UserId == id);
-
-        if (userToDelete is null)
-        {
-            return false;
-        }
-
-        dbContext.User.Remove(userToDelete);
-        await dbContext.SaveChangesAsync();
-
-        return true;
-    }
-
-    public async Task<bool> ExistingUserAsync(string username, string email)
-
-    {
-        using var dbContext = _dbContext.CreateDbContext();
-        return await dbContext.User.AnyAsync(x => x.Username == username || x.Email == email);
-    }
-
+    
 }
