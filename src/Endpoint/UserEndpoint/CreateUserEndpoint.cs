@@ -5,25 +5,23 @@ using Wait.Entities;
 using Wait.Services.UserServices;
 using Wait.Mapping;
 using Microsoft.AspNetCore.Mvc;
+using Wait.UserServices.Services;
 
 
 namespace Wait.Endpoint.UserEndpoint;
 
 
-public class CreateUserEndpoint : IEndpoint
+public class CreateUserEndpoint(IUserServices userServices) : IEndpoint
 {
-    private readonly IUserServices _userServices;
-    public CreateUserEndpoint(IUserServices userServices)
-    {
-        _userServices = userServices;
-    }
+
+
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/create", async (Users users, IPasswordHasher<Users> passwordHasher) =>
+        app.MapPost("/api/create", async (CreateUserRequest req) =>
         {
 
 
-            await _userServices.CreateUserAsync(users, passwordHasher);
+            await userServices.CreateUserAsync(users);
         });
     }
 }
