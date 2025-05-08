@@ -7,27 +7,27 @@ namespace Wait.Mapping;
 public static class ContractsToEntitiesMapper
 {
 
-    public static CreateUserRequest ToCreate(this Users users, IPasswordHasher<Users> passwordHasher)
+    public static Users ToCreate(this CreateUserRequest req, IPasswordHasher<Users> passwordHasher, Users users)
     {
-        return new CreateUserRequest
+        return new Users
         {
-            FirstName = users.FirstName,
-            LastName = users.LastName,
-            Username = users.Username,
-            Password = passwordHasher.HashPassword(users, users.Password),
-            Email = users.Email
+            FirstName = req.FirstName,
+            LastName = req.LastName,
+            Username = req.Username,
+            Password = passwordHasher.HashPassword(users ,req.Password),
+            Email = req.Email
         };
     }
 
-    public static UpdateUserRequest ToUpdate(this Users users, IPasswordHasher<Users> passwordHasher)
+    public static Users ToUpdate(this UpdateUserRequest req, IPasswordHasher<Users> passwordHasher, Users users)
     {
-        return new UpdateUserRequest
+        return new Users
         {
-            FirstName = users.FirstName,
-            LastName = users.LastName,
-            Username = users.Username,
-            Password = passwordHasher.HashPassword(users, users.Password),
-            Email = users.Email
+            FirstName = req.FirstName,
+            LastName = req.LastName,
+            Username = req.Username,
+            Password = passwordHasher.HashPassword(users, req.Password),
+            Email = req.Email
         };
     }
 }
