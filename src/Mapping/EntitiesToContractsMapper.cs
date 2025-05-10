@@ -14,7 +14,6 @@ public static class EntitiesToContractsMapper
             FirstName = users.FirstName,
             LastName = users.LastName,
             Username = users.Username,
-            Password = users.Password,
             Email = users.Email
         };
     }
@@ -23,7 +22,14 @@ public static class EntitiesToContractsMapper
     {
         return new GetAllUserResponse
         {
-            Users = users.Select()
+            Users = users.Select(x => new UserResponse
+            {
+                UserId = x.UserId,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Username = x.Username,
+                Email = x.Email
+            })
         };
     }
 }

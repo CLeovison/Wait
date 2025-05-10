@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Wait.Contracts.Data;
 using Wait.Entities;
 
 namespace Wait.UserServices.Services;
@@ -6,5 +7,5 @@ namespace Wait.UserServices.Services;
 
 public interface IUserServices
 {
-    Task<bool> CreateUserAsync(Users users, IPasswordHasher<Users> passwordHasher);
+    Task<bool> CreateUserAsync(UserDto userDto);
 }

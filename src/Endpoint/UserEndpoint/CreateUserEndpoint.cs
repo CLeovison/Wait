@@ -1,10 +1,6 @@
-using Microsoft.AspNetCore.Identity;
 using Wait.Abstract;
+using Wait.Contracts.Data;
 using Wait.Contracts.Request.UserRequest;
-using Wait.Entities;
-using Wait.Services.UserServices;
-using Wait.Mapping;
-using Microsoft.AspNetCore.Mvc;
 using Wait.UserServices.Services;
 
 
@@ -21,7 +17,19 @@ public class CreateUserEndpoint(IUserServices userServices) : IEndpoint
         {
 
 
-            await userServices.CreateUserAsync(users);
+
+            var userDto = new UserDto
+            {
+                UserId = req.UserId,
+                FirstName = req.FirstName,
+                LastName = req.LastName,
+                Username = req.Username,
+                Password = req.Password,
+                Email = req.Email,
+
+
+            };
+            return await userServices.CreateUserAsync(userDto);
         });
     }
 }

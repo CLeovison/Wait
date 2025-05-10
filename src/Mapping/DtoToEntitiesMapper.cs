@@ -7,14 +7,15 @@ namespace Wait.Mapping;
 
 public static class DtoToEntitiesMapper
 {
-    public static UserDto ToDto(this Users users, IPasswordHasher<Users> passwordHasher)
+    public static UserDto ToDto(this Users users)
     {
         return new UserDto
         {
+            UserId = users.UserId,
             FirstName = users.FirstName,
             LastName = users.LastName,
             Username = users.Username,
-            Password = passwordHasher.HashPassword(users, users.Password),
+            Password = users.Password,
             Email = users.Email
         };
     }

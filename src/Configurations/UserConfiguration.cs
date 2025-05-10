@@ -41,6 +41,8 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<Users>
         builder.Property(d => d.UpdatedAt)
             .HasDefaultValueSql("current_date");
 
+
+
         builder.ToTable("Users");
     }
 }

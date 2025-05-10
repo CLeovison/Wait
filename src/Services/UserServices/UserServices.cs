@@ -3,6 +3,7 @@ using Wait.Repositories;
 using Wait.UserServices.Services;
 using Wait.Mapping;
 using Microsoft.AspNetCore.Identity;
+using Wait.Contracts.Data;
 
 
 namespace Wait.Services.UserServices;
@@ -10,9 +11,9 @@ namespace Wait.Services.UserServices;
 public sealed class UserServices(IUserRepositories userRepositories) : IUserServices
 {
 
-    public async Task<bool> CreateUserAsync(Users users, IPasswordHasher<Users> passwordHasher)
+    public async Task<bool> CreateUserAsync(UserDto userDto)
     {
-        var newUser = users.ToDto(passwordHasher);
+        var newUser = userDto.ToEntities();
 
         return await userRepositories.CreateUserAsync(newUser);
     }
