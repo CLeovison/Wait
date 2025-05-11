@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 using Wait.Entities;
 
@@ -6,7 +7,7 @@ namespace Wait.Mapping;
 
 public static class EntitiesToDtoMapper
 {
-    public static Users ToEntities(this UserDto userDto)
+    public static Users ToEntities(this UserDto userDto, IPasswordHasher<Users> passwordHasher)
     {
         return new Users
         {
@@ -14,7 +15,7 @@ public static class EntitiesToDtoMapper
             FirstName = userDto.FirstName,
             LastName = userDto.LastName,
             Username = userDto.Username,
-            Password = userDto.Password,
+            Password = passwordHasher.HashPassword(new Users(), userDto.Password),
             Email = userDto.Email
         };
     }
