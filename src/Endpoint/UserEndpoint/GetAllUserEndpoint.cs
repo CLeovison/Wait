@@ -1,22 +1,18 @@
 using Wait.Abstract;
-using Wait.Services.UserServices;
+using Wait.UserServices.Services;
 
 namespace Wait.Endpoint.UserEndpoint;
 
 
-public class GetAllUserEndpoint : IEndpoint
+public sealed class GetAllUserEndpoint(IUserServices userServices) : IEndpoint
 {
-    private readonly IUserServices _userServices;
-    public GetAllUserEndpoint(IUserServices userServices)
-    {
-        _userServices = userServices;
-    }
+
     public void Endpoint(IEndpointRouteBuilder app)
     {
+
         app.MapGet("/api/users", async (CancellationToken ct) =>
         {
-            var getAllUser = await _userServices.GetAllUserAsync(ct);
-            return getAllUser;
+            return await userServices.GetAllUserAsync(ct);
         });
     }
 }

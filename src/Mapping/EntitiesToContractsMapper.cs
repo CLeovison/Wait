@@ -1,22 +1,35 @@
-
 using Wait.Contracts.Response.UserResponse;
 using Wait.Entities;
-
-
 
 namespace Wait.Mapping;
 
 
 public static class EntitiesToContractsMapper
 {
-    public static UserResponse ToResponse(this Users users)
+    public static UserResponse ToUserResponse(this Users users)
     {
         return new UserResponse
         {
+            UserId = users.UserId,
             FirstName = users.FirstName,
             LastName = users.LastName,
             Username = users.Username,
             Email = users.Email
+        };
+    }
+
+    public static GetAllUserResponse ToGetAllUserResponse(this IEnumerable<Users> users)
+    {
+        return new GetAllUserResponse
+        {
+            Users = users.Select(x => new UserResponse
+            {
+                UserId = x.UserId,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Username = x.Username,
+                Email = x.Email
+            })
         };
     }
 }

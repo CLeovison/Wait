@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Wait.Database;
 using Wait.Entities;
 using Wait.Extensions;
-using Wait.Infrastracture;
+
 using Wait.Repositories;
 using Wait.Services.UserServices;
+using Wait.UserServices.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +23,7 @@ builder.Services.AddDbContextFactory<AppDbContext>(optionsBuilder =>
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 builder.Services.AddSingleton<IUserRepositories, UserRepositories>();
 builder.Services.AddSingleton<IUserServices, UserServices>();
-builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher>();
+builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
 
 
 var app = builder.Build();
