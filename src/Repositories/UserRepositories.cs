@@ -11,11 +11,16 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
 {
     public async Task<bool> CreateUserAsync(Users users)
     {
-        var dbContext = dbContextFactory.CreateDbContext();
+        using var dbContext = dbContextFactory.CreateDbContext();
         var createUser = await dbContext.Set<Users>().AddAsync(users);
-        await dbContext.SaveChangesAsync(); 
+        await dbContext.SaveChangesAsync();
         return createUser is not null;
     }
 
+    public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
+    {   
+        using var dbContext = dbContextFactory.CreateDbContext();
+        return await dbContext.User.ToListAsync(ct);
+    }
 
 }

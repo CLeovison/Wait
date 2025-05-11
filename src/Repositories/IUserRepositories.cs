@@ -6,5 +6,5 @@ namespace Wait.Repositories;
 public interface IUserRepositories
 {
     Task<bool> CreateUserAsync(Users users);
-
+    Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct);
 }

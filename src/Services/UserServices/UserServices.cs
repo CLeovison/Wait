@@ -11,10 +11,15 @@ namespace Wait.Services.UserServices;
 public sealed class UserServices(IUserRepositories userRepositories) : IUserServices
 {
 
-    public async Task<bool> CreateUserAsync(UserDto userDto,IPasswordHasher<Users> passwordHasher)
+    public async Task<bool> CreateUserAsync(UserDto userDto, IPasswordHasher<Users> passwordHasher)
     {
         var newUser = userDto.ToEntities(passwordHasher);
 
         return await userRepositories.CreateUserAsync(newUser);
+    }
+
+    public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
+    {
+        return await userRepositories.GetAllUserAsync(ct);
     }
 }

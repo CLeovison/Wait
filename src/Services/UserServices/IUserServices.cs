@@ -9,4 +9,5 @@ namespace Wait.UserServices.Services;
 public interface IUserServices
 {
     Task<bool> CreateUserAsync(UserDto userDto, IPasswordHasher<Users> passwordHasher);
+    Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct);
 }
