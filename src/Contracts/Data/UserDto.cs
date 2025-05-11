@@ -3,7 +3,7 @@ namespace Wait.Contracts.Data;
 
 public class UserDto
 {
-    public Guid UserId { get; init; }
+    public Guid UserId { get; set; }
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
     public required string Username { get; set; }

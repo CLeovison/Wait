@@ -13,7 +13,7 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
     {
         var dbContext = dbContextFactory.CreateDbContext();
         var createUser = await dbContext.Set<Users>().AddAsync(users);
-
+        await dbContext.SaveChangesAsync(); 
         return createUser is not null;
     }
 
