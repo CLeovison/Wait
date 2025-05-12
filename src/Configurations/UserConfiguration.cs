@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Wait.Entities;
 
 namespace Wait.Configurations;
+
 public sealed class UserConfiguration : IEntityTypeConfiguration<Users>
 {
     public void Configure(EntityTypeBuilder<Users> builder)
@@ -37,10 +38,13 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<Users>
 
         builder.Property(d => d.CreatedAt)
             .HasDefaultValueSql("current_date");
-            
+
         builder.Property(d => d.UpdatedAt)
             .HasDefaultValueSql("current_date");
 
+        builder.Property(b => b.Birthday)
+        .HasColumnType("date")
+        .IsRequired();
 
 
         builder.ToTable("Users");

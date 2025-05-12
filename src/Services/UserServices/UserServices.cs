@@ -14,12 +14,22 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
     public async Task<bool> CreateUserAsync(UserDto userDto, IPasswordHasher<Users> passwordHasher)
     {
         var newUser = userDto.ToEntities(passwordHasher);
+        var createdUser = await userRepositories.CreateUserAsync(newUser);
 
-        return await userRepositories.CreateUserAsync(newUser);
+        if (!createdUser)
+        {
+            throw new ArgumentException("You didn't have any credentials ");
+        }
+        else
+        {
+            return createdUser;
+        }
+
     }
 
     public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
     {
-        return await userRepositories.GetAllUserAsync(ct);
+        var result = await userRepositories.GetAllUserAsync(ct);
+        return result;
     }
 }
