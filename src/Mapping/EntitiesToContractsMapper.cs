@@ -24,8 +24,8 @@ public static class EntitiesToContractsMapper
             Users = users.Select(x => new UserResponse
             {
                 FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Username = x.Username,
+                LastName = x.LastName,
+                Username = x.Username,
                 Email = x.Email
             })
         };

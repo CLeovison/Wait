@@ -15,6 +15,7 @@ public static class RequestToDtoMapper
             LastName = req.LastName,
             Username = req.Username,
             Password = passwordHasher.HashPassword(new Users(), req.Password),
+            Birthday = req.Birthday,
             Email = req.Email
         };
     }
