@@ -1,5 +1,7 @@
 using Wait.Abstract;
 using Wait.UserServices.Services;
+using Wait.Mapping;
+
 
 namespace Wait.Endpoint.UserEndpoint;
 
@@ -12,7 +14,9 @@ public sealed class GetAllUserEndpoint(IUserServices userServices) : IEndpoint
 
         app.MapGet("/api/users", async (CancellationToken ct) =>
         {
-            return await userServices.GetAllUserAsync(ct);
+            var allUser = await userServices.GetAllUserAsync(ct);
+            var modifiedUser = allUser.ToGetAllUserResponse();
+            return modifiedUser;
         });
     }
 }

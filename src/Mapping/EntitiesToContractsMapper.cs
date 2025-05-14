@@ -26,6 +26,7 @@ public static class EntitiesToContractsMapper
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Username = x.Username,
+                Birthday = x.Birthday,
                 Email = x.Email
             })
         };
