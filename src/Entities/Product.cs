@@ -1,17 +1,17 @@
-using Wait.ValueObjects.Product;
-
 namespace Wait.Entities;
 
 
 public class Product
 {
-    public int ProductId { get; init; }
-    public required string ProductName { get; init; }
-    public required string ProductType { get; init; }
-    public required string Description { get; init; }
-    public required Price Price { get; init; }
-    public int Quantity { get; init; }
+    public Guid ProductId { get; init; }
+    public required string ProductName { get; set; }
+    public required string Category { get; set; }
+    public required string Description { get; set; }
+    public required double Price { get; set; }
+    public int Quantity { get; set; }
+    public required string Size { get; set; }
+    public required string Image { get; set; }
     public bool IsSoftDelete { get; init; }
-    public DateOnly CreatedAt { get; init; }
-    public DateOnly UpdatedAt { get; init; }
+    public DateOnly CreatedAt { get; set; }
+    public DateOnly UpdatedAt { get; set; }
 }
