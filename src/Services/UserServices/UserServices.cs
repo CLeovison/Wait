@@ -32,4 +32,17 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
         var result = await userRepositories.GetAllUserAsync(ct);
         return result;
     }
+
+    public async Task<Users?> DeleteUserAsync(Guid id)
+    {
+        var deleteUser = await userRepositories.DeleteUserAsync(id);
+
+
+        if (deleteUser is null)
+        {
+            return null;
+        }
+
+        return deleteUser;
+    }
 }
