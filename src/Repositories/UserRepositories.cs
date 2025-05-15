@@ -18,9 +18,23 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
     }
 
     public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
-    {   
+    {
         using var dbContext = dbContextFactory.CreateDbContext();
         return await dbContext.User.ToListAsync(ct);
+    }
+    public async Task<Users?> DeleteUserAsync(Guid id)
+    {
+        using var dbContext = dbContextFactory.CreateDbContext();
+        var deleteUser = await dbContext.User.FindAsync(id);
+
+        if (deleteUser is not null)
+        {
+            dbContext.User.Remove(deleteUser);
+            await dbContext.SaveChangesAsync();
+            return deleteUser;
+        }
+
+        return null;
     }
 
 }
