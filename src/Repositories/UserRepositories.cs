@@ -23,7 +23,7 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
         return await dbContext.User.ToListAsync(ct);
     }
 
-    public async Task<Users?> GetUserIdAsync(Guid id)
+    public async Task<Users?> GetUserByIdAsync(Guid id)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
         return await dbContext.User.FindAsync(id);
@@ -35,8 +35,9 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
         using var dbContext = dbContextFactory.CreateDbContext();
         var deleteUser = dbContext.Set<Users>().Remove(users);
         await dbContext.SaveChangesAsync();
-
         return deleteUser is not null;
+
+
     }
 
 }

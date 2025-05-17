@@ -33,16 +33,29 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
         return result;
     }
 
-    public async Task<Users?> DeleteUserAsync(Guid id)
+    public async Task<Users?> GetUserByIdAsync(Guid id)
     {
-        var deleteUser = await userRepositories.DeleteUserAsync(id);
+        var getUser = await userRepositories.GetUserByIdAsync(id);
 
-
-        if (deleteUser is null)
+        if (getUser is null)
         {
-            return null;
+            Results.NotFound();
         }
 
-        return deleteUser;
+        return getUser;
+    }
+
+    public async Task<bool> DeleteUserAsync(Guid id)
+    {
+        var existingUser = await userRepositories.GetUserByIdAsync(id);
+
+        if (existingUser is null)
+        {
+            throw new ArgumentException("User not found.");
+        }
+        
+        return await userRepositories.DeleteUserAsync(existingUser);
+
+
     }
 }
