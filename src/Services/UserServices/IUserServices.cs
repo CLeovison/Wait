@@ -11,5 +11,6 @@ public interface IUserServices
     Task<bool> CreateUserAsync(UserDto userDto, IPasswordHasher<Users> passwordHasher);
     Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct);
     Task<Users?> GetUserByIdAsync(Guid id);
+    Task<bool> UpdateUserAsync(UserDto userDto, IPasswordHasher<Users> passwordHasher, CancellationToken ct);
     Task<bool> DeleteUserAsync(Guid id);
 }

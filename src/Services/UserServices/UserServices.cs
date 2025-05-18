@@ -26,7 +26,6 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
         }
 
     }
-
     public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
     {
         var result = await userRepositories.GetAllUserAsync(ct);
@@ -45,6 +44,13 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
         return getUser;
     }
 
+    public async Task<bool> UpdateUserAsync(UserDto userDto, IPasswordHasher<Users> passwordHasher, CancellationToken ct)
+    {
+        var existingUser = await userRepositories.GetUserByIdAsync(userDto.UserId);
+
+
+
+    }
     public async Task<bool> DeleteUserAsync(Guid id)
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id);
@@ -53,7 +59,7 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
         {
             throw new ArgumentException("User not found.");
         }
-        
+
         return await userRepositories.DeleteUserAsync(existingUser);
 
 

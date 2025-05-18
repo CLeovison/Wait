@@ -24,7 +24,7 @@ public static class ContractsToEntitiesMapper
         return user;
     }
 
-    public static Users ToUpdate(this UpdateUserRequest req, IPasswordHasher<Users> passwordHasher, Users users)
+    public static Users ToUpdate(this UpdateUserRequest req, IPasswordHasher<Users> passwordHasher)
     {
         return new Users
         {
@@ -32,7 +32,7 @@ public static class ContractsToEntitiesMapper
             FirstName = req.FirstName,
             LastName = req.LastName,
             Username = req.Username,
-            Password = passwordHasher.HashPassword(users, req.Password),
+            Password = passwordHasher.HashPassword(new Users(), req.Password),
             Email = req.Email,
             UpdatedAt = req.UpdatedAt
         };

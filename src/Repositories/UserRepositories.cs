@@ -30,6 +30,15 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
 
     }
 
+    public async Task<bool> UpdateUserAsync(Users users, CancellationToken ct)
+    {
+        using var dbContext = dbContextFactory.CreateDbContext();
+        dbContext.Entry(users).CurrentValues.SetValues(users);
+
+        await dbContext.SaveChangesAsync(ct);
+        return true;
+    }
+
     public async Task<bool> DeleteUserAsync(Users users)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
