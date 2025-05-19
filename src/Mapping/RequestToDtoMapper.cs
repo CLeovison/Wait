@@ -15,6 +15,20 @@ public static class RequestToDtoMapper
             LastName = req.LastName,
             Username = req.Username,
             Password = passwordHasher.HashPassword(new Users(), req.Password),
+            Birthday = req.Birthday,
+            Email = req.Email
+        };
+    }
+
+    public static UserDto ToRequestUpdate(this UpdateUserRequest req, IPasswordHasher<Users> passwordHasher)
+    {
+        return new UserDto
+        {
+            FirstName = req.FirstName,
+            LastName = req.LastName,
+            Username = req.Username,
+            Password = passwordHasher.HashPassword(new Users(), req.Password),
+            Birthday = req.Birthday,
             Email = req.Email
         };
     }

@@ -10,7 +10,6 @@ public static class EntitiesToContractsMapper
     {
         return new UserResponse
         {
-            UserId = users.UserId,
             FirstName = users.FirstName,
             LastName = users.LastName,
             Username = users.Username,
@@ -24,10 +23,10 @@ public static class EntitiesToContractsMapper
         {
             Users = users.Select(x => new UserResponse
             {
-                UserId = x.UserId,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Username = x.Username,
+                Birthday = x.Birthday,
                 Email = x.Email
             })
         };

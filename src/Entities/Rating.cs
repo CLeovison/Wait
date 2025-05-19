@@ -9,5 +9,4 @@ public sealed class Rating
     public int Stars { get; set; }
     public required string Review { get; set; }
     public DateOnly DatePosted { get; set; }
-
 }
