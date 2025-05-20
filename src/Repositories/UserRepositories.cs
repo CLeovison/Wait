@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Wait.Contracts.Data;
+using Wait.Contracts.Request.UserRequest;
 using Wait.Database;
 using Wait.Entities;
 
@@ -23,22 +24,28 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
         return await dbContext.User.ToListAsync(ct);
     }
 
-    public async Task<Users?> GetUserByIdAsync(Guid id)
+    public async Task<Users?> GetUserByIdAsync(Guid id, CancellationToken ct)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
-        return await dbContext.User.FindAsync(id);
+        return await dbContext.User.FindAsync(id, ct);
 
     }
 
-    public async Task<bool> UpdateUserAsync(Users users, CancellationToken ct)
+    public async Task<Users?> UpdateUserAsync(Users users, CancellationToken ct)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
-        dbContext.Entry(users).CurrentValues.SetValues(users);
+        var attachedEntry = dbContext.Entry(users);
+        if (attachedEntry.State == EntityState.Detached)
+        {
+
+            dbContext.User.Attach(users);
+        }
+        attachedEntry.State = EntityState.Modified;
 
         await dbContext.SaveChangesAsync(ct);
-        return true;
+        return users;
     }
-
+    
     public async Task<bool> DeleteUserAsync(Users users)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
