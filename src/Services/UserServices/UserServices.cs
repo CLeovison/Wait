@@ -44,23 +44,13 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
 
         return getUser;
     }
+
     public async Task<bool> UpdateUserAsync(UserDto userDto, IPasswordHasher<Users> passwordHasher, CancellationToken ct)
     {
-        var existingUser = await userRepositories.GetUserByIdAsync(userDto.UserId, ct);
-
-        if (existingUser is null)
-        {
-            throw new ArgumentException("The User Doesn't Exist");
-        }
-
-        var updatedUserDto = userDto.ToEntities(passwordHasher);
-    
-
-        var validUpdate = await userRepositories.UpdateUserAsync(updatedUserDto, ct);
-
-        return validUpdate is not null;
+        var updatedUser = userDto.ToEntities(passwordHasher);
+        var result = await userRepositories.UpdateUserAsync(updatedUser.UserId, updatedUser, ct);
+        return result != null;
     }
-
     public async Task<bool> DeleteUserAsync(Guid id, CancellationToken ct)
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);

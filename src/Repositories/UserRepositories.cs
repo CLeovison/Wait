@@ -31,21 +31,27 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
 
     }
 
-    public async Task<Users?> UpdateUserAsync(Users users, CancellationToken ct)
+    public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
-        var attachedEntry = dbContext.Entry(users);
-        if (attachedEntry.State == EntityState.Detached)
-        {
+        var updateUser = await dbContext.User.FindAsync(users.UserId);
 
-            dbContext.User.Attach(users);
+        if (updateUser is null)
+        {
+            return null;
         }
-        attachedEntry.State = EntityState.Modified;
+        updateUser.Username = users.Username;
+        updateUser.Password = users.Password;
+        updateUser.FirstName = users.FirstName;
+        updateUser.Password = users.Password;
+        updateUser.Email = users.Email;
 
         await dbContext.SaveChangesAsync(ct);
-        return users;
+        return updateUser;
+
+
+
     }
-    
     public async Task<bool> DeleteUserAsync(Users users)
     {
         using var dbContext = dbContextFactory.CreateDbContext();

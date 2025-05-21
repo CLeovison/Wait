@@ -15,5 +15,5 @@ public sealed class Users
     public string Email { get; set; } = string.Empty;
     public DateOnly Birthday { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? ModifiedAt { get; set; }
 }
