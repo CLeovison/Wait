@@ -34,7 +34,7 @@ public static class ContractsToEntitiesMapper
             Username = req.Username,
             Password = passwordHasher.HashPassword(new Users(), req.Password),
             Email = req.Email,
-            UpdatedAt = req.UpdatedAt
+           ModifiedAt = req.UpdatedAt
         };
     }
 }

@@ -4,6 +4,7 @@ using Wait.UserServices.Services;
 using Wait.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
+using Wait.Contracts.Request.UserRequest;
 
 
 namespace Wait.Services.UserServices;
@@ -32,9 +33,9 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
         return result;
     }
 
-    public async Task<Users?> GetUserByIdAsync(Guid id)
+    public async Task<Users?> GetUserByIdAsync(Guid id, CancellationToken ct)
     {
-        var getUser = await userRepositories.GetUserByIdAsync(id);
+        var getUser = await userRepositories.GetUserByIdAsync(id, ct);
 
         if (getUser is null)
         {
@@ -46,14 +47,13 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
 
     public async Task<bool> UpdateUserAsync(UserDto userDto, IPasswordHasher<Users> passwordHasher, CancellationToken ct)
     {
-        var existingUser = await userRepositories.GetUserByIdAsync(userDto.UserId);
-
-
-
+        var updatedUser = userDto.ToEntities(passwordHasher);
+        var result = await userRepositories.UpdateUserAsync(updatedUser.UserId, updatedUser, ct);
+        return result != null;
     }
-    public async Task<bool> DeleteUserAsync(Guid id)
+    public async Task<bool> DeleteUserAsync(Guid id, CancellationToken ct)
     {
-        var existingUser = await userRepositories.GetUserByIdAsync(id);
+        var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
 
         if (existingUser is null)
         {
