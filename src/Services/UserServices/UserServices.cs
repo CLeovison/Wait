@@ -45,11 +45,13 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
         return getUser;
     }
 
-    public async Task<bool> UpdateUserAsync(UserDto userDto, IPasswordHasher<Users> passwordHasher, CancellationToken ct)
+    public async Task<bool> UpdateUserAsync(Guid id, UserDto userDto, IPasswordHasher<Users> passwordHasher, CancellationToken ct)
     {
-        var updatedUser = userDto.ToEntities(passwordHasher);
-        var result = await userRepositories.UpdateUserAsync(updatedUser.UserId, updatedUser, ct);
-        return result != null;
+
+        var toUpdateUser = userDto.ToEntities(passwordHasher);
+
+        return await userRepositories.UpdateUserAsync(id, toUpdateUser, ct) is not null;
+
     }
     public async Task<bool> DeleteUserAsync(Guid id, CancellationToken ct)
     {
