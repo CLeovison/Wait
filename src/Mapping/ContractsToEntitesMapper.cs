@@ -28,13 +28,12 @@ public static class ContractsToEntitiesMapper
     {
         return new Users
         {
-            UserId = req.UserId,
             FirstName = req.FirstName,
             LastName = req.LastName,
             Username = req.Username,
             Password = passwordHasher.HashPassword(new Users(), req.Password),
             Email = req.Email,
-           ModifiedAt = req.UpdatedAt
+
         };
     }
 }

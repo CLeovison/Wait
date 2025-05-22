@@ -34,23 +34,24 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
     public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
-        var updateUser = await dbContext.User.FindAsync(users.UserId);
 
-        if (updateUser is null)
+        var existingUser = await dbContext.User.FindAsync(id);
+
+        if (existingUser is null)
         {
             return null;
         }
-        updateUser.Username = users.Username;
-        updateUser.Password = users.Password;
-        updateUser.FirstName = users.FirstName;
-        updateUser.Password = users.Password;
-        updateUser.Email = users.Email;
+        existingUser.FirstName = users.FirstName;
+        existingUser.LastName = users.LastName;
+        existingUser.Username = users.Username;
+        existingUser.Password = users.Password;
+        existingUser.Email = users.Email;
+
+        dbContext.Entry(existingUser).CurrentValues.SetValues(users);
 
         await dbContext.SaveChangesAsync(ct);
-        return updateUser;
 
-
-
+        return existingUser;
     }
     public async Task<bool> DeleteUserAsync(Users users)
     {
