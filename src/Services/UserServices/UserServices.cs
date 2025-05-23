@@ -50,6 +50,7 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
 
         var toUpdateUser = userDto.ToEntities(passwordHasher);
 
+
         return await userRepositories.UpdateUserAsync(id, toUpdateUser, ct) is not null;
 
     }
