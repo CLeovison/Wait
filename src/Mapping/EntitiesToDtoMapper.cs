@@ -11,7 +11,6 @@ public static class EntitiesToDtoMapper
     {
         return new Users
         {
-
             FirstName = userDto.FirstName,
             LastName = userDto.LastName,
             Username = userDto.Username,

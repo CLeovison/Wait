@@ -11,8 +11,6 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<Users>
 
         builder.HasKey(c => c.UserId);
 
-        builder.HasIndex(c => c.UserId);
-
         builder.Property(c => c.UserId)
             .HasDefaultValueSql("gen_random_uuid()")
             .ValueGeneratedOnAdd();

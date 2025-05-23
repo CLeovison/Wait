@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Wait.Enums;
 
 namespace Wait.Entities;
@@ -5,6 +6,7 @@ namespace Wait.Entities;
 /// <summary>
 /// This Class Is The Entity Based Class of the User
 /// </summary>
+[PrimaryKey(nameof(UserId))]
 public sealed class Users
 {
     public Guid UserId { get; set; }

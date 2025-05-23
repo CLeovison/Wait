@@ -47,7 +47,7 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
         existingUser.Password = users.Password;
         existingUser.Email = users.Email;
 
-        dbContext.Entry(existingUser).CurrentValues.SetValues(users);
+        dbContext.Entry(users).CurrentValues.SetValues(users);
 
         await dbContext.SaveChangesAsync(ct);
 
