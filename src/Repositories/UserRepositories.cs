@@ -30,12 +30,17 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
         return await dbContext.User.FindAsync(id, ct);
 
     }
-    public async Task<Users?> PaginatedUserAsync(Guid id, int limit, int totalPage, int count)
+    public async Task<IEnumerable<Users>> PaginatedUserAsync(Guid id, int limit, int totalPage)
     {
 
         using var dbContext = dbContextFactory.CreateDbContext();
-        var queryUser = dbContext.User.Where(x => x.UserId == id).OrderBy(x => x.CreatedAt);
-        
+        var queryUser = await dbContext.User
+            .Where(x => x.UserId == id)
+            .OrderBy(x => x.CreatedAt)
+            .Skip((totalPage - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+        return queryUser;
 
     }
 

@@ -5,6 +5,7 @@ using Wait.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 using Wait.Contracts.Request.UserRequest;
+using System.Collections;
 
 
 namespace Wait.Services.UserServices;
@@ -44,7 +45,18 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
 
         return getUser;
     }
+    public async Task<IEnumerable<Users>> PaginatedUserAsync(Guid id, int page,int limit)
+    {
+        int limits = 20;
+        int pages = 1;
 
+        if (limit < limits)
+        {
+
+        }
+
+        var paginatedUsers = await userRepositories.PaginatedUserAsync();
+    }
     public async Task<bool> UpdateUserAsync(Guid id, UserDto userDto, IPasswordHasher<Users> passwordHasher, CancellationToken ct)
     {
 
