@@ -45,7 +45,7 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
 
         return getUser;
     }
-    public async Task<IEnumerable<Users>> PaginatedUserAsync(Guid id, int page, int limit)
+    public async Task<IEnumerable<Users>> PaginatedUserAsync(UserDto userDto, IPasswordHasher<Users> passwordHasher, int page, int limit)
     {
         int pages = 1;
         int limits = 10;
@@ -54,7 +54,9 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
         {
             throw new ArgumentException("Invalid Limit and Page Provided");
         }
-        return await userRepositories.PaginatedUserAsync(id, limit, page);
+        var paginatedUser = userDto.ToEntities(passwordHasher);
+
+        return await userRepositories.PaginatedUserAsync(paginatedUser, limit, page);
     }
     public async Task<bool> UpdateUserAsync(Guid id, UserDto userDto, IPasswordHasher<Users> passwordHasher, CancellationToken ct)
     {
