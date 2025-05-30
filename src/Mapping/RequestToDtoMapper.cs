@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 using Wait.Contracts.Request.UserRequest;
+using Wait.Contracts.Response.UserResponse;
 using Wait.Entities;
 
 namespace Wait.Mapping;
@@ -19,7 +20,6 @@ public static class RequestToDtoMapper
             Email = req.Email
         };
     }
-
     public static UserDto ToRequestUpdate(this UpdateUserRequest req, IPasswordHasher<Users> passwordHasher)
     {
         return new UserDto

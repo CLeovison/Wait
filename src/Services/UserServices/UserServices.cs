@@ -45,7 +45,7 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
 
         return getUser;
     }
-    public async Task<IEnumerable<Users>> PaginatedUserAsync(UserDto userDto, IPasswordHasher<Users> passwordHasher, int page, int limit)
+    public async Task<IEnumerable<Users>> PaginatedUserAsync(UserDto userDto, DateTime? timestamp, IPasswordHasher<Users> passwordHasher, int page, int limit)
     {
         int pages = 1;
         int limits = 10;
@@ -56,7 +56,7 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
         }
         var paginatedUser = userDto.ToEntities(passwordHasher);
 
-        return await userRepositories.PaginatedUserAsync(paginatedUser, limit, page);
+        return await userRepositories.PaginatedUserAsync(paginatedUser, timestamp, limit, page);
     }
     public async Task<bool> UpdateUserAsync(Guid id, UserDto userDto, IPasswordHasher<Users> passwordHasher, CancellationToken ct)
     {
