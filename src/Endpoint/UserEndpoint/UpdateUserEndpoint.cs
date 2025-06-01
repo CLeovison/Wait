@@ -16,7 +16,7 @@ public sealed class UpdateUserEndpoint(IUserServices userServices) : IEndpoint
             var updatedUser = req.ToRequestUpdate(passwordHasher);
 
 
-            var result = await userServices.UpdateUserAsync(id, updatedUser, passwordHasher, ct);
+            var result = await userServices.UpdateUserAsync(id, updatedUser, ct);
 
             return result;
         });

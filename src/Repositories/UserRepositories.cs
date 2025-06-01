@@ -1,6 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Wait.Contracts.Data;
-using Wait.Contracts.Request.UserRequest;
 using Wait.Database;
 using Wait.Entities;
 
@@ -30,17 +28,20 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
         return await dbContext.User.FindAsync(id, ct);
 
     }
-    public async Task<IEnumerable<Users>> PaginatedUserAsync(Users users, DateTime? timestamp, int limit, int page)
+    public async Task<IEnumerable<Users>> PaginatedUserAsync(Users users, string? searchterm, int limit, int page)
     {
-
         using var dbContext = dbContextFactory.CreateDbContext();
-        var queryUser = await dbContext.User
-            .OrderBy(x => x.CreatedAt)
-            .Where(x => x.CreatedAt > timestamp)
+
+        IQueryable<Users> userQuery = dbContext.User;
+
+        var user = await userQuery.OrderBy(x => x.CreatedAt)
+            .ThenBy(x => x.FirstName)
+            .Skip((limit - 1) * page)
             .Take(limit)
             .AsNoTracking()
             .ToListAsync();
-        return queryUser;
+
+        return user;
 
     }
 

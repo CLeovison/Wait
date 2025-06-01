@@ -4,16 +4,14 @@ using Wait.UserServices.Services;
 using Wait.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
-using Wait.Contracts.Request.UserRequest;
-using System.Collections;
 
 
 namespace Wait.Services.UserServices;
 
-public sealed class UserServices(IUserRepositories userRepositories) : IUserServices
+public sealed class UserServices(IUserRepositories userRepositories, IPasswordHasher<Users> passwordHasher) : IUserServices
 {
 
-    public async Task<bool> CreateUserAsync(UserDto userDto, IPasswordHasher<Users> passwordHasher)
+    public async Task<bool> CreateUserAsync(UserDto userDto)
     {
         var newUser = userDto.ToEntities(passwordHasher);
         var createdUser = await userRepositories.CreateUserAsync(newUser);
@@ -45,20 +43,22 @@ public sealed class UserServices(IUserRepositories userRepositories) : IUserServ
 
         return getUser;
     }
-    public async Task<IEnumerable<Users>> PaginatedUserAsync(UserDto userDto, DateTime? timestamp, IPasswordHasher<Users> passwordHasher, int page, int limit)
+    public async Task<IEnumerable<Users>> PaginatedUserAsync(UserDto userDto)
     {
-        int pages = 1;
+        int page = 1;
         int limits = 10;
+        string? searchterm = "";
 
-        if (limits > 0 && pages > 0)
+
+        if (limits > 0 && page > 0)
         {
             throw new ArgumentException("Invalid Limit and Page Provided");
         }
         var paginatedUser = userDto.ToEntities(passwordHasher);
 
-        return await userRepositories.PaginatedUserAsync(paginatedUser, timestamp, limit, page);
+        return await userRepositories.PaginatedUserAsync(paginatedUser, searchterm, limits, page);
     }
-    public async Task<bool> UpdateUserAsync(Guid id, UserDto userDto, IPasswordHasher<Users> passwordHasher, CancellationToken ct)
+    public async Task<bool> UpdateUserAsync(Guid id, UserDto userDto, CancellationToken ct)
     {
 
         var toUpdateUser = userDto.ToEntities(passwordHasher);

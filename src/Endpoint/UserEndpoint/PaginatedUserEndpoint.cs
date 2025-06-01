@@ -1,20 +1,25 @@
-using Wait.Abstract;
-using Wait.Contracts.Response.UserResponse;
-using Wait.UserServices.Services;
-using Wait.Mapping;
-using Microsoft.AspNetCore.Identity;
-using Wait.Entities;
+// using Wait.Abstract;
+// using Wait.Contracts.Response.UserResponse;
+// using Wait.UserServices.Services;
 
-namespace Wait.Endpoint.UserEndpoint;
+// using Microsoft.AspNetCore.Identity;
+// using Wait.Entities;
+// using Wait.Contracts.Data;
 
-public sealed class PaginatedUserAsync(IUserServices userServices) : IEndpoint
-{
+// namespace Wait.Endpoint.UserEndpoint;
 
-    public void Endpoint(IEndpointRouteBuilder app)
-    {
-        app.MapGet("/api/paginateduser", async (GetAllUserResponse req, IPasswordHasher<Users> passwordHasher, CancellationToken ct) =>
-        {
+// public sealed class PaginatedUserAsync(IUserServices userServices) : IEndpoint
+// {
 
-        });
-    }
-}
+//     public void Endpoint(IEndpointRouteBuilder app)
+//     {
+//         app.MapGet("/api/paginateduser", async (GetAllUserResponse req, IPasswordHasher<Users> passwordHasher, CancellationToken ct) =>
+//         {   
+//             var paginatedUser = new UserDto
+//             {
+//                 FirstName = req.Users.
+//             }
+//             return await userServices.PaginatedUserAsync();
+//         });
+//     }
+// }
