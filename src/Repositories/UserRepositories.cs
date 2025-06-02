@@ -28,52 +28,40 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
         return await dbContext.User.FindAsync(id, ct);
 
     }
-    public async Task<IEnumerable<Users>> PaginatedUserAsync(Users users, string? searchterm, int limit, int page)
+    public async Task<List<Users>> PaginatedUserAsync(int limit, int page)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
 
-        IQueryable<Users> userQuery = dbContext.User;
+        IQueryable<Users> userQuery = dbContext.User.AsQueryable();
 
-        var user = await userQuery.OrderBy(x => x.CreatedAt)
-            .ThenBy(x => x.FirstName)
-            .Skip((limit - 1) * page)
-            .Take(limit)
-            .AsNoTracking()
-            .ToListAsync();
+        var paginatedUser = await userQuery.OrderBy(x => x.CreatedAt)
+             .ThenBy(x => x.FirstName)
+             .Skip((page - 1) * limit)
+             .Take(limit)
+             .AsNoTracking()
+             .ToListAsync();
 
-        return user;
+        return paginatedUser;
 
     }
 
-    public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)
+    public async Task<Users?> UpdateUserAsync(Users users, CancellationToken ct)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
-
-        var existingUser = await dbContext.User.FindAsync(id);
-
-        if (existingUser is null)
-        {
-            return null;
-        }
-        existingUser.FirstName = users.FirstName;
-        existingUser.LastName = users.LastName;
-        existingUser.Username = users.Username;
-        existingUser.Password = users.Password;
-        existingUser.Email = users.Email;
 
         dbContext.Entry(users).CurrentValues.SetValues(users);
 
         await dbContext.SaveChangesAsync(ct);
 
-        return existingUser;
+        return users;
     }
     public async Task<bool> DeleteUserAsync(Users users)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
         var deleteUser = dbContext.Set<Users>().Remove(users);
         await dbContext.SaveChangesAsync();
-        return deleteUser is not null;
 
+        return deleteUser is not null;
 
     }
 

@@ -4,6 +4,7 @@ using Wait.UserServices.Services;
 using Wait.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 
 namespace Wait.Services.UserServices;
@@ -43,28 +44,41 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
 
         return getUser;
     }
-    public async Task<IEnumerable<Users>> PaginatedUserAsync(UserDto userDto)
+    public async Task<List<Users>> PaginatedUserAsync(int page, int limit, string? searchTerm)
     {
-        int page = 1;
-        int limits = 10;
-        string? searchterm = "";
 
+        var userPaginated = await userRepositories.PaginatedUserAsync(limit, page);
 
-        if (limits > 0 && page > 0)
+        if (limit < 0 || page < 0)
         {
             throw new ArgumentException("Invalid Limit and Page Provided");
         }
-        var paginatedUser = userDto.ToEntities(passwordHasher);
 
-        return await userRepositories.PaginatedUserAsync(paginatedUser, searchterm, limits, page);
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            userPaginated = userPaginated.Where(x => x.FirstName.Contains(searchTerm) || x.LastName.Contains(searchTerm)).ToList();
+        }
+
+        return userPaginated;
     }
-    public async Task<bool> UpdateUserAsync(Guid id, UserDto userDto, CancellationToken ct)
+    public async Task<Users?> UpdateUserAsync(Guid id, UserDto userDto, CancellationToken ct)
     {
 
         var toUpdateUser = userDto.ToEntities(passwordHasher);
+        var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
 
+        if (existingUser is null)
+        {
+            return null;
+        }
 
-        return await userRepositories.UpdateUserAsync(id, toUpdateUser, ct) is not null;
+        existingUser.FirstName = toUpdateUser.FirstName;
+        existingUser.LastName = toUpdateUser.LastName;
+        existingUser.Username = toUpdateUser.Username;
+        existingUser.Password = toUpdateUser.Password;
+        existingUser.Email = toUpdateUser.Email;
+
+        return await userRepositories.UpdateUserAsync(toUpdateUser, ct);
 
     }
     public async Task<bool> DeleteUserAsync(Guid id, CancellationToken ct)
