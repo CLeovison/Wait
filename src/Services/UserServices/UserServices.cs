@@ -61,10 +61,10 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
 
         return userPaginated;
     }
-    public async Task<Users?> UpdateUserAsync(Guid id, UserDto userDto, CancellationToken ct)
+    public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)
     {
 
-        var toUpdateUser = userDto.ToEntities(passwordHasher);
+
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
 
         if (existingUser is null)
@@ -72,13 +72,13 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             return null;
         }
 
-        existingUser.FirstName = toUpdateUser.FirstName;
-        existingUser.LastName = toUpdateUser.LastName;
-        existingUser.Username = toUpdateUser.Username;
-        existingUser.Password = toUpdateUser.Password;
-        existingUser.Email = toUpdateUser.Email;
+        existingUser.FirstName = users.FirstName;
+        existingUser.LastName = users.LastName;
+        existingUser.Username = users.Username;
+        existingUser.Password = passwordHasher.HashPassword(users, users.Password);
+        existingUser.Email = users.Email;
 
-        return await userRepositories.UpdateUserAsync(toUpdateUser, ct);
+        return await userRepositories.UpdateUserAsync(existingUser, ct);
 
     }
     public async Task<bool> DeleteUserAsync(Guid id, CancellationToken ct)

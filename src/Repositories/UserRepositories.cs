@@ -49,7 +49,7 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
     {
         using var dbContext = dbContextFactory.CreateDbContext();
 
-        dbContext.Entry(users).CurrentValues.SetValues(users);
+        dbContext.User.Update(users);
 
         await dbContext.SaveChangesAsync(ct);
 
