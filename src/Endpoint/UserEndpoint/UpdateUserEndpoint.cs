@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Wait.Abstract;
+using Wait.Contracts.Data;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Entities;
 using Wait.Mapping;
@@ -11,9 +12,9 @@ public sealed class UpdateUserEndpoint(IUserServices userServices) : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("/api/users/{id}", async (Guid id, UpdateUserRequest req, IPasswordHasher<Users> passwordHasher, CancellationToken ct) =>
+        app.MapPut("/api/users/{id}", async (Guid id, UserDto users, IPasswordHasher<Users> passwordHasher, CancellationToken ct) =>
         {
-            var updatedUser = req.ToRequestUpdate(passwordHasher);
+            var updatedUser = users.ToEntities(passwordHasher);
 
 
             var result = await userServices.UpdateUserAsync(id, updatedUser, ct);
