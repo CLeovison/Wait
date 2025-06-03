@@ -5,6 +5,7 @@ using Wait.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 
 namespace Wait.Services.UserServices;
@@ -44,11 +45,12 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
 
         return getUser;
     }
-    public async Task<List<Users>> PaginatedUserAsync(int page, int limit, string? searchTerm)
+    public async Task<List<Users>> PaginatedUserAsync(int page, int limit, string? searchTerm, string sortOrder)
     {
 
         var userPaginated = await userRepositories.PaginatedUserAsync(limit, page);
 
+        //Validating the Page And Limit
         if (limit < 0 || page < 0)
         {
             throw new ArgumentException("Invalid Limit and Page Provided");
@@ -59,11 +61,21 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             userPaginated = userPaginated.Where(x => x.FirstName.Contains(searchTerm) || x.LastName.Contains(searchTerm)).ToList();
         }
 
+        //Validating the Sort Order
+        userPaginated = sortOrder.ToLower() switch
+        {
+            "asc" => userPaginated.OrderBy(x => x.CreatedAt).ThenBy(x => x.FirstName).ToList(),
+            "desc" => userPaginated.OrderByDescending(x => x.CreatedAt).ThenBy(x => x.FirstName).ToList(),
+            _ => throw new ArgumentException("Invalid sort order. Use 'asc' or 'desc' ")
+        };
+
+
+
+
         return userPaginated;
     }
     public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)
     {
-
 
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
 

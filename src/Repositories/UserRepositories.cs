@@ -42,7 +42,6 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
              .ToListAsync();
 
         return paginatedUser;
-
     }
 
     public async Task<Users?> UpdateUserAsync(Users users, CancellationToken ct)
