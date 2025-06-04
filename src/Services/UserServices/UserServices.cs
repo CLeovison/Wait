@@ -4,9 +4,6 @@ using Wait.UserServices.Services;
 using Wait.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-
 
 namespace Wait.Services.UserServices;
 
@@ -56,6 +53,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             throw new ArgumentException("Invalid Limit and Page Provided");
         }
 
+        //Validating the Filtering
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
             userPaginated = userPaginated.Where(x => x.FirstName.Contains(searchTerm) || x.LastName.Contains(searchTerm)).ToList();
@@ -69,29 +67,32 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             _ => throw new ArgumentException("Invalid sort order. Use 'asc' or 'desc' ")
         };
 
-
-
-
         return userPaginated;
     }
     public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)
     {
-
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
-
-        if (existingUser is null)
+        try
         {
-            return null;
+            if (existingUser is null)
+            {
+                return null;
+            }
+
+            existingUser.FirstName = users.FirstName;
+            existingUser.LastName = users.LastName;
+            existingUser.Username = users.Username;
+            existingUser.Password = passwordHasher.HashPassword(users, users.Password);
+            existingUser.Email = users.Email;
+
+            return await userRepositories.UpdateUserAsync(existingUser, ct);
         }
-
-        existingUser.FirstName = users.FirstName;
-        existingUser.LastName = users.LastName;
-        existingUser.Username = users.Username;
-        existingUser.Password = passwordHasher.HashPassword(users, users.Password);
-        existingUser.Email = users.Email;
-
-        return await userRepositories.UpdateUserAsync(existingUser, ct);
-
+        catch (Exception ex)
+        {
+            Results.NotFound(ex);
+        }
+        
+        return existingUser;
     }
     public async Task<bool> DeleteUserAsync(Guid id, CancellationToken ct)
     {
