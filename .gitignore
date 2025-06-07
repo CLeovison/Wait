@@ -1,4 +1,4 @@
 bin
 obj
-/.vscode/appsettings.json
-/.vscode/appsettings.Development.json
+/.src/appsettings.json
+/.src/appsettings.Development.json
