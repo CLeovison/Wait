@@ -42,9 +42,9 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
 
         return getUser;
     }
-    public async Task<List<Users>> PaginatedUserAsync(int page, int limit, string? searchTerm, string sortOrder)
+    public async Task<IEnumerable<Users>> PaginatedUserAsync(int page, int limit, string? searchTerm, string sortOrder)
     {
-
+        
         var userPaginated = await userRepositories.PaginatedUserAsync(limit, page);
 
         //Validating the Page And Limit
@@ -66,6 +66,8 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             "desc" => userPaginated.OrderByDescending(x => x.CreatedAt).ThenBy(x => x.FirstName).ToList(),
             _ => throw new ArgumentException("Invalid sort order. Use 'asc' or 'desc' ")
         };
+
+
 
         return userPaginated;
     }
