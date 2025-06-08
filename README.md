@@ -4,5 +4,5 @@
 
 ## Table of Contents
 
--[Getting Started]
--[Architecture Overview]
+- [Getting Started]()
+- [Architecture Overview]()
