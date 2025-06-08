@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Wait.Contracts.Response;
 using Wait.Database;
 using Wait.Entities;
-using Wait.Shared;
-
 
 namespace Wait.Repositories;
 
@@ -29,20 +28,21 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
         return await dbContext.User.FindAsync(id, ct);
 
     }
-    public async Task<PaginatedList<Users>> PaginatedUserAsync(int limit, int page)
+    public async Task<PaginatedResponse<Users>> PaginatedUserAsync(int page, int pageSize)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
 
         IQueryable<Users> userQuery = dbContext.User.AsQueryable();
 
-        var count = await userQuery.CountAsync();
+        var totalCount = await userQuery.AsNoTracking().CountAsync();
+
         var items = await userQuery.OrderBy(x => x.CreatedAt)
              .ThenBy(x => x.FirstName)
-
-             .AsNoTracking()
+             .Skip((page - 1) * pageSize)
+             .Take(pageSize)
              .ToListAsync();
 
-        var paginatedUser = new PaginatedList<Users>(items, count, page, limit);
+        var paginatedUser = new PaginatedResponse<Users>(items, page, pageSize, totalCount);
 
         return paginatedUser;
     }

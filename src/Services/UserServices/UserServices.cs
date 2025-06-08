@@ -4,6 +4,9 @@ using Wait.UserServices.Services;
 using Wait.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
+using Wait.Contracts.Response;
+using Wait.Contracts.Request.Shared;
+
 
 namespace Wait.Services.UserServices;
 
@@ -42,34 +45,35 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
 
         return getUser;
     }
-    public async Task<IEnumerable<Users>> PaginatedUserAsync(int page, int limit, string? searchTerm, string sortOrder)
+    public async Task<PaginatedResponse<Users>> PaginatedUserAsync(PaginatedRequest req, CancellationToken ct)
     {
-        
-        var userPaginated = await userRepositories.PaginatedUserAsync(limit, page);
+        var getAllUser = await userRepositories.GetAllUserAsync(ct);
 
-        //Validating the Page And Limit
-        if (limit < 0 || page < 0)
+        //Validation for Filtering
+        if (string.IsNullOrWhiteSpace(req.SearchTerm))
         {
-            throw new ArgumentException("Invalid Limit and Page Provided");
+            getAllUser = getAllUser.Where(x => x.FirstName.Contains(req.SearchTerm!) || x.LastName.Contains(req.SearchTerm!));
         }
 
-        //Validating the Filtering
-        if (!string.IsNullOrWhiteSpace(searchTerm))
-        {
-            userPaginated = userPaginated.Where(x => x.FirstName.Contains(searchTerm) || x.LastName.Contains(searchTerm)).ToList();
-        }
+        //Validation for Sorting
 
-        //Validating the Sort Order
-        userPaginated = sortOrder.ToLower() switch
+        getAllUser = req.SortBy?.ToLower() switch
         {
-            "asc" => userPaginated.OrderBy(x => x.CreatedAt).ThenBy(x => x.FirstName).ToList(),
-            "desc" => userPaginated.OrderByDescending(x => x.CreatedAt).ThenBy(x => x.FirstName).ToList(),
-            _ => throw new ArgumentException("Invalid sort order. Use 'asc' or 'desc' ")
+            "firstname" => req.SortDescending ? getAllUser.OrderByDescending(x => x.FirstName) : getAllUser.OrderBy(x => x.FirstName),
+            "lastname" => req.SortDescending ? getAllUser.OrderByDescending(x => x.LastName) : getAllUser.OrderBy(x => x.LastName),
+            "email" => req.SortDescending ? getAllUser.OrderByDescending(x => x.Email) : getAllUser.OrderBy(x => x.Email),
+            _ => getAllUser
         };
 
+        //Validation for Pages
+        if (req.Page <= 0 || req.PageSize < 0)
+        {
+            throw new ArgumentException("Page number and page size must be greater than zero.");
+        }
+        var paginatedUser = await userRepositories.PaginatedUserAsync(req.Page, req.PageSize);
 
 
-        return userPaginated;
+        return paginatedUser;
     }
     public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)
     {
@@ -93,7 +97,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         {
             Results.NotFound(ex);
         }
-        
+
         return existingUser;
     }
     public async Task<bool> DeleteUserAsync(Guid id, CancellationToken ct)
