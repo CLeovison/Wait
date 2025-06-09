@@ -36,8 +36,7 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
 
         var totalCount = await userQuery.AsNoTracking().CountAsync();
 
-        var items = await userQuery.OrderBy(x => x.CreatedAt)
-             .ThenBy(x => x.FirstName)
+        var items = await userQuery
              .Skip((page - 1) * pageSize)
              .Take(pageSize)
              .ToListAsync();

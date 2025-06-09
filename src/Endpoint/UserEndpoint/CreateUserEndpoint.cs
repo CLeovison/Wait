@@ -18,7 +18,9 @@ public class CreateUserEndpoint(IUserServices userServices) : IEndpoint
         app.MapPost("/api/create", async (CreateUserRequest req, IPasswordHasher<Users> passwordHasher) =>
         {
             var userDto = req.ToRequest(passwordHasher);
-            return await userServices.CreateUserAsync(userDto);
+
+            var userCreated = await userServices.CreateUserAsync(userDto);
+            return Results.Ok(userCreated);
         });
     }
 }

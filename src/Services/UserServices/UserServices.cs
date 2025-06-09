@@ -5,7 +5,7 @@ using Wait.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 using Wait.Contracts.Response;
-using Wait.Contracts.Request.Shared;
+using Wait.Contracts.Request.Common;
 
 
 namespace Wait.Services.UserServices;
@@ -16,18 +16,13 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     public async Task<bool> CreateUserAsync(UserDto userDto)
     {
         var newUser = userDto.ToEntities(passwordHasher);
-        var createdUser = await userRepositories.CreateUserAsync(newUser);
 
-        if (!createdUser)
-        {
-            throw new ArgumentException("You didn't have any credentials ");
-        }
-        else
-        {
-            return createdUser;
-        }
+        if (!await userRepositories.CreateUserAsync(newUser))
+            throw new ArgumentException("You didn't have any credentials");
 
+        return true;
     }
+
     public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
     {
         var result = await userRepositories.GetAllUserAsync(ct);
@@ -50,7 +45,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         var getAllUser = await userRepositories.GetAllUserAsync(ct);
 
         //Validation for Filtering
-        if (string.IsNullOrWhiteSpace(req.SearchTerm))
+        if (!string.IsNullOrWhiteSpace(req.SearchTerm))
         {
             getAllUser = getAllUser.Where(x => x.FirstName.Contains(req.SearchTerm!) || x.LastName.Contains(req.SearchTerm!));
         }
@@ -59,22 +54,20 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
 
         getAllUser = req.SortBy?.ToLower() switch
         {
-            "firstname" => req.SortDescending ? getAllUser.OrderByDescending(x => x.FirstName) : getAllUser.OrderBy(x => x.FirstName),
-            "lastname" => req.SortDescending ? getAllUser.OrderByDescending(x => x.LastName) : getAllUser.OrderBy(x => x.LastName),
-            "email" => req.SortDescending ? getAllUser.OrderByDescending(x => x.Email) : getAllUser.OrderBy(x => x.Email),
+            "firstname" => req.SortDirection ? getAllUser.OrderByDescending(x => x.FirstName) : getAllUser.OrderBy(x => x.FirstName),
+            "lastname" => req.SortDirection ? getAllUser.OrderByDescending(x => x.LastName) : getAllUser.OrderBy(x => x.LastName),
+            "email" => req.SortDirection ? getAllUser.OrderByDescending(x => x.Email) : getAllUser.OrderBy(x => x.Email),
             _ => getAllUser
         };
 
         //Validation for Pages
-        if (req.Page <= 0 || req.PageSize < 0)
+        if (req.Page < 0 || req.PageSize < 0)
         {
             throw new ArgumentException("Page number and page size must be greater than zero.");
         }
-        var paginatedUser = await userRepositories.PaginatedUserAsync(req.Page, req.PageSize);
-
-
-        return paginatedUser;
+        return await userRepositories.PaginatedUserAsync(req.Page, req.PageSize);
     }
+
     public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
@@ -84,12 +77,12 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             {
                 return null;
             }
-
             existingUser.FirstName = users.FirstName;
             existingUser.LastName = users.LastName;
             existingUser.Username = users.Username;
             existingUser.Password = passwordHasher.HashPassword(users, users.Password);
             existingUser.Email = users.Email;
+            existingUser.ModifiedAt = users.ModifiedAt;
 
             return await userRepositories.UpdateUserAsync(existingUser, ct);
         }

@@ -16,7 +16,8 @@ public static class EntitiesToDtoMapper
             Username = userDto.Username,
             Password = passwordHasher.HashPassword(new Users(), userDto.Password),
             Birthday = userDto.Birthday,
-            Email = userDto.Email
+            Email = userDto.Email,
+            ModifiedAt = userDto.ModifiedAt
         };
     }
 
