@@ -11,5 +11,6 @@ public class UserDto
     public required string Email { get; set; }
     public DateOnly Birthday { get; set; }
     public DateOnly CreatedAt { get; set; }
+    public DateTime ModifiedAt { get; set; }
 
 }

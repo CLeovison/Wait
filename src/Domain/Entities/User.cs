@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Wait.Enums;
 
 namespace Wait.Entities;
 
