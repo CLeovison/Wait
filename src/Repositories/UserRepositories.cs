@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Wait.Contracts.Response;
 using Wait.Database;
-using Wait.Entities;
+using Wait.Domain.Entities;
 
 namespace Wait.Repositories;
 
@@ -26,7 +26,17 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
     {
         using var dbContext = dbContextFactory.CreateDbContext();
         return await dbContext.User.FindAsync(id, ct);
+    }
+    public async Task<IEnumerable<Users>> SearchUserAsync(string? searchTerm, CancellationToken ct)
+    {
+        using var dbContext = dbContextFactory.CreateDbContext();
 
+        return await dbContext.User
+            .Where(x =>
+                !string.IsNullOrEmpty(searchTerm) &&
+                (x.FirstName.Contains(searchTerm) || x.LastName.Contains(searchTerm))
+            )
+            .ToListAsync(ct);
     }
     public async Task<PaginatedResponse<Users>> PaginatedUserAsync(int page, int pageSize)
     {
@@ -50,7 +60,7 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
     {
         using var dbContext = dbContextFactory.CreateDbContext();
 
-        dbContext.User.Update(users);
+        dbContext.Set<Users>().Update(users);
 
         await dbContext.SaveChangesAsync(ct);
 

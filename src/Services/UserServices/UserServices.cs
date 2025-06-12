@@ -1,6 +1,5 @@
-using Wait.Entities;
+using Wait.Domain.Entities;
 using Wait.Repositories;
-using Wait.UserServices.Services;
 using Wait.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
@@ -40,32 +39,39 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
 
         return getUser;
     }
+
+    public async Task<IEnumerable<Users>> SearchUserAsync(string? searchTerm, CancellationToken ct)
+    {
+
+        var lowerCaseTerm = searchTerm?.Trim().ToLower();
+
+        if (string.IsNullOrWhiteSpace(lowerCaseTerm))
+        {
+            Enumerable.Empty<Users>();
+        }
+
+        return await userRepositories.SearchUserAsync(lowerCaseTerm, ct);
+
+    }
     public async Task<PaginatedResponse<Users>> PaginatedUserAsync(PaginatedRequest req, CancellationToken ct)
     {
-        var getAllUser = await userRepositories.GetAllUserAsync(ct);
+        var users = await userRepositories.GetAllUserAsync(ct);
 
-        //Validation for Filtering
-        if (!string.IsNullOrWhiteSpace(req.SearchTerm))
+        if (req.Page < 1)
         {
-            getAllUser = getAllUser.Where(x => x.FirstName.Contains(req.SearchTerm!) || x.LastName.Contains(req.SearchTerm!));
+            throw new ArgumentException("There are no page available");
         }
 
-        //Validation for Sorting
-
-        getAllUser = req.SortBy?.ToLower() switch
+        if (string.IsNullOrWhiteSpace(req.SearchTerm))
         {
-            "firstname" => req.SortDirection ? getAllUser.OrderByDescending(x => x.FirstName) : getAllUser.OrderBy(x => x.FirstName),
-            "lastname" => req.SortDirection ? getAllUser.OrderByDescending(x => x.LastName) : getAllUser.OrderBy(x => x.LastName),
-            "email" => req.SortDirection ? getAllUser.OrderByDescending(x => x.Email) : getAllUser.OrderBy(x => x.Email),
-            _ => getAllUser
-        };
-
-        //Validation for Pages
-        if (req.Page < 0 || req.PageSize < 0)
-        {
-            throw new ArgumentException("Page number and page size must be greater than zero.");
+            var term = req.SearchTerm?.ToLower();
+            users = users.Where(x => x.FirstName.Contains(term!) || x.LastName.Contains(term!));
         }
-        return await userRepositories.PaginatedUserAsync(req.Page, req.PageSize);
+        ;
+
+        var userPaginated = await userRepositories.PaginatedUserAsync(req.Page, req.PageSize);
+
+        return userPaginated;
     }
 
     public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)
@@ -103,7 +109,5 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         }
 
         return await userRepositories.DeleteUserAsync(existingUser);
-
-
     }
 }

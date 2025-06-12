@@ -1,5 +1,5 @@
 using Wait.Abstract;
-using Wait.UserServices.Services;
+using Wait.Services.UserServices;
 using Wait.Mapping;
 
 

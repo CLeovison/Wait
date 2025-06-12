@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
-using Wait.Entities;
+using Wait.Domain.Entities;
 
 namespace Wait.Mapping;
 

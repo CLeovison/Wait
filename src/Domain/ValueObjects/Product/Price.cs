@@ -1,4 +1,4 @@
-using Wait.Primitives;
+using Wait.Domain.Primitives;
 
 namespace Wait.ValueObjects.Product;
 

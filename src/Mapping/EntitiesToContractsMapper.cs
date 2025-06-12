@@ -1,5 +1,5 @@
 using Wait.Contracts.Response.UserResponse;
-using Wait.Entities;
+using Wait.Domain.Entities;
 
 namespace Wait.Mapping;
 

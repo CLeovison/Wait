@@ -1,4 +1,4 @@
-namespace Wait.Primitives;
+namespace Wait.Domain.Primitives;
 
 
 public abstract class ValueObject : IEquatable<ValueObject>

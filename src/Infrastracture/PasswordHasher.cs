@@ -1,9 +1,6 @@
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
-using Wait.Contracts.Request.UserRequest;
-using Wait.Entities;
-
 
 namespace Wait.Infrastracture;
 

@@ -1,14 +1,16 @@
+//Microsoft Packages
 using System.Reflection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+//Data Access
 using Wait.Database;
-using Wait.Entities;
-using Wait.Extensions;
-
+using Wait.Domain.Entities;
 using Wait.Repositories;
+
+//Business Logic Access
 using Wait.Services.UserServices;
-using Wait.UserServices.Services;
+using Wait.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);

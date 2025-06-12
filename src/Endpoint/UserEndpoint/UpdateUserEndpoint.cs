@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Wait.Abstract;
 using Wait.Contracts.Data;
-using Wait.Contracts.Request.UserRequest;
-using Wait.Entities;
+
+using Wait.Domain.Entities;
+using Wait.Services.UserServices;
 using Wait.Mapping;
-using Wait.UserServices.Services;
 
 namespace Wait.Endpoint.UserEndpoint;
 

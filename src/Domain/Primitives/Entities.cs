@@ -1,8 +1,8 @@
-namespace Wait.Primitives;
+namespace Wait.Domain.Primitives;
 
 public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : notnull
 {
-    public TId Id { get; init; }
+    public TId Id { get; set; }
     protected Entity(TId id)
     {
         Id = id;

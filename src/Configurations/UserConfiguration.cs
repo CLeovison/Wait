@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Wait.Entities;
+using Wait.Domain.Entities;
 
 namespace Wait.Configurations;
 

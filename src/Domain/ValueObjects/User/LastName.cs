@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using Wait.Primitives;
+using  Wait.Domain.Primitives;
 
 namespace Wait.ValueObjects.User;
 

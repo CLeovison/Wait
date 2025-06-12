@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 using Wait.Contracts.Request.UserRequest;
-using Wait.Contracts.Response.UserResponse;
-using Wait.Entities;
+using Wait.Domain.Entities;
 
 namespace Wait.Mapping;
 

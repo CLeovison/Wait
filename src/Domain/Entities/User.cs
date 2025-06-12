@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Wait.Entities;
+
+namespace Wait.Domain.Entities;
 
 /// <summary>
 /// This Class Is The Entity Based Class of the User
