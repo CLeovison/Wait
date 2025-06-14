@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 using Wait.Domain.Entities;
 
-namespace Wait.Mapping;
+namespace Wait.Infrastracture.Mapping;
 
 
 public static class EntitiesToDtoMapper

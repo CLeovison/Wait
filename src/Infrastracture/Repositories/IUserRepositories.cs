@@ -2,7 +2,7 @@ using Wait.Domain.Entities;
 using Wait.Contracts.Response;
 
 
-namespace Wait.Repositories;
+namespace Wait.Infrastracture.Repositories;
 
 
 public interface IUserRepositories

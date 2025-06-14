@@ -3,7 +3,7 @@ using Wait.Contracts.Response;
 using Wait.Database;
 using Wait.Domain.Entities;
 
-namespace Wait.Repositories;
+namespace Wait.Infrastracture.Repositories;
 
 
 public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFactory) : IUserRepositories

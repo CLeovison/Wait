@@ -2,7 +2,7 @@ using Wait.Abstract;
 
 using Wait.Contracts.Request.UserRequest;
 using Wait.Services.UserServices;
-using Wait.Mapping;
+using Wait.Infrastracture.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Wait.Domain.Entities;
 

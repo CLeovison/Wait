@@ -1,6 +1,6 @@
 using Wait.Domain.Entities;
-using Wait.Repositories;
-using Wait.Mapping;
+using Wait.Infrastracture.Repositories;
+using Wait.Infrastracture.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 using Wait.Contracts.Response;
