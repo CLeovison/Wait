@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 //Data Access
 using Wait.Database;
 using Wait.Domain.Entities;
-using Wait.Repositories;
+using Wait.Infrastracture.Repositories;
 
 //Business Logic Access
 using Wait.Services.UserServices;

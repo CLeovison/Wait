@@ -55,23 +55,8 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     }
     public async Task<PaginatedResponse<Users>> PaginatedUserAsync(PaginatedRequest req, CancellationToken ct)
     {
-        var users = await userRepositories.GetAllUserAsync(ct);
-
-        if (req.Page < 1)
-        {
-            throw new ArgumentException("There are no page available");
-        }
-
-        if (string.IsNullOrWhiteSpace(req.SearchTerm))
-        {
-            var term = req.SearchTerm?.ToLower();
-            users = users.Where(x => x.FirstName.Contains(term!) || x.LastName.Contains(term!));
-        }
-        ;
-
-        var userPaginated = await userRepositories.PaginatedUserAsync(req.Page, req.PageSize);
-
-        return userPaginated;
+        var result = await userRepositories.PaginatedUserAsync(req, ct);
+        return result;
     }
 
     public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)

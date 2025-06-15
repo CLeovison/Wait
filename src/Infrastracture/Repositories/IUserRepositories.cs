@@ -1,5 +1,6 @@
 using Wait.Domain.Entities;
 using Wait.Contracts.Response;
+using Wait.Contracts.Request.Common;
 
 
 namespace Wait.Infrastracture.Repositories;
@@ -11,7 +12,7 @@ public interface IUserRepositories
     Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct);
     Task<Users?> GetUserByIdAsync(Guid id, CancellationToken ct);
     Task<IEnumerable<Users>> SearchUserAsync(string? searchTerm, CancellationToken ct);
-    Task<PaginatedResponse<Users>> PaginatedUserAsync(int page, int pageSize);
+    Task<PaginatedResponse<Users>> PaginatedUserAsync(PaginatedRequest req, CancellationToken ct);
     Task<Users?> UpdateUserAsync(Users users, CancellationToken ct);
     Task<bool> DeleteUserAsync(Users users);
 }

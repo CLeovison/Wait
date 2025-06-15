@@ -1,5 +1,3 @@
-
-
 namespace Wait.Contracts.Response;
 
 public class PaginatedResponse<T>(List<T> items, int page, int pageSize, int totalCount)
