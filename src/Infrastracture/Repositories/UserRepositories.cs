@@ -3,6 +3,7 @@ using Wait.Contracts.Request.Common;
 using Wait.Contracts.Response;
 using Wait.Database;
 using Wait.Domain.Entities;
+using Wait.Extensions;
 
 namespace Wait.Infrastracture.Repositories;
 
@@ -47,6 +48,8 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
 
         var paginatedUser = await dbContext.User
         .Skip((req.Page - 1) * req.PageSize)
+        .Search(req.SearchTerm)
+        .Sort(req)
         .Take(req.PageSize)
         .ToListAsync(ct);
 
