@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Wait.Contracts.Request.Common;
+using Wait.Contracts.Request.UserRequest;
 using Wait.Domain.Entities;
 
 namespace Wait.Extensions;
@@ -7,8 +8,20 @@ namespace Wait.Extensions;
 
 public static class UserRepositoryExtensions
 {
-    public static IQueryable<Users> Filter(this IQueryable<Users> filter)
+    public static IQueryable<Users> Filter(this IQueryable<Users> filter, FilterUserRequest req)
     {
+        if (req is null) return filter;
+
+        if (!string.IsNullOrWhiteSpace(req.FirstName) && !string.IsNullOrWhiteSpace(req.LastName))
+        {
+            _ = filter.Where(x => x.FirstName.Contains(req.FirstName) || x.LastName.Contains(req.LastName));
+        }
+        if (req.CreatedAt.HasValue)
+        {
+            filter = filter.Where(x => x.CreatedAt > req.CreatedAt);
+        }
+
+        return filter;
 
     }
     public static IQueryable<Users> Search(this IQueryable<Users> search, string? searchTerm)

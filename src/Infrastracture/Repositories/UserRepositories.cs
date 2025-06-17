@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Wait.Contracts.Request.Common;
+using Wait.Contracts.Request.UserRequest;
 using Wait.Contracts.Response;
 using Wait.Database;
 using Wait.Domain.Entities;
@@ -40,19 +41,19 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
             )
             .ToListAsync(ct);
     }
-    public async Task<PaginatedResponse<Users>> PaginatedUserAsync(PaginatedRequest req, CancellationToken ct)
+    public async Task<PaginatedResponse<Users>> PaginatedUserAsync(PaginatedRequest req, FilterUserRequest data, CancellationToken ct)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
 
-        var totalCount = await dbContext.User.CountAsync(ct);
-
         var paginatedUser = await dbContext.User
         .Skip((req.Page - 1) * req.PageSize)
-        .Search(req.SearchTerm)
+        .Search(req.SearchTerm!)
+        .Filter(data) // Pass the required argument to Filter
         .Sort(req)
         .Take(req.PageSize)
         .ToListAsync(ct);
 
+        var totalCount = await dbContext.User.CountAsync(ct);
         return new PaginatedResponse<Users>(paginatedUser, req.Page, req.PageSize, totalCount);
     }
 
