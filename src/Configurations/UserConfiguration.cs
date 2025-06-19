@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Wait.Domain.Entities;
 
-namespace Wait.Infrastracture.Configurations;
+namespace Wait.Configurations;
 
 public sealed class UserConfiguration : IEntityTypeConfiguration<Users>
 {

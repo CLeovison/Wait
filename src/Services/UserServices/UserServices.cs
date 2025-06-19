@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 using Wait.Contracts.Response;
 using Wait.Contracts.Request.Common;
+using Wait.Contracts.Request.UserRequest;
 
 
 namespace Wait.Services.UserServices;
@@ -42,7 +43,6 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
 
     public async Task<IEnumerable<Users>> SearchUserAsync(string? searchTerm, CancellationToken ct)
     {
-
         var lowerCaseTerm = searchTerm?.Trim().ToLower();
 
         if (string.IsNullOrWhiteSpace(lowerCaseTerm))
@@ -51,11 +51,10 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         }
 
         return await userRepositories.SearchUserAsync(lowerCaseTerm, ct);
-
     }
-    public async Task<PaginatedResponse<Users>> PaginatedUserAsync(PaginatedRequest req, CancellationToken ct)
+    public async Task<PaginatedResponse<Users>> PaginatedUserAsync(PaginatedRequest req, FilterUserRequest filter, CancellationToken ct)
     {
-        var result = await userRepositories.PaginatedUserAsync(req, ct);
+        var result = await userRepositories.PaginatedUserAsync(req, filter, ct);
         return result;
     }
 

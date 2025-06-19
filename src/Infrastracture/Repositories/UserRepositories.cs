@@ -45,15 +45,12 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
     {
         using var dbContext = dbContextFactory.CreateDbContext();
 
-        var paginatedUser = await dbContext.User
-        .Skip((req.Page - 1) * req.PageSize)
-        .Search(req.SearchTerm!)
-        .Filter(data) // Pass the required argument to Filter
-        .Sort(req)
-        .Take(req.PageSize)
-        .ToListAsync(ct);
+        var filteredUsers = dbContext.User.Filter(data).Search(req.SearchTerm!).Sort(req);
 
-        var totalCount = await dbContext.User.CountAsync(ct);
+        var paginatedUser = await filteredUsers.Skip((req.Page - 1) * req.PageSize).Take(req.PageSize).ToListAsync(ct);
+
+        var totalCount = await filteredUsers.CountAsync(ct);
+
         return new PaginatedResponse<Users>(paginatedUser, req.Page, req.PageSize, totalCount);
     }
 
