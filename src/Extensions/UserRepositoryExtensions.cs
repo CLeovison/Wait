@@ -12,10 +12,15 @@ public static class UserRepositoryExtensions
     {
         if (req is null) return filter;
 
-        if (!string.IsNullOrWhiteSpace(req.FirstName) && !string.IsNullOrWhiteSpace(req.LastName))
+        if (!string.IsNullOrWhiteSpace(req.FirstName))
         {
-            _ = filter.Where(x => x.FirstName.Contains(req.FirstName) || x.LastName.Contains(req.LastName));
+            filter = filter.Where(x => x.FirstName.Contains(req.FirstName));
         }
+        if (!string.IsNullOrWhiteSpace(req.LastName))
+        {
+            filter = filter.Where(x => x.LastName.Contains(req.LastName));
+        }
+
         if (req.CreatedAt.HasValue)
         {
             filter = filter.Where(x => x.CreatedAt > req.CreatedAt);
@@ -38,15 +43,11 @@ public static class UserRepositoryExtensions
 
     public static IQueryable<Users> Sort(this IQueryable<Users> sort, PaginatedRequest req)
     {
-        if (req.SortBy?.ToLower() == "desc")
-        {
-            sort = sort.OrderByDescending(UserSortProperty(req));
-        }
-        else
-        {
-            sort = sort.OrderBy(UserSortProperty(req));
-        }
-        return sort;
+
+        var property = UserSortProperty(req);
+        var isDecending = req.SortDirection?.ToLower() == "desc";
+
+        return isDecending ? sort.OrderByDescending(property) : sort.OrderBy(property);
     }
 
 

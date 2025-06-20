@@ -54,6 +54,16 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     }
     public async Task<PaginatedResponse<Users>> PaginatedUserAsync(PaginatedRequest req, FilterUserRequest filter, CancellationToken ct)
     {
+        if (req.Page < 1)
+        {
+            req.Page = 1;
+        }
+
+        if (req.PageSize < 1 || req.PageSize > 100)
+        {
+            req.PageSize = 10;
+        }
+        
         var result = await userRepositories.PaginatedUserAsync(req, filter, ct);
         return result;
     }

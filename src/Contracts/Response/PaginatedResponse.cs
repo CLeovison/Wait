@@ -7,11 +7,12 @@ public class PaginatedResponse<T>(List<T> items, int page, int pageSize, int tot
     public int Page { get; } = page;
 
     //PageSize = Number of Items Per Page
-    public int PageSize { get; } = (int)Math.Ceiling((decimal)totalCount / (decimal)pageSize);
+    public int PageSize { get; } = pageSize;
 
     public int TotalCount { get; } = totalCount;
+    public int TotalPages => (int)Math.Ceiling((decimal)totalCount / pageSize);
 
-    public bool HasNextPage => Page * PageSize < TotalCount;
+    public bool HasNextPage => Page < TotalPages;
 
     public bool HasPreviousPage => Page > 1;
 
