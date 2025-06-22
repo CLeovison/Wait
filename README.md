@@ -11,8 +11,6 @@ To get a local copy up and running, follow these simple steps.
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 
-## Architecture Overview
-
 ### Installation
 
 1. Clone the repo
@@ -27,3 +25,5 @@ To get a local copy up and running, follow these simple steps.
    ```sh
    dotnet restore
    ```
+## Architecture Overview
+
