@@ -30,28 +30,24 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
         using var dbContext = dbContextFactory.CreateDbContext();
         return await dbContext.User.FindAsync(id, ct);
     }
-    public async Task<IEnumerable<Users>> SearchUserAsync(string? searchTerm, CancellationToken ct)
+
+    public async Task<(List<Users>, int totalCount)> PaginatedUserAsync(FilterUserRequest filters,
+     string? searchTerm,
+     int skip,
+     int take,
+     string sortBy,
+     bool desc,
+     CancellationToken ct)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
 
-        return await dbContext.User
-            .Where(x =>
-                !string.IsNullOrEmpty(searchTerm) &&
-                (x.FirstName.Contains(searchTerm) || x.LastName.Contains(searchTerm))
-            )
-            .ToListAsync(ct);
-    }
-    public async Task<PaginatedResponse<Users>> PaginatedUserAsync(PaginatedRequest req, FilterUserRequest data, CancellationToken ct)
-    {
-        using var dbContext = dbContextFactory.CreateDbContext();
+        var filteredUsers = dbContext.User.Filter(filters).Search(searchTerm).Sort(sortBy, desc);
 
-        var filteredUsers = dbContext.User.Filter(data).Search(req.SearchTerm!).Sort(req);
-
-        var paginatedUser = await filteredUsers.Skip((req.Page - 1) * req.PageSize).Take(req.PageSize).ToListAsync(ct);
+        var paginatedUser = await filteredUsers.Skip(skip).Take(take).ToListAsync(ct);
 
         var totalCount = await filteredUsers.CountAsync(ct);
 
-        return new PaginatedResponse<Users>(paginatedUser, req.Page, req.PageSize, totalCount);
+        return (paginatedUser, totalCount);
     }
 
     public async Task<Users?> UpdateUserAsync(Users users, CancellationToken ct)

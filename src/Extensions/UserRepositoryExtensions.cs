@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Domain.Entities;
 
@@ -38,29 +37,21 @@ public static class UserRepositoryExtensions
 
         var lowerCaseTerm = searchTerm.Trim().ToLower();
 
-        return search.Where(x => x.FirstName.Contains(lowerCaseTerm) || x.LastName.Contains(lowerCaseTerm));
+        return search.Where(x => x.FirstName.ToLower().Contains(lowerCaseTerm) || x.LastName.ToLower().Contains(lowerCaseTerm));
+
     }
 
-    public static IQueryable<Users> Sort(this IQueryable<Users> sort, PaginatedRequest req)
+    public static IQueryable<Users> Sort(this IQueryable<Users> query, string sortBy, bool descending)
     {
-
-        var property = UserSortProperty(req);
-        var isDecending = req.SortDirection?.ToLower() == "desc";
-
-        return isDecending ? sort.OrderByDescending(property) : sort.OrderBy(property);
-    }
-
-
-    private static Expression<Func<Users, object>> UserSortProperty(PaginatedRequest req)
-    {
-
-        return req.SortBy?.ToLower() switch
+        Expression<Func<Users, object>> keySelector = sortBy.ToLower() switch
         {
-
-            "firstname" => users => users.FirstName,
-            "lastname" => users => users.LastName,
-            "email" => users => users.Email,
-            _ => users => users.UserId
+            "firstname" => user => user.FirstName,
+            "lastname" => user => user.LastName,
+            "email" => user => user.Email,
+            _ => user => user.UserId
         };
+
+        return descending ? query.OrderByDescending(keySelector) : query.OrderBy(keySelector);
     }
+
 }

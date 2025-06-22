@@ -6,6 +6,7 @@ using Wait.Contracts.Data;
 using Wait.Contracts.Response;
 using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.UserRequest;
+using Wait.Helper;
 
 
 namespace Wait.Services.UserServices;
@@ -41,34 +42,21 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         return getUser;
     }
 
-    public async Task<IEnumerable<Users>> SearchUserAsync(string? searchTerm, CancellationToken ct)
+    public async Task<PaginatedResponse<Users>> PaginatedUsersAsync(PaginatedRequest req, FilterUserRequest filters, CancellationToken ct)
     {
-        var lowerCaseTerm = searchTerm?.Trim().ToLower();
+        var pagination = PaginationProcessor.Create(req);
 
-        if (string.IsNullOrWhiteSpace(lowerCaseTerm))
-        {
-            Enumerable.Empty<Users>();
-        }
+        var (users, totalCount) = await userRepositories.PaginatedUserAsync(filters, req.SearchTerm, pagination.Skip,
+            pagination.Take,
+            pagination.SortBy,
+            pagination.Descending,
+            ct);
 
-        return await userRepositories.SearchUserAsync(lowerCaseTerm, ct);
-    }
-    public async Task<PaginatedResponse<Users>> PaginatedUserAsync(PaginatedRequest req, FilterUserRequest filter, CancellationToken ct)
-    {
-        if (req.Page < 1)
-        {
-            req.Page = 1;
-        }
-
-        if (req.PageSize < 1 || req.PageSize > 100)
-        {
-            req.PageSize = 10;
-        }
-        
-        var result = await userRepositories.PaginatedUserAsync(req, filter, ct);
-        return result;
+        return new PaginatedResponse<Users>(users, pagination.Page, pagination.PageSize, totalCount);
     }
 
-    public async Task<Users?> UpdateUserAsync(Guid id, Users users, CancellationToken ct)
+
+    public async Task<Users?> UpdateUserAsync(Guid id, UserDto users, CancellationToken ct)
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
         try
@@ -80,7 +68,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             existingUser.FirstName = users.FirstName;
             existingUser.LastName = users.LastName;
             existingUser.Username = users.Username;
-            existingUser.Password = passwordHasher.HashPassword(users, users.Password);
+            existingUser.Password = passwordHasher.HashPassword(existingUser, users.Password);
             existingUser.Email = users.Email;
             existingUser.ModifiedAt = users.ModifiedAt;
 
