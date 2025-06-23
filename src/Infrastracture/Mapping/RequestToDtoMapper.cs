@@ -23,12 +23,12 @@ public static class RequestToDtoMapper
     {
         return new UserDto
         {
-            FirstName = req.FirstName,
-            LastName = req.LastName,
-            Username = req.Username,
-            Password = passwordHasher.HashPassword(new Users(), req.Password),
+            FirstName = req.FirstName ?? string.Empty,
+            LastName = req.LastName ?? string.Empty,
+            Username = req.Username ?? string.Empty,
+            Password = passwordHasher.HashPassword(new Users(), req.Password ?? string.Empty),
             Birthday = req.Birthday,
-            Email = req.Email
+            Email = req.Email ?? string.Empty
         };
     }
 }

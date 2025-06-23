@@ -15,6 +15,7 @@ public sealed class UpdateUserEndpoint(IUserServices userServices) : IEndpoint
     {
         app.MapPut("/api/users/{id}", async (Guid id, UserDto users, IPasswordHasher<Users> passwordHasher, CancellationToken ct) =>
         {
+
             var result = await userServices.UpdateUserAsync(id, users, ct);
 
             return result;

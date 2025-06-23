@@ -46,11 +46,9 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     {
         var pagination = PaginationProcessor.Create(req);
 
-        var (users, totalCount) = await userRepositories.PaginatedUserAsync(filters, req.SearchTerm, pagination.Skip,
-            pagination.Take,
-            pagination.SortBy,
-            pagination.Descending,
-            ct);
+        var (users, totalCount) = await userRepositories.PaginatedUserAsync(filters,
+            req.SearchTerm, pagination.Skip, pagination.Take,
+            pagination.SortBy, pagination.Descending,ct);
 
         return new PaginatedResponse<Users>(users, pagination.Page, pagination.PageSize, totalCount);
     }
@@ -59,6 +57,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     public async Task<Users?> UpdateUserAsync(Guid id, UserDto users, CancellationToken ct)
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
+
         try
         {
             if (existingUser is null)
@@ -84,7 +83,6 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     public async Task<bool> DeleteUserAsync(Guid id, CancellationToken ct)
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
-
         if (existingUser is null)
         {
             throw new ArgumentException("User not found.");

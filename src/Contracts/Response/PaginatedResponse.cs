@@ -1,8 +1,8 @@
 namespace Wait.Contracts.Response;
 
-public class PaginatedResponse<T>(List<T> items, int page, int pageSize, int totalCount)
+public class PaginatedResponse<T>(List<T> data, int page, int pageSize, int totalCount)
 {
-    public List<T> Items { get; } = items;
+    public List<T> Data { get; } = data;
     public int Page { get; } = page;
     public int PageSize { get; } = pageSize;
     public int TotalCount { get; } = totalCount;

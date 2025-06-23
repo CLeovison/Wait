@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.UserRequest;
-using Wait.Contracts.Response;
 using Wait.Database;
 using Wait.Domain.Entities;
 using Wait.Extensions;

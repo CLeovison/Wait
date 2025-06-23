@@ -27,11 +27,11 @@ public static class ContractsToEntitiesMapper
     {
         return new Users
         {
-            FirstName = req.FirstName,
-            LastName = req.LastName,
-            Username = req.Username,
-            Password = passwordHasher.HashPassword(new Users(), req.Password),
-            Email = req.Email,
+            FirstName = req.FirstName ?? string.Empty,
+            LastName = req.LastName ?? string.Empty,
+            Username = req.Username ?? string.Empty,
+            Password = passwordHasher.HashPassword(new Users(), req.Password ?? string.Empty),
+            Email = req.Email ?? string.Empty,
 
         };
     }
