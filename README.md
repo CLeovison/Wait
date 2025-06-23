@@ -1,4 +1,4 @@
-# Wait ( Official Documentation )
+# Wait 
 
 ## Table of Contents
 
