@@ -1,6 +1,4 @@
 using Wait.Domain.Entities;
-using Wait.Contracts.Response;
-using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.UserRequest;
 
 
@@ -20,4 +18,5 @@ public interface IUserRepositories
          CancellationToken ct);
     Task<Users?> UpdateUserAsync(Users users, CancellationToken ct);
     Task<bool> DeleteUserAsync(Users users);
+    Task<Users?> GetUserByUsernameAsync(string username);
 }

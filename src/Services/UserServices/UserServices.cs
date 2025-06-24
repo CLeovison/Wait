@@ -48,7 +48,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
 
         var (users, totalCount) = await userRepositories.PaginatedUserAsync(filters,
             req.SearchTerm, pagination.Skip, pagination.Take,
-            pagination.SortBy, pagination.Descending,ct);
+            pagination.SortBy, pagination.Descending, ct);
 
         return new PaginatedResponse<Users>(users, pagination.Page, pagination.PageSize, totalCount);
     }
@@ -89,5 +89,12 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         }
 
         return await userRepositories.DeleteUserAsync(existingUser);
+    }
+
+    public async Task<Users?> LoginUserAsync(string username, string password)
+    {
+        var existingUser = await userRepositories.GetUserByUsernameAsync(username);
+
+        
     }
 }

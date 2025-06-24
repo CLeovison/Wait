@@ -65,7 +65,16 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
         await dbContext.SaveChangesAsync();
 
         return deleteUser is not null;
-
     }
+
+    public async Task<Users?> GetUserByUsernameAsync(string username)
+    {
+        using var dbContext = dbContextFactory.CreateDbContext();
+
+        var selectUser = await dbContext.User.FirstOrDefaultAsync(x => x.Username == username);
+
+        return selectUser;
+    }
+
 
 }

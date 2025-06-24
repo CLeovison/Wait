@@ -20,7 +20,7 @@ builder.Services.AddDbContextFactory<AppDbContext>(optionsBuilder =>
 {
     optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
 });
-
+builder.Services.AddAuthentication().AddJwtBearer();
 // Register other services
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 builder.Services.AddSingleton<IUserRepositories, UserRepositories>();
@@ -30,5 +30,7 @@ builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
 
 var app = builder.Build();
 app.Endpoint();
+app.UseAuthorization();
+app.UseAuthentication();
 
 app.Run();
