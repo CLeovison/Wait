@@ -33,6 +33,8 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<Users>
 
         builder.Property(x => x.Email)
             .IsRequired();
+        builder.Property(x => x.IsVerifiedEmail)
+            .HasDefaultValue(false);
 
         builder.Property(d => d.CreatedAt)
             .HasDefaultValueSql("current_date");

@@ -92,15 +92,15 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         return await userRepositories.DeleteUserAsync(existingUser);
     }
 
-    public async Task<Users?> LoginUserAsync(string username, string password)
-    {
-        var existingUser = await userRepositories.GetUserByUsernameAsync(username);
+    // public async Task<Users?> LoginUserAsync(string username, string password)
+    // {
+    //     var existingUser = await userRepositories.GetUserByUsernameAsync(username);
 
-        if (existingUser == null || existingUser.Username != username)
-        {
-            return null;
-        }
-        var verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password);
+    //     if (existingUser == null || existingUser.Username != username)
+    //     {
+    //         return null;
+    //     }
+    //     var verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password);
 
-    }
+    // }
 }
