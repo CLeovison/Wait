@@ -7,6 +7,7 @@ using Wait.Contracts.Response;
 using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Helper;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace Wait.Services.UserServices;
@@ -95,6 +96,11 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     {
         var existingUser = await userRepositories.GetUserByUsernameAsync(username);
 
-        
+        if (existingUser == null || existingUser.Username != username)
+        {
+            return null;
+        }
+        var verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password);
+
     }
 }
