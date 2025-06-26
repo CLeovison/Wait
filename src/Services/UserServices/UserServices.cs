@@ -8,11 +8,12 @@ using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Helper;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Wait.Infrastracture;
 
 
 namespace Wait.Services.UserServices;
 
-public sealed class UserServices(IUserRepositories userRepositories, IPasswordHasher<Users> passwordHasher) : IUserServices
+public sealed class UserServices(IUserRepositories userRepositories, IPasswordHasher<Users> passwordHasher, TokenProvider tokenProvider) : IUserServices
 {
 
     public async Task<bool> CreateUserAsync(UserDto userDto)
@@ -92,15 +93,23 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         return await userRepositories.DeleteUserAsync(existingUser);
     }
 
-    // public async Task<Users?> LoginUserAsync(string username, string password)
-    // {
-    //     var existingUser = await userRepositories.GetUserByUsernameAsync(username);
+    public async Task<string> LoginUserAsync(string username, string password)
+    {
+        var existingUser = await userRepositories.GetUserByUsernameAsync(username);
 
-    //     if (existingUser == null || existingUser.Username != username)
-    //     {
-    //         return null;
-    //     }
-    //     var verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password);
+        if (existingUser == null || existingUser.Username != username)
+        {
+            return null;
+        }
+        bool verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password);
 
-    // }
+        if (verifiedPassword == PasswordVerificationResult.Success)
+        {
+            
+        }
+
+            var token = tokenProvider.Create(existingUser);
+
+        return token;
+    }
 }
