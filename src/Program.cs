@@ -11,6 +11,7 @@ using Wait.Infrastracture.Repositories;
 //Business Logic Access
 using Wait.Services.UserServices;
 using Wait.Extensions;
+using Wait.Infrastracture;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +27,7 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 builder.Services.AddSingleton<IUserRepositories, UserRepositories>();
 builder.Services.AddSingleton<IUserServices, UserServices>();
 builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
-
+builder.Services.AddSingleton<TokenProvider>();
 
 var app = builder.Build();
 app.Endpoint();
