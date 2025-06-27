@@ -18,5 +18,5 @@ public interface IUserServices
     Task<PaginatedResponse<Users>> PaginatedUsersAsync(PaginatedRequest req, FilterUserRequest filters, CancellationToken ct);
     Task<Users?> UpdateUserAsync(Guid id, UserDto users, CancellationToken ct);
     Task<bool> DeleteUserAsync(Guid id, CancellationToken ct);
-    // Task<string> LoginUserAsync(string username, string password);
+    Task<string?> LoginUserAsync(string username, string password);
 }

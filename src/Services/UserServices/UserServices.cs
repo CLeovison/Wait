@@ -7,7 +7,7 @@ using Wait.Contracts.Response;
 using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Helper;
-using Microsoft.AspNetCore.Http.HttpResults;
+
 using Wait.Infrastracture;
 
 
@@ -93,23 +93,32 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         return await userRepositories.DeleteUserAsync(existingUser);
     }
 
-    public async Task<string> LoginUserAsync(string username, string password)
+    public async Task<string?> LoginUserAsync(string username, string password)
     {
         var existingUser = await userRepositories.GetUserByUsernameAsync(username);
 
-        if (existingUser == null || existingUser.Username != username)
+        if (existingUser == null)
         {
             return null;
         }
-        bool verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password);
 
-        if (verifiedPassword == PasswordVerificationResult.Success)
+        bool verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password) == PasswordVerificationResult.Success;
+
+
+        if (!verifiedPassword)
         {
-            
+            throw new ArgumentException("The password that you've provide is incorrect");
         }
 
-            var token = tokenProvider.Create(existingUser);
+        
+        var token = tokenProvider.Create(existingUser);
 
         return token;
+
+
     }
+
+
+
 }
+

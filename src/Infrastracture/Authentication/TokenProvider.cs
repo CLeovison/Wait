@@ -8,7 +8,7 @@ using Wait.Domain.Entities;
 
 namespace Wait.Infrastracture;
 
-internal sealed class TokenProvider(IConfiguration configuration)
+public sealed class TokenProvider(IConfiguration configuration)
 {
     public string Create(Users users)
     {

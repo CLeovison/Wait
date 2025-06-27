@@ -28,6 +28,8 @@ builder.Services.AddSingleton<IUserRepositories, UserRepositories>();
 builder.Services.AddSingleton<IUserServices, UserServices>();
 builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
 builder.Services.AddSingleton<TokenProvider>();
+builder.Services.AddAuthorization();
+
 
 var app = builder.Build();
 app.Endpoint();
