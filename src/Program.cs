@@ -22,13 +22,15 @@ builder.Services.AddDbContextFactory<AppDbContext>(optionsBuilder =>
     optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
 });
 builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddAuthorization();
+
 // Register other services
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 builder.Services.AddSingleton<IUserRepositories, UserRepositories>();
 builder.Services.AddSingleton<IUserServices, UserServices>();
 builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
 builder.Services.AddSingleton<TokenProvider>();
-builder.Services.AddAuthorization();
+
 
 
 var app = builder.Build();

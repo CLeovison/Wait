@@ -105,7 +105,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         bool verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password) == PasswordVerificationResult.Success;
 
 
-        if (!verifiedPassword)
+        if (verifiedPassword)
         {
             throw new ArgumentException("The password that you've provide is incorrect");
         }
