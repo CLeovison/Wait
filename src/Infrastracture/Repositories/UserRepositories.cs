@@ -9,12 +9,12 @@ namespace Wait.Infrastracture.Repositories;
 
 public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFactory) : IUserRepositories
 {
-    public async Task<bool> CreateUserAsync(Users users)
+    public async Task<Users> CreateUserAsync(Users users)
     {
         using var dbContext = dbContextFactory.CreateDbContext();
         var createUser = await dbContext.Set<Users>().AddAsync(users);
         await dbContext.SaveChangesAsync();
-        return createUser is not null;
+        return createUser.Entity;
     }
 
     public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)

@@ -15,11 +15,11 @@ public class CreateUserEndpoint(IUserServices userServices) : IEndpoint
 
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/create", async (CreateUserRequest req, IPasswordHasher<Users> passwordHasher) =>
+        app.MapPost("/api/create", async (CreateUserRequest req, IPasswordHasher<Users> passwordHasher, CancellationToken ct) =>
         {
             var userDto = req.ToRequest(passwordHasher);
 
-            var userCreated = await userServices.CreateUserAsync(userDto);
+            var userCreated = await userServices.CreateUserAsync(userDto, ct);
             return Results.Ok(userCreated);
         });
     }

@@ -11,7 +11,7 @@ namespace Wait.Services.UserServices;
 
 public interface IUserServices
 {
-    Task<bool> CreateUserAsync(UserDto userDto);
+    Task<UserDto> CreateUserAsync(UserDto userDto, CancellationToken ct);
     Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct);
     Task<Users?> GetUserByIdAsync(Guid id, CancellationToken ct);
 

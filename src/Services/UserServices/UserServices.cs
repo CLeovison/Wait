@@ -9,6 +9,9 @@ using Wait.Contracts.Request.UserRequest;
 using Wait.Helper;
 
 using Wait.Infrastracture;
+using Wait.Validation;
+using FluentValidation.Results;
+using Wait.Mapping;
 
 
 namespace Wait.Services.UserServices;
@@ -16,14 +19,38 @@ namespace Wait.Services.UserServices;
 public sealed class UserServices(IUserRepositories userRepositories, IPasswordHasher<Users> passwordHasher, TokenProvider tokenProvider) : IUserServices
 {
 
-    public async Task<bool> CreateUserAsync(UserDto userDto)
+    public async Task<UserDto> CreateUserAsync(UserDto userDto, CancellationToken ct)
     {
         var newUser = userDto.ToEntities(passwordHasher);
 
-        if (!await userRepositories.CreateUserAsync(newUser))
-            throw new ArgumentException("You didn't have any credentials");
+        var existingUser = await userRepositories.GetUserByUsernameAsync(userDto.Username);
 
-        return true;
+        if (existingUser is not null)
+        {
+            throw new ArgumentException("The user is already existing");
+        }
+
+        UserValidation validations = new UserValidation();
+
+        ValidationResult results = validations.Validate(newUser);
+        if (!results.IsValid)
+        {
+            var problemDetails = new HttpValidationProblemDetails(results.ToDictionary())
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Validation Failed",
+                Detail = "One or more validation occured",
+                Instance = "api/create"
+            };
+
+            throw new ArgumentException("Validation failed: " + string.Join("; ", results.Errors.Select(e => e.ErrorMessage)));
+        }
+
+        var result = await userRepositories.CreateUserAsync(newUser);
+        UserDto newUsers = result.ToDto(passwordHasher);
+
+        return newUsers;
+
     }
 
     public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
@@ -110,7 +137,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             throw new ArgumentException("The password that you've provide is incorrect");
         }
 
-        
+
         var token = tokenProvider.Create(existingUser);
 
         return token;

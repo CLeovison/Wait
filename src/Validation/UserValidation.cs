@@ -19,8 +19,8 @@ public class UserValidation : AbstractValidator<Users>
         .WithMessage("Your Password length must be atleast 8")
         .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
         .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
-        .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.")
-        .Matches(@"[\!\?\*\.]+").WithMessage("Your password must contain at least one (!? *.).");
+        .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.");
+   
         
         RuleFor(user => user.Email).EmailAddress().NotEmpty().WithMessage("Please provide an email address");
     }

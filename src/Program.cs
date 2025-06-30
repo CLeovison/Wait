@@ -13,6 +13,8 @@ using Wait.Services.UserServices;
 using Wait.Extensions;
 using Wait.Infrastracture;
 
+//Validation
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,7 @@ builder.Services.AddSingleton<IUserRepositories, UserRepositories>();
 builder.Services.AddSingleton<IUserServices, UserServices>();
 builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
 builder.Services.AddSingleton<TokenProvider>();
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
 
 
