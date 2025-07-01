@@ -4,7 +4,6 @@ using Wait.Domain.Entities;
 
 namespace Wait.Mapping;
 
-
 public static class DtoToEntitiesMapper
 {
     public static UserDto ToDto(this Users users, IPasswordHasher<Users> passwordHasher)
@@ -15,7 +14,7 @@ public static class DtoToEntitiesMapper
             LastName = users.LastName,
             Username = users.Username,
             Password = passwordHasher.HashPassword(new Users(), users.Password),
-            Email = users.Email
+            Email = users.Email 
         };
     }
 }

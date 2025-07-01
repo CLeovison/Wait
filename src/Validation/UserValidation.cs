@@ -15,13 +15,12 @@ public class UserValidation : AbstractValidator<Users>
 
         RuleFor(user => user.Username).MinimumLength(5).NotEmpty().WithMessage("The Minimum Length for Username is 5 Characters");
 
-        RuleFor(user => user.Password).NotEmpty().MinimumLength(8)
-        .WithMessage("Your Password length must be atleast 8")
+        RuleFor(user => user.Password).NotEmpty().WithMessage("Your Password length must be atleast 8")
+        .MinimumLength(8)
         .Matches(@"[A-Z]+").WithMessage("Your password must contain at least one uppercase letter.")
         .Matches(@"[a-z]+").WithMessage("Your password must contain at least one lowercase letter.")
         .Matches(@"[0-9]+").WithMessage("Your password must contain at least one number.");
-   
-        
+
         RuleFor(user => user.Email).EmailAddress().NotEmpty().WithMessage("Please provide an email address");
     }
 }
