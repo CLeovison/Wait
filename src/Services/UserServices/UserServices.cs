@@ -30,6 +30,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             throw new ArgumentException("The user is already existing");
         }
 
+
         var results = new UserValidation().Validate(userDto);
 
         if (!results.IsValid)
