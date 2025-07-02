@@ -30,9 +30,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             throw new ArgumentException("The user is already existing");
         }
 
-        UserValidation validations = new();
-
-        ValidationResult results = validations.Validate(newUser);
+        var results = new UserValidation().Validate(userDto);
 
         if (!results.IsValid)
         {
@@ -48,7 +46,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         }
 
         var result = await userRepositories.CreateUserAsync(newUser);
-        var newUsers = result.ToDto(passwordHasher);
+        UserDto newUsers = result.ToDto(passwordHasher);
 
         return newUsers;
 
@@ -145,4 +143,8 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
 
 
     }
+
+
+
 }
+

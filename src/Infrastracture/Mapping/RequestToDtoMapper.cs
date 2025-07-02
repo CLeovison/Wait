@@ -7,14 +7,14 @@ namespace Wait.Infrastracture.Mapping;
 
 public static class RequestToDtoMapper
 {
-    public static UserDto ToRequest(this CreateUserRequest req, IPasswordHasher<Users> passwordHasher)
+    public static UserDto ToRequest(this CreateUserRequest req)
     {
         return new UserDto
         {
             FirstName = req.FirstName,
             LastName = req.LastName,
             Username = req.Username,
-            Password = passwordHasher.HashPassword(new Users(), req.Password),
+            Password = req.Password,
             Birthday = req.Birthday,
             Email = req.Email
         };
