@@ -23,10 +23,14 @@ Below is a comprehensive technical documentation for the Wait repository. It cov
 - License
 
 
-## Getting Started
-To get a local copy up and running, follow these simple steps.
-
-- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+## Project Overview
+This repository hosts Wait, a minimal ASP.NET Core web application built with:
+- Minimal APIs (no MVC controllers)
+- Dependency injection for services and repositories
+- JWT-based authentication and authorization
+- Rate limiting middleware
+- FluentValidation for request validation
+Its goal is to demonstrate a clean architecture approach with separation of concerns between layers.
 
 ### Installation
 
