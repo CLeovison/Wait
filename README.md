@@ -1,9 +1,26 @@
-# Wait ( Documentation )
+# Wait: ASP.NET Core Web Application Documentation
+Below is a comprehensive technical documentation for the Wait repository. It covers project setup, architecture, structure, configuration, services, middleware, and contribution guidelines.
+
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
-- [Architecture Overview](#architecture-overview)
+
+- Project Overview
+- Getting Started
+- Architecture
+- Project Structure
+- Configuration
+- Dependency Injection & Services
+- Middleware Pipeline
+- Endpoints & Features
+- Validation
+- Database & Migrations
+- Authentication & Authorization
+- Rate Limiting
+- Logging & Error Handling
+- Deployment
+- Contributing
+- License
 
 
 ## Getting Started
@@ -27,3 +44,4 @@ To get a local copy up and running, follow these simple steps.
    ```
 ## Architecture Overview
 
+This api applies the concept of Clean Architecture and Vertical Slice Architecture, which organize by layer with the mix of organizing by features.
