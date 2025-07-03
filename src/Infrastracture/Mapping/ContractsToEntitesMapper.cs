@@ -30,7 +30,7 @@ public static class ContractsToEntitiesMapper
             FirstName = req.FirstName ?? string.Empty,
             LastName = req.LastName ?? string.Empty,
             Username = req.Username ?? string.Empty,
-            Password = passwordHasher.HashPassword(new Users(), req.Password ?? string.Empty),
+            Password = req.Password ?? string.Empty,
             Email = req.Email ?? string.Empty,
 
         };

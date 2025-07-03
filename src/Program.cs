@@ -25,6 +25,7 @@ builder.Services.AddDbContextFactory<AppDbContext>(optionsBuilder =>
 });
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
+builder.Services.AddRateLimiter();
 
 // Register other services
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
@@ -40,5 +41,5 @@ var app = builder.Build();
 app.Endpoint();
 app.UseAuthorization();
 app.UseAuthentication();
-
+app.UseRateLimiter();
 app.Run();

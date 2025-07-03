@@ -6,7 +6,7 @@ using Wait.Contracts.Data;
 namespace Wait.Validation;
 
 
-public class UserValidation : AbstractValidator<UserDto>
+public sealed class UserValidation : AbstractValidator<UserDto>
 {
     public UserValidation()
     {

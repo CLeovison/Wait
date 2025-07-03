@@ -7,10 +7,8 @@ using Wait.Contracts.Response;
 using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Helper;
-
 using Wait.Infrastracture;
 using Wait.Validation;
-using FluentValidation.Results;
 using Wait.Mapping;
 
 
@@ -47,7 +45,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         }
 
         var result = await userRepositories.CreateUserAsync(newUser);
-        UserDto newUsers = result.ToDto(passwordHasher);
+        var newUsers = result.ToDto(passwordHasher);
 
         return newUsers;
 
