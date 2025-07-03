@@ -1,9 +1,8 @@
-# Wait: ASP.NET Core Web Application Documentation
+# Wait: ASP.NET Core Web Api Documentation
 Below is a comprehensive technical documentation for the Wait repository. It covers project setup, architecture, structure, configuration, services, middleware, and contribution guidelines.
 
 
 ## Table of Contents
-
 
 - Project Overview
 - Getting Started
@@ -46,6 +45,3 @@ Its goal is to demonstrate a clean architecture approach with separation of conc
    ```sh
    dotnet restore
    ```
-## Architecture Overview
-
-This api applies the concept of Clean Architecture and Vertical Slice Architecture, which organize by layer with the mix of organizing by features.
