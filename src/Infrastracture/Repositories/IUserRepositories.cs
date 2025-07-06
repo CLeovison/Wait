@@ -7,7 +7,7 @@ namespace Wait.Infrastracture.Repositories;
 
 public interface IUserRepositories
 {
-    Task<Users> CreateUserAsync(Users users);
+    Task<Users> CreateUserAsync(Users users,CancellationToken ct);
     Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct);
     Task<Users?> GetUserByIdAsync(Guid id, CancellationToken ct);
     Task<(List<Users>, int totalCount)> PaginatedUserAsync(FilterUserRequest filters, string? searchTerm,

@@ -23,8 +23,6 @@ public sealed class UserValidation : AbstractValidator<UserDto>
         .Matches(@"[a-z]+").WithMessage("Must contain lowercase")
         .Matches(@"[0-9]+").WithMessage("Must contain number");
 
-
-
         RuleFor(user => user.Email).EmailAddress().NotEmpty().WithMessage("Please provide an email address");
     }
 }

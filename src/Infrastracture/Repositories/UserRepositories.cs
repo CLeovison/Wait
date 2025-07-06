@@ -7,25 +7,25 @@ using Wait.Extensions;
 namespace Wait.Infrastracture.Repositories;
 
 
-public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFactory) : IUserRepositories
+public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
 {
-    public async Task<Users> CreateUserAsync(Users users)
+    public async Task<Users> CreateUserAsync(Users users, CancellationToken ct)
     {
-        using var dbContext = dbContextFactory.CreateDbContext();
-        var createUser = await dbContext.Set<Users>().AddAsync(users);
+    
+        var createUser = await dbContext.Set<Users>().AddAsync(users, ct);
         await dbContext.SaveChangesAsync();
         return createUser.Entity;
     }
 
     public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
     {
-        using var dbContext = dbContextFactory.CreateDbContext();
+ 
         return await dbContext.User.ToListAsync(ct);
     }
 
     public async Task<Users?> GetUserByIdAsync(Guid id, CancellationToken ct)
     {
-        using var dbContext = dbContextFactory.CreateDbContext();
+   
         return await dbContext.User.FindAsync(id, ct);
     }
 
@@ -37,7 +37,7 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
      bool desc,
      CancellationToken ct)
     {
-        using var dbContext = dbContextFactory.CreateDbContext();
+
 
         var filteredUsers = dbContext.User.Filter(filters).Search(searchTerm).Sort(sortBy, desc);
 
@@ -50,7 +50,7 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
 
     public async Task<Users?> UpdateUserAsync(Users users, CancellationToken ct)
     {
-        using var dbContext = dbContextFactory.CreateDbContext();
+
 
         dbContext.Set<Users>().Update(users);
 
@@ -60,7 +60,7 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
     }
     public async Task<bool> DeleteUserAsync(Users users)
     {
-        using var dbContext = dbContextFactory.CreateDbContext();
+       
         var deleteUser = dbContext.Set<Users>().Remove(users);
         await dbContext.SaveChangesAsync();
 
@@ -69,7 +69,7 @@ public sealed class UserRepositories(IDbContextFactory<AppDbContext> dbContextFa
 
     public async Task<Users?> GetUserByUsernameAsync(string username)
     {
-        using var dbContext = dbContextFactory.CreateDbContext();
+
 
         var selectUser = await dbContext.User.FirstOrDefaultAsync(x => x.Username == username);
 

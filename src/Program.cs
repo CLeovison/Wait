@@ -1,45 +1,55 @@
-//Microsoft Packages
+// Microsoft Packages
 using System.Reflection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-//Data Access
+// Data Access
 using Wait.Database;
 using Wait.Domain.Entities;
 using Wait.Infrastracture.Repositories;
 
-//Business Logic Access
+// Business Logic Access
 using Wait.Services.UserServices;
 using Wait.Extensions;
 using Wait.Infrastracture;
 
-//Validation
+// Validation
 using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register the DbContextFactory
-builder.Services.AddDbContextFactory<AppDbContext>(optionsBuilder =>
-{
-    optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
-});
+// Configure EF Core with PostgreSQL
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
+
+// Configure authentication/authorization
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
 builder.Services.AddRateLimiter();
 
-// Register other services
+// Register minimal API endpoint definitions from assembly
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
-builder.Services.AddSingleton<IUserRepositories, UserRepositories>();
-builder.Services.AddSingleton<IUserServices, UserServices>();
+
+// App services
+builder.Services.AddScoped<IUserRepositories, UserRepositories>();
+builder.Services.AddScoped<IUserServices, UserServices>();
+
+// Stateless services
 builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
 builder.Services.AddSingleton<TokenProvider>();
+
+// FluentValidation
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
-
-
+// Build the app
 var app = builder.Build();
-app.Endpoint();
-app.UseAuthorization();
+
+// Middleware
 app.UseAuthentication();
+app.UseAuthorization();
 app.UseRateLimiter();
+
+// Register endpoints cleanly
+app.Endpoint();
+
 app.Run();

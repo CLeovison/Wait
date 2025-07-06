@@ -1,35 +1,34 @@
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Wait.Abstract;
 
 namespace Wait.Extensions;
-
 
 public static class EndpointExtensions
 {
     public static IServiceCollection AddEndpoints(this IServiceCollection services, Assembly assembly)
     {
-        ServiceDescriptor[] serviceDescriptors = assembly
-            .DefinedTypes
-            .Where(type => type is { IsAbstract: false, IsInterface: false } &&
-                           type.IsAssignableTo(typeof(IEndpoint)))
-            .Select(type => ServiceDescriptor.Transient(typeof(IEndpoint), type))
-            .ToArray();
+        var types = assembly.DefinedTypes
+            .Where(t => typeof(IEndpoint).IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface);
 
-        services.TryAddEnumerable(serviceDescriptors);
+        foreach (var type in types)
+        {
+            services.AddScoped(typeof(IEndpoint), type); // Scoped because they depend on AppDbContext
+        }
 
         return services;
     }
 
-    public static IApplicationBuilder Endpoint(this WebApplication app, RouteGroupBuilder? routeGroupBuilder = null)
+    public static WebApplication Endpoint(this WebApplication app)
     {
+        var routeBuilder = (IEndpointRouteBuilder)app;
 
-        IEnumerable<IEndpoint> endpoints = app.Services.GetRequiredService<IEnumerable<IEndpoint>>();
-        IEndpointRouteBuilder builder = routeGroupBuilder is null ? app : routeGroupBuilder;
+        // Temporary scope JUST for startup-time mapping
+        using var scope = app.Services.CreateScope();
+        var endpoints = scope.ServiceProvider.GetServices<IEndpoint>();
 
-        foreach (IEndpoint endpoint in endpoints)
+        foreach (var endpoint in endpoints)
         {
-            endpoint.Endpoint(builder);
+            endpoint.Endpoint(routeBuilder); // Only maps routes; no lifetime abuse
         }
 
         return app;
@@ -38,6 +37,5 @@ public static class EndpointExtensions
     public static RouteHandlerBuilder HasPermission(this RouteHandlerBuilder app, string permission)
     {
         return app.RequireAuthorization(permission);
-
     }
 }
