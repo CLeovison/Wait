@@ -9,11 +9,11 @@ using Wait.Infrastracture.Mapping;
 
 namespace Wait.Endpoint.UserEndpoint;
 
-public sealed class UpdateUserEndpoint(IUserServices userServices) : IEndpoint
+public sealed class UpdateUserEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("/api/users/{id}", async (Guid id, UserDto users, IPasswordHasher<Users> passwordHasher, CancellationToken ct) =>
+        app.MapPut("/api/users/{id}", async (Guid id, IUserServices userServices, UserDto users, IPasswordHasher<Users> passwordHasher, CancellationToken ct) =>
         {
 
             var result = await userServices.UpdateUserAsync(id, users, ct);

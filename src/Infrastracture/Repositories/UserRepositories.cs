@@ -6,12 +6,10 @@ using Wait.Extensions;
 
 namespace Wait.Infrastracture.Repositories;
 
-
 public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
 {
     public async Task<Users> CreateUserAsync(Users users, CancellationToken ct)
     {
-    
         var createUser = await dbContext.Set<Users>().AddAsync(users, ct);
         await dbContext.SaveChangesAsync();
         return createUser.Entity;
@@ -50,8 +48,6 @@ public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
 
     public async Task<Users?> UpdateUserAsync(Users users, CancellationToken ct)
     {
-
-
         dbContext.Set<Users>().Update(users);
 
         await dbContext.SaveChangesAsync(ct);
@@ -69,12 +65,8 @@ public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
 
     public async Task<Users?> GetUserByUsernameAsync(string username)
     {
-
-
         var selectUser = await dbContext.User.FirstOrDefaultAsync(x => x.Username == username);
-
         return selectUser;
     }
-
 
 }

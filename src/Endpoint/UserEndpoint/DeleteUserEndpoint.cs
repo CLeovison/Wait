@@ -3,16 +3,18 @@ using Wait.Services.UserServices;
 
 namespace Wait.Endpoint.UserEndpoint;
 
-
-public sealed class DeleteUserEndpoint(IUserServices userServices) : IEndpoint
+public sealed class DeleteUserEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("/api/users/{id}", async (Guid id, CancellationToken ct) =>
+        app.MapDelete("/api/users/{id}", async (Guid id, IUserServices userServices, CancellationToken ct) =>
         {
-            var removeUser = await userServices.DeleteUserAsync(id, ct);
+            var removed = await userServices.DeleteUserAsync(id, ct);
 
-            return Results.Ok(new { message = "The User is Successfully Deleted" });
+            if (!removed)
+                return Results.NotFound(new { message = "User not found or could not be deleted." });
+
+            return Results.Ok(new { message = "The user was successfully deleted." });
         });
     }
 }

@@ -5,11 +5,11 @@ using Wait.Services.UserServices;
 
 namespace Wait.Endpoint.UserEndpoint;
 
-public sealed class PaginatedUserEndpoint(IUserServices userServices) : IEndpoint
+public sealed class PaginatedUserEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/users/paginated", async ([AsParameters] FilterUserRequest filters,
+        app.MapGet("api/users/paginated", async (IUserServices userServices, [AsParameters] FilterUserRequest filters,
             string? searchTerm,
             int page,
             int pageSize,
