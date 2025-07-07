@@ -7,6 +7,7 @@ public static class ValidationExtension
 {
     public static RouteHandlerBuilder WithValidation<TRequest>(this RouteHandlerBuilder builder)
     {
+       
         return builder.AddEndpointFilter(async (invocationContext, next) =>
         {
             //Grab the first argument passed into the route handler(usually the request DTO)
@@ -32,7 +33,8 @@ public static class ValidationExtension
                     var loggerFactory = invocationContext.HttpContext.RequestServices.GetService<ILoggerFactory>();
                     var logger = loggerFactory?.CreateLogger("FluentValidation");
 
-                    logger?.LogWarning("Validation failed for {RequestType} : {ErrorDetails}", typeof(TRequest).Name, string.Join("|", errors.Select(e => $"{e.Key} : {e.Value}")));
+                    logger?.LogWarning("Validation failed for {RequestType} : {ErrorDetails}",
+                     typeof(TRequest).Name, string.Join("|", errors.Select(e => $"{e.Key} : {e.Value}")));
 
                     // Group errors by property and return as a structured 400 response
                     return Results.ValidationProblem(

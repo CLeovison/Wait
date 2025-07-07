@@ -19,9 +19,9 @@ public sealed class UserValidation : AbstractValidator<UserDto>
         RuleFor(user => user.Password)
         .NotEmpty().Must(p => !string.IsNullOrWhiteSpace(p)).WithMessage("Please Fill the Password")
         .MinimumLength(8).WithMessage("Minimum length is 8 characters")
-        .Matches(@"[A-Z]+").WithMessage("Must contain uppercase")
-        .Matches(@"[a-z]+").WithMessage("Must contain lowercase")
-        .Matches(@"[0-9]+").WithMessage("Must contain number");
+        .Matches(@"[A-Z]+").WithMessage("Password must contain uppercase")
+        .Matches(@"[a-z]+").WithMessage("Password must contain lowercase")
+        .Matches(@"[0-9]+").WithMessage("Password must contain number");
 
         RuleFor(user => user.Email).EmailAddress().NotEmpty().WithMessage("Please provide an email address");
     }
