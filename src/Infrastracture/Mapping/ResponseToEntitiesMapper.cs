@@ -1,19 +1,20 @@
+using Wait.Contracts.Data;
 using Wait.Contracts.Response.UserResponse;
 using Wait.Domain.Entities;
 
 namespace Wait.Infrastracture.Mapping;
 
 
-public static class EntitiesToContractsMapper
+public static class ResponseToEntitiesMapper
 {
-    public static UserResponse ToUserResponse(this Users users)
+    public static UserResponse ToUserResponse(this UserDto users)
     {
         return new UserResponse
         {
             FirstName = users.FirstName,
             LastName = users.LastName,
             Username = users.Username,
-            Email = users.Email
+            Email = users.Email,
         };
     }
 

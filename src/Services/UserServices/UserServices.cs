@@ -28,21 +28,6 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             throw new ArgumentException("The user is already existing");
         }
 
-        var results = new UserValidation().Validate(userDto);
-
-        if (!results.IsValid)
-        {
-            var problemDetails = new HttpValidationProblemDetails(results.ToDictionary())
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Title = "Validation Failed",
-                Detail = "One or more validation occured",
-                Instance = "api/create"
-            };
-
-            throw new ArgumentException("Validation failed: " + string.Join("; ", results.Errors.Select(e => e.ErrorMessage)));
-        }
-
         var result = await userRepositories.CreateUserAsync(newUser, ct);
         UserDto newUsers = result.ToDto(passwordHasher);
 

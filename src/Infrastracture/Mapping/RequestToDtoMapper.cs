@@ -11,12 +11,12 @@ public static class RequestToDtoMapper
     {
         return new UserDto
         {
-            FirstName = req.FirstName,
-            LastName = req.LastName,
-            Username = req.Username,
-            Password = req.Password,
-            Birthday = req.Birthday,
-            Email = req.Email
+            FirstName = req.FirstName ?? string.Empty,
+            LastName = req.LastName ?? string.Empty,
+            Username = req.Username ?? string.Empty,
+            Password = req.Password ?? string.Empty,
+            Birthday = req.Birthday ,
+            Email = req.Email ?? string.Empty
         };
     }
     public static UserDto ToRequestUpdate(this UpdateUserRequest req, IPasswordHasher<Users> passwordHasher)
