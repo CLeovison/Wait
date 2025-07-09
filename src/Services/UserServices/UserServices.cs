@@ -8,7 +8,6 @@ using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Helper;
 using Wait.Infrastracture;
-using Wait.Validation;
 using Wait.Mapping;
 
 

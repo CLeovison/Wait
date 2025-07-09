@@ -39,7 +39,7 @@ builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
 builder.Services.AddSingleton<TokenProvider>();
 
 // FluentValidation
-builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
+builder.Services.AddValidatorsFromAssembly(typeof(AbstractValidator<>).Assembly, includeInternalTypes: true);
 
 // Build the app
 var app = builder.Build();
