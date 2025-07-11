@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 
-namespace Wait.Infrastracture;
+namespace Wait.Infrastructure.Authentication;
 
 public sealed class PasswordHasher : IPasswordHasher<UserDto>
 {

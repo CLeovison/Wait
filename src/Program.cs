@@ -6,15 +6,17 @@ using Microsoft.EntityFrameworkCore;
 // Data Access
 using Wait.Database;
 using Wait.Domain.Entities;
-using Wait.Infrastracture.Repositories;
+using Wait.Infrastructure.Repositories;
 
 // Business Logic Access
 using Wait.Services.UserServices;
 using Wait.Extensions;
-using Wait.Infrastracture;
+using Wait.Infrastructure.Authentication;
 
 // Validation
 using FluentValidation;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +41,7 @@ builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
 builder.Services.AddSingleton<TokenProvider>();
 
 // FluentValidation
-builder.Services.AddValidatorsFromAssembly(typeof(AbstractValidator<>).Assembly, includeInternalTypes: true);
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Build the app
 var app = builder.Build();

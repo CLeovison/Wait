@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Wait.Domain.Entities;
 
-namespace Wait.Infrastracture;
+namespace Wait.Infrastructure.Authentication;
 
 public sealed class TokenProvider(IConfiguration configuration)
 {

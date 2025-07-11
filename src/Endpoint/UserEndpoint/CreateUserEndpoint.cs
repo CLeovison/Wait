@@ -1,7 +1,7 @@
 using Wait.Abstract;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Extensions;
-using Wait.Infrastracture.Mapping;
+using Wait.Infrastructure.Mapping;
 using Wait.Services.UserServices;
 
 namespace Wait.Endpoint.UserEndpoint;
@@ -21,6 +21,7 @@ public class CreateUserEndpoint : IEndpoint
             return Results.Ok(response);
         })
         .WithValidation<CreateUserRequest>();
+
 
 
     }

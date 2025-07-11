@@ -1,12 +1,13 @@
 
 using FluentValidation;
-using Wait.Contracts.Data;
+
+using Wait.Contracts.Request.UserRequest;
 
 
 namespace Wait.Validation;
 
 
-public sealed class UserValidation : AbstractValidator<UserDto>
+public sealed class UserValidation : AbstractValidator<CreateUserRequest>
 {
     public UserValidation()
     {

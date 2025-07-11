@@ -4,7 +4,8 @@ using Wait.Database;
 using Wait.Domain.Entities;
 using Wait.Extensions;
 
-namespace Wait.Infrastracture.Repositories;
+
+namespace Wait.Infrastructure.Repositories;
 
 public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
 {

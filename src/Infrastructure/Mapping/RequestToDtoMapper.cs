@@ -3,7 +3,9 @@ using Wait.Contracts.Data;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Domain.Entities;
 
-namespace Wait.Infrastracture.Mapping;
+namespace Wait.Infrastructure.Mapping;
+
+
 
 public static class RequestToDtoMapper
 {

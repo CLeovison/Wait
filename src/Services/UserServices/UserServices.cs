@@ -1,14 +1,16 @@
-using Wait.Domain.Entities;
-using Wait.Infrastracture.Repositories;
-using Wait.Infrastracture.Mapping;
 using Microsoft.AspNetCore.Identity;
+using Wait.Domain.Entities;
+
 using Wait.Contracts.Data;
 using Wait.Contracts.Response;
 using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.UserRequest;
+
 using Wait.Helper;
-using Wait.Infrastracture;
-using Wait.Mapping;
+
+using Wait.Infrastructure.Mapping;
+using Wait.Infrastructure.Repositories;
+using Wait.Infrastructure.Authentication;
 
 
 namespace Wait.Services.UserServices;

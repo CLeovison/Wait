@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Domain.Entities;
 
-namespace Wait.Mapping;
+namespace Wait.Infrastructure.Mapping;
 
 public static class ContractsToEntitiesMapper
 {

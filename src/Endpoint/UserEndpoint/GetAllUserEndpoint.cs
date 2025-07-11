@@ -1,6 +1,6 @@
 using Wait.Abstract;
 using Wait.Services.UserServices;
-using Wait.Infrastracture.Mapping;
+using Wait.Infrastructure.Mapping;
 
 namespace Wait.Endpoint.UserEndpoint;
 
