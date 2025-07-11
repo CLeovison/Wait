@@ -5,6 +5,7 @@ namespace Wait.Extensions;
 
 public class ValidationFilter<TRequest>(IValidator<TRequest> validator) : IEndpointFilter
 {
+
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
         var request = context.GetArgument<TRequest>(0);
@@ -20,8 +21,10 @@ public class ValidationFilter<TRequest>(IValidator<TRequest> validator) : IEndpo
     }
 }
 
+
 public static class ValidationExtension
 {
+
     public static RouteHandlerBuilder WithValidation<TRequest>(this RouteHandlerBuilder builder)
     {
         return builder.AddEndpointFilter<ValidationFilter<TRequest>>().ProducesValidationProblem();

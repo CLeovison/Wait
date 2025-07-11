@@ -16,8 +16,6 @@ using Wait.Infrastructure.Authentication;
 // Validation
 using FluentValidation;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure EF Core with PostgreSQL
