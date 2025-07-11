@@ -24,7 +24,6 @@ public class ValidationFilter<TRequest>(IValidator<TRequest> validator) : IEndpo
 
 public static class ValidationExtension
 {
-
     public static RouteHandlerBuilder WithValidation<TRequest>(this RouteHandlerBuilder builder)
     {
         return builder.AddEndpointFilter<ValidationFilter<TRequest>>().ProducesValidationProblem();
