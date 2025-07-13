@@ -9,7 +9,7 @@ public static class ContractsToEntitiesMapper
 
     public static Users ToCreate(this CreateUserRequest req)
     {
-        var user = new Users
+        return new Users
         {
             UserId = Guid.NewGuid(),
             FirstName = req.FirstName,
@@ -20,7 +20,6 @@ public static class ContractsToEntitiesMapper
             CreatedAt = req.CreatedAt
         };
 
-        return user;
     }
 
     public static Users ToUpdate(this UpdateUserRequest req, IPasswordHasher<Users> passwordHasher)

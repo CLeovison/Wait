@@ -17,7 +17,7 @@ public static class RequestToDtoMapper
             LastName = req.LastName ?? string.Empty,
             Username = req.Username ?? string.Empty,
             Password = req.Password ?? string.Empty,
-            
+            ConfirmPassword = req.ConfirmPassword ?? string.Empty,
             Birthday = req.Birthday,
             Email = req.Email ?? string.Empty
         };
@@ -30,7 +30,7 @@ public static class RequestToDtoMapper
             LastName = req.LastName ?? string.Empty,
             Username = req.Username ?? string.Empty,
             Password = passwordHasher.HashPassword(new Users(), req.Password ?? string.Empty),
-            
+
             Birthday = req.Birthday,
             Email = req.Email ?? string.Empty
         };
