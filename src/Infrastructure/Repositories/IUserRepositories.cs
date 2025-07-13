@@ -17,6 +17,6 @@ public interface IUserRepositories
          bool desc,
          CancellationToken ct);
     Task<Users?> UpdateUserAsync(Users users, CancellationToken ct);
-    Task<bool> DeleteUserAsync(Users users);
-    Task<Users?> GetUserByUsernameAsync(string username);
+    Task<bool> DeleteUserAsync(Users users, CancellationToken ct);
+    Task<Users?> GetUserByUsernameAsync(string username,CancellationToken ct);
 }

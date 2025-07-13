@@ -11,7 +11,7 @@ public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
 {
     public async Task<Users> CreateUserAsync(Users users, CancellationToken ct)
     {
-        var createUser = await dbContext.Set<Users>().AddAsync(users, ct);
+        var createUser = await dbContext.AddAsync(users, ct);
         await dbContext.SaveChangesAsync();
         return createUser.Entity;
     }
@@ -55,18 +55,18 @@ public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
 
         return users;
     }
-    public async Task<bool> DeleteUserAsync(Users users)
+    public async Task<bool> DeleteUserAsync(Users users, CancellationToken ct)
     {
        
-        var deleteUser = dbContext.Set<Users>().Remove(users);
-        await dbContext.SaveChangesAsync();
+        var deleteUser = dbContext.Remove(users);
+        await dbContext.SaveChangesAsync(ct);
 
         return deleteUser is not null;
     }
 
-    public async Task<Users?> GetUserByUsernameAsync(string username)
+    public async Task<Users?> GetUserByUsernameAsync(string username,CancellationToken ct)
     {
-        var selectUser = await dbContext.User.FirstOrDefaultAsync(x => x.Username == username);
+        var selectUser = await dbContext.User.FirstOrDefaultAsync(x => x.Username == username,ct);
         return selectUser;
     }
 

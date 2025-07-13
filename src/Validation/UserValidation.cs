@@ -24,6 +24,7 @@ public sealed class UserValidation : AbstractValidator<CreateUserRequest>
         .Matches(@"[a-z]+").WithMessage("Password must contain lowercase")
         .Matches(@"[0-9]+").WithMessage("Password must contain number");
 
+
         RuleFor(user => user.Email).EmailAddress().NotEmpty().WithMessage("Please provide an email address");
     }
 }

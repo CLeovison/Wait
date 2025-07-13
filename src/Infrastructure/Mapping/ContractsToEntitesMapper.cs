@@ -32,7 +32,6 @@ public static class ContractsToEntitiesMapper
             Username = req.Username ?? string.Empty,
             Password = req.Password ?? string.Empty,
             Email = req.Email ?? string.Empty,
-
         };
     }
 }

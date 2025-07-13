@@ -25,14 +25,16 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<Users>
 
         builder.Property(x => x.Username)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasMaxLength(250);
 
         builder.Property(x => x.Password)
             .IsRequired()
             .HasMaxLength(250);
 
+
         builder.Property(x => x.Email)
             .IsRequired();
+
         builder.Property(x => x.IsVerifiedEmail)
             .HasDefaultValue(false);
 
@@ -45,7 +47,6 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<Users>
         builder.Property(b => b.Birthday)
         .HasColumnType("date")
         .IsRequired();
-
 
         builder.ToTable("Users");
     }

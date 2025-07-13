@@ -22,7 +22,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     {
         var newUser = userDto.ToEntities(passwordHasher);
 
-        var existingUser = await userRepositories.GetUserByUsernameAsync(userDto.Username);
+        var existingUser = await userRepositories.GetUserByUsernameAsync(userDto.Username, ct);
 
         if (existingUser is not null)
         {
@@ -70,16 +70,22 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
 
+        if (existingUser is null)
+        {
+            return null;
+        }
+
+
         try
         {
-            if (existingUser is null)
-            {
-                return null;
-            }
+
             existingUser.FirstName = users.FirstName;
             existingUser.LastName = users.LastName;
             existingUser.Username = users.Username;
-            existingUser.Password = passwordHasher.HashPassword(existingUser, users.Password);
+            if (!string.IsNullOrWhiteSpace(users.Password))
+            {
+                existingUser.Password = passwordHasher.HashPassword(existingUser, users.Password);
+            }
             existingUser.Email = users.Email;
             existingUser.ModifiedAt = users.ModifiedAt;
 
@@ -100,12 +106,12 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             throw new ArgumentException("User not found.");
         }
 
-        return await userRepositories.DeleteUserAsync(existingUser);
+        return await userRepositories.DeleteUserAsync(existingUser, ct);
     }
 
-    public async Task<string?> LoginUserAsync(string username, string password)
+    public async Task<string?> LoginUserAsync(string username, string password, CancellationToken ct)
     {
-        var existingUser = await userRepositories.GetUserByUsernameAsync(username);
+        var existingUser = await userRepositories.GetUserByUsernameAsync(username, ct);
 
         if (existingUser == null)
         {
@@ -124,10 +130,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         var token = tokenProvider.Create(existingUser);
 
         return token;
-
-
     }
-
 
 
 }
