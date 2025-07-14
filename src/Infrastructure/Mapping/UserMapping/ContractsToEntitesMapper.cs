@@ -6,7 +6,7 @@ namespace Wait.Infrastructure.Mapping;
 
 public static class ContractsToEntitiesMapper
 {
-
+  
     public static Users ToCreate(this CreateUserRequest req)
     {
         return new Users

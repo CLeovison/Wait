@@ -15,6 +15,7 @@ public static class ResponseToEntitiesMapper
             LastName = users.LastName,
             Username = users.Username,
             Email = users.Email,
+            Birthday = users.Birthday
         };
     }
 

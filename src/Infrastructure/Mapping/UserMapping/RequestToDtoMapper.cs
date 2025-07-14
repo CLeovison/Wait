@@ -9,6 +9,11 @@ namespace Wait.Infrastructure.Mapping;
 
 public static class RequestToDtoMapper
 {
+    /// <summary>
+    /// Provides extension methods for mapping user-related request models to UserDto objects.
+    /// Converts CreateUserRequest and UpdateUserRequest into DTO representations for downstream processing.
+    /// </summary>
+
     public static UserDto ToRequest(this CreateUserRequest req)
     {
         return new UserDto
@@ -30,7 +35,7 @@ public static class RequestToDtoMapper
             LastName = req.LastName ?? string.Empty,
             Username = req.Username ?? string.Empty,
             Password = passwordHasher.HashPassword(new Users(), req.Password ?? string.Empty),
-
+            ConfirmPassword = req.ConfirmPassword ?? string.Empty,
             Birthday = req.Birthday,
             Email = req.Email ?? string.Empty
         };

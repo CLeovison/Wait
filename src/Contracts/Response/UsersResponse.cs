@@ -8,5 +8,5 @@ public sealed class UserResponse
     public string LastName { get; set; } = default!;
     public string Username { get; set; } = default!;
     public string Email { get; set; } = default!;
-    public DateOnly Birthday { get; set; }
+    public DateOnly Birthday { get; set; } = default!;
 }

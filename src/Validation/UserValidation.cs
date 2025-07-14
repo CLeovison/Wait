@@ -26,6 +26,7 @@ public sealed class UserValidation : AbstractValidator<CreateUserRequest>
         .Matches(@"[0-9]+").WithMessage("Password must contain number");
 
         RuleFor(user => user.ConfirmPassword).Matches(user => user.Password).WithMessage("Your confirmation password must match the password you entered.");
+        
         RuleFor(user => user.Email).EmailAddress().NotEmpty().WithMessage("Please provide an email address");
     }
 }
