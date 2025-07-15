@@ -15,7 +15,7 @@ public static class EntitiesToDtoMapper
             LastName = userDto.LastName,
             Username = userDto.Username,
             Password = passwordHasher.HashPassword(new Users(), userDto.Password),
-            Birthday = userDto.Birthday,
+            Birthday = DateOnly.Parse(userDto.Birthday.ToString()),
             Email = userDto.Email,
             ModifiedAt = userDto.ModifiedAt
         };
