@@ -18,7 +18,7 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Price).IsRequired();
         builder.Property(x => x.Quantity).IsRequired();
         builder.Property(x => x.Size).IsRequired();
-        builder.Property(x => x.Image).IsRequired();
+        builder.Property(x => x.ImageUrl).IsRequired();
         builder.Property(x => x.IsSoftDelete).HasDefaultValue(false);
         builder.Property(d => d.CreatedAt).HasDefaultValueSql("current_date");
         builder.Property(x => x.ModifiedAt).HasDefaultValueSql("current_date");
