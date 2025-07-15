@@ -16,6 +16,7 @@ public static class RequestToDtoMapper
 
     public static UserDto ToRequest(this CreateUserRequest req)
     {
+     
         return new UserDto
         {
             FirstName = req.FirstName ?? string.Empty,
@@ -23,7 +24,7 @@ public static class RequestToDtoMapper
             Username = req.Username ?? string.Empty,
             Password = req.Password ?? string.Empty,
             ConfirmPassword = req.ConfirmPassword ?? string.Empty,
-            Birthday = req.Birthday,
+            Birthday = DateOnly.Parse(req.Birthday.ToString()),
             Email = req.Email ?? string.Empty
         };
     }
@@ -36,7 +37,7 @@ public static class RequestToDtoMapper
             Username = req.Username ?? string.Empty,
             Password = passwordHasher.HashPassword(new Users(), req.Password ?? string.Empty),
             ConfirmPassword = req.ConfirmPassword ?? string.Empty,
-            Birthday = req.Birthday,
+            Birthday = DateOnly.Parse(req.Birthday.ToString()),
             Email = req.Email ?? string.Empty
         };
     }

@@ -13,5 +13,5 @@ public class Product
     public string ImageUrl { get; set; } = string.Empty;
     public bool IsSoftDelete { get; init; }
     public DateOnly CreatedAt { get; set; }
-    public DateOnly UpdatedAt { get; set; }
+    public DateOnly ModifiedAt { get; set; }
 }
