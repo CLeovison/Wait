@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 using Wait.Domain.Entities;
+using Wait.Entities;
 
 namespace Wait.Infrastructure.Mapping;
 
@@ -18,4 +19,14 @@ public static class DtoToEntitiesMapper
             Email = users.Email
         };
     }
+
+    public static ProductDto ToCreate(this Product product)
+    {
+        return new ProductDto
+        {
+            ProductName = product.ProductName,
+            Description = product.Description,
+        };
+    }
+
 }

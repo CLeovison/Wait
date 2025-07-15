@@ -2,11 +2,12 @@ using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Domain.Entities;
 
+
 namespace Wait.Infrastructure.Mapping;
 
 public static class ContractsToEntitiesMapper
 {
-  
+
     public static Users ToCreate(this CreateUserRequest req)
     {
         return new Users
@@ -33,4 +34,5 @@ public static class ContractsToEntitiesMapper
             Email = req.Email ?? string.Empty,
         };
     }
+
 }

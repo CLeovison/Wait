@@ -1,0 +1,18 @@
+using Wait.Contracts.Data;
+using Wait.Infrastructure.Mapping;
+using Wait.Infrastructure.Repositories.ProductRepository;
+
+
+namespace Wait.Services.ProductServices;
+
+
+public sealed class ProductService(ProductRepository productRepository) : IProductService
+{
+    public async Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct)
+    {
+        var productDto = product.ToCreate();
+        var request = await productRepository.CreateProductAsync(productDto, ct);
+        var response = request.ToCreate();
+        return response;
+    }
+}

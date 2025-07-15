@@ -59,4 +59,9 @@ public static class EndpointExtensions
     {
         return app.RequireAuthorization(permission);
     }
+
+    public static RouteGroupBuilder MapEndpoint(this RouteGroupBuilder group)
+    {
+        return group.MapGroup("/api");
+    }
 }

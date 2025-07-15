@@ -4,6 +4,6 @@ namespace Wait.Services.ProductServices;
 
 public interface IProductService
 {
-    Task<ProductDto> CreateProductAsync();
+    Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct);
 
 }
