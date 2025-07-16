@@ -15,6 +15,8 @@ using Wait.Infrastructure.Authentication;
 
 // Validation
 using FluentValidation;
+using Wait.Infrastructure.Repositories.ProductRepository;
+using Wait.Services.ProductServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,8 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 // App services
 builder.Services.AddScoped<IUserRepositories, UserRepositories>();
 builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 // Stateless services
 builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();

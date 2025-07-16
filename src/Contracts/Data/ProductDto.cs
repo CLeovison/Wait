@@ -8,7 +8,6 @@ public class ProductDto
     public string ProductSize { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty;
     public int Quantity { get; set; }
-
-    public DateOnly CreatedAt { get; init; }
-
+    public DateOnly CreatedAt { get; set; }
+    public DateOnly UpdatedAt { get; set; }
 }

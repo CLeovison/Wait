@@ -6,7 +6,7 @@ using Wait.Infrastructure.Repositories.ProductRepository;
 namespace Wait.Services.ProductServices;
 
 
-public sealed class ProductService(ProductRepository productRepository) : IProductService
+public sealed class ProductService(IProductRepository productRepository) : IProductService
 {
     public async Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct)
     {

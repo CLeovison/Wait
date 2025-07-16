@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
+using Wait.Contracts.Request.ProductRequest;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Domain.Entities;
-
 namespace Wait.Infrastructure.Mapping;
 
 
@@ -14,9 +14,9 @@ public static class RequestToDtoMapper
     /// Converts CreateUserRequest and UpdateUserRequest into DTO representations for downstream processing.
     /// </summary>
 
-    public static UserDto ToRequest(this CreateUserRequest req)
+    public static UserDto ToCreateRequest(this CreateUserRequest req)
     {
-     
+
         return new UserDto
         {
             FirstName = req.FirstName ?? string.Empty,
@@ -41,4 +41,18 @@ public static class RequestToDtoMapper
             Email = req.Email ?? string.Empty
         };
     }
+
+    public static ProductDto ToCreateRequest(this CreateProductRequest req)
+    {
+        return new ProductDto
+        {
+            ProductName = req.ProductName,
+            Description = req.Description,
+            ProductSize = req.ProductSize,
+            Category = req.Category,
+            Quantity = req.Quantity,
+            CreatedAt = req.CreatedAt
+        };
+    }
+
 }

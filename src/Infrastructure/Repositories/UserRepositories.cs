@@ -49,7 +49,7 @@ public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
 
     public async Task<Users?> UpdateUserAsync(Users users, CancellationToken ct)
     {
-        dbContext.Set<Users>().Update(users);
+        dbContext.Update(users);
 
         await dbContext.SaveChangesAsync(ct);
 

@@ -15,7 +15,7 @@ public class CreateUserEndpoint : IEndpoint
             IUserServices userServices,
             CancellationToken ct) =>
         {
-            var userDto = req.ToRequest();
+            var userDto = req.ToCreateRequest();
             var userCreated = await userServices.CreateUserAsync(userDto, ct);
             var response = userCreated.ToUserResponse();
             return Results.Ok(response);
