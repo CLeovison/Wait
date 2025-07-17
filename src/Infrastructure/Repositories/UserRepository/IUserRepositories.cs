@@ -2,7 +2,7 @@ using Wait.Domain.Entities;
 using Wait.Contracts.Request.UserRequest;
 
 
-namespace Wait.Infrastructure.Repositories;
+namespace Wait.Infrastructure.Repositories.UserRepository;
 
 
 public interface IUserRepositories
