@@ -33,7 +33,6 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         UserDto newUsers = result.ToDto(passwordHasher);
 
         return newUsers;
-
     }
 
     public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
@@ -75,10 +74,8 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             return null;
         }
 
-
         try
         {
-
             existingUser.FirstName = users.FirstName;
             existingUser.LastName = users.LastName;
             existingUser.Username = users.Username;
@@ -119,14 +116,12 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         }
 
         bool verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password) == PasswordVerificationResult.Success;
-
-
+        
         if (verifiedPassword)
         {
             throw new ArgumentException("The password that you've provide is incorrect");
         }
-
-
+        
         var token = tokenProvider.Create(existingUser);
 
         return token;
