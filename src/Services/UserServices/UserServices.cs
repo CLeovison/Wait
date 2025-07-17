@@ -9,7 +9,7 @@ using Wait.Contracts.Request.UserRequest;
 using Wait.Helper;
 
 using Wait.Infrastructure.Mapping;
-using Wait.Infrastructure.Repositories;
+using Wait.Infrastructure.Repositories.UserRepository;
 using Wait.Infrastructure.Authentication;
 
 
@@ -116,12 +116,12 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         }
 
         bool verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password) == PasswordVerificationResult.Success;
-        
+
         if (verifiedPassword)
         {
             throw new ArgumentException("The password that you've provide is incorrect");
         }
-        
+
         var token = tokenProvider.Create(existingUser);
 
         return token;

@@ -28,7 +28,12 @@ public static class EntitiesToDtoMapper
         return new Product
         {
             ProductName = productDto.ProductName,
-            Description = productDto.Description,            
+            Description = productDto.Description,
+            ProductSize = productDto.ProductSize,
+            Category = productDto.Category,
+            Quantity = productDto.Quantity,
+            CreatedAt = productDto.CreatedAt
+
         };
     }
 }

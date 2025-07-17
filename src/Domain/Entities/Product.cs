@@ -9,7 +9,7 @@ public class Product
     public string Description { get; set; } = string.Empty;
     public double Price { get; set; }
     public int Quantity { get; set; }
-    public string Size { get; set; } = string.Empty;
+    public string ProductSize { get; set; } = string.Empty;
     public string ImageUrl { get; set; } = string.Empty;
     public bool IsSoftDelete { get; init; }
     public DateOnly CreatedAt { get; set; }

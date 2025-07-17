@@ -5,6 +5,7 @@ namespace Wait.Infrastructure.Repositories.AuthRepository;
 
 public interface IAuthRepository
 {
-    Task<Users> LoginUserAsync();
-    Task<Users> ResetPassword();
+    Task<Users> LoginUserAsync(string username, string password);
+    Task SendPasswordResetEmail(string email);
+    Task<Users> ResetPasswordAsync();
 }
