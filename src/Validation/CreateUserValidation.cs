@@ -1,16 +1,13 @@
 
 using FluentValidation;
-
 using Wait.Contracts.Request.UserRequest;
-
-
 
 namespace Wait.Validation;
 
 
-public sealed class UserValidation : AbstractValidator<CreateUserRequest>
+public sealed class CreateUserValidation : AbstractValidator<CreateUserRequest>
 {
-    public UserValidation()
+    public CreateUserValidation()
     {
         RuleFor(user => user.FirstName).NotEmpty().WithMessage("Please Fill the First Name");
 
