@@ -1,12 +1,9 @@
-using Microsoft.EntityFrameworkCore;
-
-
 namespace Wait.Domain.Entities;
 
 /// <summary>
 /// This Class Is The Entity Based Class of the User
 /// </summary>
-[PrimaryKey(nameof(UserId))]
+
 public sealed class Users
 {
     public Guid UserId { get; set; }

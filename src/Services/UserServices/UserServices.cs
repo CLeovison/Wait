@@ -122,7 +122,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             throw new ArgumentException("The password that you've provide is incorrect");
         }
 
-        var token = tokenProvider.Create(existingUser);
+        var token = tokenProvider.GenerateToken(existingUser);
 
         return token;
     }

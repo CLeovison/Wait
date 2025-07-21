@@ -54,7 +54,7 @@ public sealed class TokenProvider(IConfiguration configuration)
 
         string token = handler.CreateToken(tokenDescriptor);
 
-        return token;
+        return handler.CreateToken(token);
     }
     /// <summary>
     /// Generates a cryptographically secure, random 32-byte refresh token encoded in Base64 format.

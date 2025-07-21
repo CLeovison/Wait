@@ -18,13 +18,13 @@ public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
 
     public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
     {
- 
+
         return await dbContext.User.ToListAsync(ct);
     }
 
     public async Task<Users?> GetUserByIdAsync(Guid id, CancellationToken ct)
     {
-   
+
         return await dbContext.User.FindAsync(id, ct);
     }
 
@@ -57,17 +57,22 @@ public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
     }
     public async Task<bool> DeleteUserAsync(Users users, CancellationToken ct)
     {
-       
+
         var deleteUser = dbContext.Remove(users);
         await dbContext.SaveChangesAsync(ct);
 
         return deleteUser is not null;
     }
 
-    public async Task<Users?> GetUserByUsernameAsync(string username,CancellationToken ct)
+    public async Task<Users?> GetUserByUsernameAsync(string username, CancellationToken ct)
     {
-        var selectUser = await dbContext.User.FirstOrDefaultAsync(x => x.Username == username,ct);
+        var selectUser = await dbContext.User.FirstOrDefaultAsync(x => x.Username == username, ct);
         return selectUser;
+    }
+    public async Task<Users?> GetUserByEmailAsync(string email, CancellationToken ct)
+    {
+        var userEmail = await dbContext.User.FirstOrDefaultAsync(x => x.Email == email, ct);
+        return userEmail;
     }
 
 }
