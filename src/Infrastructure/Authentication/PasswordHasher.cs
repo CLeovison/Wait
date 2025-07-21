@@ -17,7 +17,7 @@ public sealed class PasswordHasher : IPasswordHasher<UserDto>
         byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
         byte[] hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, Algorithm, HashSize);
 
-        return $"{Convert.ToHexString(hash)}-{Convert.ToHexString(salt)}";
+        return $"{Convert.ToHexString(salt)}-{Convert.ToHexString(hash)}";
     }
 
     public PasswordVerificationResult VerifyHashedPassword(UserDto user, string hashedPassword, string providedPassword)
