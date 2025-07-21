@@ -10,7 +10,7 @@ namespace Wait.Infrastructure.Authentication;
 
 public sealed class TokenProvider(IConfiguration configuration)
 {
-    public string Create(Users users)
+    public string CreateAccessToken(Users users)
     {
         string secretKey = configuration["Jwt:SecretKey"]!;
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
