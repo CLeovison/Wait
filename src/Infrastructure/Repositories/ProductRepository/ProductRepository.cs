@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Wait.Database;
 using Wait.Entities;
 
@@ -12,5 +13,9 @@ public sealed class ProductRepository(AppDbContext dbContext) : IProductReposito
 
         return request.Entity;
     }
+    public async Task<Product?> GetProductByIdAsync(int id, CancellationToken ct)
+    {
+        return await dbContext.Product.FindAsync(id, ct);
 
+    }
 }

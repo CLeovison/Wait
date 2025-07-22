@@ -6,6 +6,6 @@ namespace Wait.Services.ProductServices;
 public interface IProductService
 {
     Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct);
-    Task<IEnumerable<ProductDto>> GetPaginatedProductAsync(PaginatedRequest req, CancellationToken ct);
+    Task<ProductDto?> GetProductByIdAsync(int id, CancellationToken ct);
 
 }

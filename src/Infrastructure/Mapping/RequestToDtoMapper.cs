@@ -47,6 +47,7 @@ public static class RequestToDtoMapper
         return new ProductDto
         {
             ProductName = req.ProductName,
+            Price = req.Price,
             Description = req.Description,
             ProductSize = req.ProductSize,
             Category = req.Category,

@@ -18,13 +18,11 @@ public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
 
     public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
     {
-
         return await dbContext.User.ToListAsync(ct);
     }
 
     public async Task<Users?> GetUserByIdAsync(Guid id, CancellationToken ct)
     {
-
         return await dbContext.User.FindAsync(id, ct);
     }
 

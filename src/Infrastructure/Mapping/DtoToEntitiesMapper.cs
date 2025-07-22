@@ -20,12 +20,17 @@ public static class DtoToEntitiesMapper
         };
     }
 
-    public static ProductDto ToCreate(this Product product)
+    public static ProductDto ToDto(this Product product)
     {
         return new ProductDto
         {
             ProductName = product.ProductName,
+            Price = product.Price,
+            ProductSize = product.ProductSize,
+            Category = product.Category,
+            Quantity = product.Quantity,
             Description = product.Description,
+            CreatedAt = product.CreatedAt,
         };
     }
 

@@ -28,6 +28,7 @@ public static class EntitiesToDtoMapper
         return new Product
         {
             ProductName = productDto.ProductName,
+            Price = productDto.Price,
             Description = productDto.Description,
             ProductSize = productDto.ProductSize,
             Category = productDto.Category,

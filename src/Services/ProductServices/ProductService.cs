@@ -12,7 +12,21 @@ public sealed class ProductService(IProductRepository productRepository) : IProd
     {
         var productDto = product.ToCreate();
         var request = await productRepository.CreateProductAsync(productDto, ct);
-        var response = request.ToCreate();
+        var response = request.ToDto();
         return response;
+    }
+
+    public async Task<ProductDto?> GetProductByIdAsync(int id, CancellationToken ct)
+    {
+        var request = await productRepository.GetProductByIdAsync(id, ct);
+
+        if (request is null)
+        {
+            Results.NotFound();
+        }
+
+        var productResponse = request?.ToDto();
+
+        return productResponse;
     }
 }
