@@ -27,7 +27,7 @@ public sealed class AppDbContext(DbContextOptions options) : DbContext(options)
     /// 
     public required DbSet<Users> User { get; init; }
     public required DbSet<Product> Product { get; init; }
-
+    public required DbSet<RefreshToken> RefreshTokens { get; init; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

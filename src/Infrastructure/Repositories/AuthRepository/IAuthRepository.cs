@@ -9,4 +9,5 @@ public interface IAuthRepository
     Task SendPasswordResetEmail(string email);
     Task SendPasswordVerificationToken();
     Task<Users> ResetPasswordAsync();
+    Task VerifyEmail();
 }

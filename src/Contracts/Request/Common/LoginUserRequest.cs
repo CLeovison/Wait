@@ -1,4 +1,4 @@
-namespace Wait.Contracts.Request.UserRequest;
+namespace Wait.Contracts.Request.AuthRequest;
 
 public class LoginUserRequest
 {
