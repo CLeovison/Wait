@@ -2,7 +2,7 @@
 using FluentValidation;
 using Wait.Contracts.Request.UserRequest;
 
-namespace Wait.Validation;
+namespace Wait.Domain.Validation.UserValidation;
 
 
 public sealed class CreateUserValidation : AbstractValidator<CreateUserRequest>

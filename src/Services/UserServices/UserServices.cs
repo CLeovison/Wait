@@ -106,26 +106,26 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         return await userRepositories.DeleteUserAsync(existingUser, ct);
     }
 
-    public async Task<string?> LoginUserAsync(string username, string password, CancellationToken ct)
-    {
-        var existingUser = await userRepositories.GetUserByUsernameAsync(username, ct);
+    // public async Task<string?> LoginUserAsync(string username, string password, CancellationToken ct)
+    // {
+    //     var existingUser = await userRepositories.GetUserByUsernameAsync(username, ct);
 
-        if (existingUser == null)
-        {
-            return null;
-        }
+    //     if (existingUser == null)
+    //     {
+    //         return null;
+    //     }
 
-        bool verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password) == PasswordVerificationResult.Success;
+    //     bool verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password) == PasswordVerificationResult.Success;
 
-        if (verifiedPassword)
-        {
-            throw new ArgumentException("The password that you've provide is incorrect");
-        }
+    //     if (verifiedPassword)
+    //     {
+    //         throw new ArgumentException("The password that you've provide is incorrect");
+    //     }
 
-        var token = tokenProvider.GenerateToken(existingUser);
+    //     var token = tokenProvider.GenerateToken(existingUser);
 
-        return token;
-    }
+    //     return token;
+    // }
 
 
 }

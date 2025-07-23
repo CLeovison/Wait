@@ -2,7 +2,6 @@ namespace Wait.Services.AuthService;
 
 public interface IAuthService
 {
-    Task GenerateRefreshToken();
-    Task GenerateToken();
-    Task<bool> InvokeRefreshToken();
+    Task<bool> Login(string username, string password, CancellationToken ct);
+    Task Logout(Guid id, string refreshToken);
 }
