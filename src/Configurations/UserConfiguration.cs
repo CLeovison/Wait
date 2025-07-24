@@ -12,7 +12,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<Users>
         builder.HasKey(c => c.UserId);
 
         builder.Property(c => c.UserId)
-            .HasDefaultValueSql("gen_random_uuid()")
+            .HasDefaultValueSql("gen_random_uuid ()")
             .ValueGeneratedOnAdd();
 
         builder.Property(x => x.FirstName)

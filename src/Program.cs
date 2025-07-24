@@ -41,7 +41,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 
 // Stateless services
 builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
-builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 
 // FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
