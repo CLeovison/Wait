@@ -11,7 +11,6 @@ using Wait.Helper;
 using Wait.Infrastructure.Mapping;
 using Wait.Infrastructure.Repositories.UserRepository;
 
-
 namespace Wait.Services.UserServices;
 
 public sealed class UserServices(IUserRepositories userRepositories, IPasswordHasher<Users> passwordHasher) : IUserServices
@@ -113,28 +112,6 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         }
 
     }
-
-    // public async Task<string?> LoginUserAsync(string username, string password, CancellationToken ct)
-    // {
-    //     var existingUser = await userRepositories.GetUserByUsernameAsync(username, ct);
-
-    //     if (existingUser == null)
-    //     {
-    //         return null;
-    //     }
-
-    //     bool verifiedPassword = passwordHasher.VerifyHashedPassword(existingUser, existingUser.Password, password) == PasswordVerificationResult.Success;
-
-    //     if (verifiedPassword)
-    //     {
-    //         throw new ArgumentException("The password that you've provide is incorrect");
-    //     }
-
-    //     var token = tokenProvider.GenerateToken(existingUser);
-
-    //     return token;
-    // }
-
 
 }
 
