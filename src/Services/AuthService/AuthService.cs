@@ -40,6 +40,7 @@ AppDbContext dbContext) : IAuthService
             CreatedAt = DateTime.UtcNow
         };
         dbContext.RefreshTokens.Add(refreshToken);
+        await dbContext.SaveChangesAsync();
 
         return new LoginResponse
         {
