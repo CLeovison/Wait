@@ -10,12 +10,11 @@ using Wait.Helper;
 
 using Wait.Infrastructure.Mapping;
 using Wait.Infrastructure.Repositories.UserRepository;
-using Wait.Infrastructure.Authentication;
 
 
 namespace Wait.Services.UserServices;
 
-public sealed class UserServices(IUserRepositories userRepositories, IPasswordHasher<Users> passwordHasher, TokenProvider tokenProvider) : IUserServices
+public sealed class UserServices(IUserRepositories userRepositories, IPasswordHasher<Users> passwordHasher) : IUserServices
 {
 
     public async Task<UserDto> CreateUserAsync(UserDto userDto, CancellationToken ct)
@@ -98,12 +97,21 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     public async Task<bool> DeleteUserAsync(Guid id, CancellationToken ct)
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
-        if (existingUser is null)
+
+        try
         {
-            throw new ArgumentException("User not found.");
+            if (existingUser is null)
+            {
+                throw new ArgumentException("User not found.");
+            }
+
+            return await userRepositories.DeleteUserAsync(existingUser, ct);
+        }
+        catch (Exception ex)
+        {
+            throw new ArgumentException("ex", ex);
         }
 
-        return await userRepositories.DeleteUserAsync(existingUser, ct);
     }
 
     // public async Task<string?> LoginUserAsync(string username, string password, CancellationToken ct)

@@ -17,6 +17,7 @@ using Wait.Infrastructure.Authentication;
 using FluentValidation;
 using Wait.Infrastructure.Repositories.ProductRepository;
 using Wait.Services.ProductServices;
+using Wait.Abstract;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +41,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 
 // Stateless services
 builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
-builder.Services.AddSingleton<TokenProvider>();
+builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
 
 // FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();

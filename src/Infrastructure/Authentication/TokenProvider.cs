@@ -3,11 +3,12 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using Wait.Abstract;
 using Wait.Domain.Entities;
 
 namespace Wait.Infrastructure.Authentication;
 
-public sealed class TokenProvider(IConfiguration configuration)
+public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
 {
     /// <summary>
     /// Generates a signed JWT token containing user-specific claims using application configuration settings.
