@@ -6,13 +6,12 @@ using Wait.Database;
 using Wait.Domain.Entities;
 using Wait.Infrastructure.Repositories.UserRepository;
 
-
 namespace Wait.Services.AuthService;
 
 
 public sealed class AuthService(IUserRepositories userRepositories,
 ITokenProvider tokenProvider,
-IPasswordHasher<UserDto> passwordHasher,
+IPasswordHasher<Users> passwordHasher,
 AppDbContext dbContext) : IAuthService
 {
     public async Task<LoginResponse> LoginUserAsync(string username, string password, CancellationToken ct)
@@ -24,7 +23,12 @@ AppDbContext dbContext) : IAuthService
             throw new ApplicationException("The User Was Not FOund");
         }
 
-        bool verified = passwordHasher.VerifyHashedPassword(password, userRequest.Password);
+        // Map Users to UserDto
+
+
+        var verificationResult = passwordHasher.VerifyHashedPassword(userRequest, userRequest.Password, password);
+        bool verifiedPassword = verificationResult == PasswordVerificationResult.Success;
+
 
         var accessToken = tokenProvider.GenerateToken(userRequest);
         var refreshToken = new RefreshToken
