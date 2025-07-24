@@ -1,6 +1,6 @@
 using Wait.Abstract;
-using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.UserRequest;
+using Wait.Infrastructure.Mapping;
 using Wait.Services.UserServices;
 
 namespace Wait.Endpoint.UserEndpoint;
@@ -17,15 +17,7 @@ public sealed class PaginatedUserEndpoint : IEndpoint
             string? sortDirection,
             CancellationToken ct) =>
         {
-            var request = new PaginatedRequest
-            {
-                Page = page,
-                PageSize = pageSize,
-                SearchTerm = searchTerm,
-                SortBy = sortBy,
-                SortDirection = sortDirection
-            };
-
+            var request = PaginationMapper.ToPaginate(searchTerm, page, pageSize, sortBy, sortDirection);
 
             var filterRequest = new FilterUserRequest
             {
