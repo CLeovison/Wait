@@ -20,15 +20,16 @@ AppDbContext dbContext) : IAuthService
 
         if (userRequest is null)
         {
-            throw new ApplicationException("The User Was Not FOund");
+            throw new ApplicationException("The User Was Not Found");
         }
-
-        // Map Users to UserDto
-
 
         var verificationResult = passwordHasher.VerifyHashedPassword(userRequest, userRequest.Password, password);
         bool verifiedPassword = verificationResult == PasswordVerificationResult.Success;
 
+        if (!verifiedPassword)
+        {
+            throw new ApplicationException("Invalid password.");
+        }
 
         var accessToken = tokenProvider.GenerateToken(userRequest);
         var refreshToken = new RefreshToken
@@ -42,10 +43,11 @@ AppDbContext dbContext) : IAuthService
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();
 
-        return new LoginResponse
-        {
-            AccessToken = accessToken,
-            RefreshToken = refreshToken.Token
-        };
+
+        return new LoginResponse(
+
+            accessToken,
+            refreshToken.Token
+        );
     }
 }

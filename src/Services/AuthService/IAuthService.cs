@@ -1,3 +1,4 @@
+using Wait.Contracts.Data;
 using Wait.Contracts.Response;
 
 namespace Wait.Services.AuthService;
