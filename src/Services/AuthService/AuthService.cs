@@ -1,18 +1,16 @@
 using Microsoft.AspNetCore.Identity;
 using Wait.Abstract;
-using Wait.Contracts.Data;
 using Wait.Contracts.Response;
-using Wait.Database;
 using Wait.Domain.Entities;
+using Wait.Infrastructure.Repositories;
 using Wait.Infrastructure.Repositories.UserRepository;
 
 namespace Wait.Services.AuthService;
 
-
 public sealed class AuthService(IUserRepositories userRepositories,
+IAuthRepository authRepository,
 ITokenProvider tokenProvider,
-IPasswordHasher<Users> passwordHasher,
-AppDbContext dbContext) : IAuthService
+IPasswordHasher<Users> passwordHasher) : IAuthService
 {
     public async Task<LoginResponse> LoginUserAsync(string username, string password, CancellationToken ct)
     {
@@ -20,7 +18,7 @@ AppDbContext dbContext) : IAuthService
 
         if (userRequest is null)
         {
-            throw new ApplicationException("The User Was Not Found");
+            throw new ApplicationException("The user does not exist!");
         }
 
         var verificationResult = passwordHasher.VerifyHashedPassword(userRequest, userRequest.Password, password);
@@ -40,14 +38,9 @@ AppDbContext dbContext) : IAuthService
             ExpiresAt = DateTime.UtcNow.AddDays(7),
             CreatedAt = DateTime.UtcNow
         };
-        dbContext.RefreshTokens.Add(refreshToken);
-        await dbContext.SaveChangesAsync();
 
+        var generateRefresh = await authRepository.GenerateRefreshToken(refreshToken, ct);
 
-        return new LoginResponse(
-
-            accessToken,
-            refreshToken.Token
-        );
+        return new LoginResponse(accessToken, generateRefresh.Token);
     }
 }

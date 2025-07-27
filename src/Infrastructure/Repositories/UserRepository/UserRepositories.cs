@@ -16,17 +16,13 @@ public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
         return createUser.Entity;
     }
 
-    public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
-    {
-        return await dbContext.User.ToListAsync(ct);
-    }
-
+ 
     public async Task<Users?> GetUserByIdAsync(Guid id, CancellationToken ct)
     {
         return await dbContext.User.FindAsync(id, ct);
     }
 
-    public async Task<(List<Users>, int totalCount)> PaginatedUserAsync(FilterUserRequest filters,
+    public async Task<(List<Users>, int totalCount)> GetPaginatedUserAsync(FilterUserRequest filters,
      string? searchTerm,
      int skip,
      int take,
@@ -38,9 +34,10 @@ public sealed class UserRepositories(AppDbContext dbContext) : IUserRepositories
 
         var filteredUsers = dbContext.User.Filter(filters).Search(searchTerm).Sort(sortBy, desc);
 
+        var totalCount = await filteredUsers.CountAsync(ct);
+
         var paginatedUser = await filteredUsers.Skip(skip).Take(take).ToListAsync(ct);
 
-        var totalCount = await filteredUsers.CountAsync(ct);
 
         return (paginatedUser, totalCount);
     }

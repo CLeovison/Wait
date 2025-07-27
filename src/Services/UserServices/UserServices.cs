@@ -28,16 +28,9 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         }
 
         var result = await userRepositories.CreateUserAsync(newUser, ct);
-        UserDto newUsers = result.ToDto(passwordHasher);
-
-        return newUsers;
+        return result.ToDto(passwordHasher);
     }
 
-    public async Task<IEnumerable<Users>> GetAllUserAsync(CancellationToken ct)
-    {
-        var result = await userRepositories.GetAllUserAsync(ct);
-        return result;
-    }
 
     public async Task<Users?> GetUserByIdAsync(Guid id, CancellationToken ct)
     {
@@ -51,11 +44,11 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         return getUser;
     }
 
-    public async Task<PaginatedResponse<Users>> PaginatedUsersAsync(PaginatedRequest req, FilterUserRequest filters, CancellationToken ct)
+    public async Task<PaginatedResponse<Users>> GetPaginatedUsersAsync(PaginatedRequest req, FilterUserRequest filters, CancellationToken ct)
     {
         var pagination = PaginationProcessor.Create(req);
 
-        var (users, totalCount) = await userRepositories.PaginatedUserAsync(filters,
+        var (users, totalCount) = await userRepositories.GetPaginatedUserAsync(filters,
             req.SearchTerm, pagination.Skip, pagination.Take,
             pagination.SortBy, pagination.Descending, ct);
 

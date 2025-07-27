@@ -25,7 +25,7 @@ public sealed class PaginatedUserEndpoint : IEndpoint
                 LastName = filters.LastName,
                 CreatedAt = filters.CreatedAt
             };
-            return await userServices.PaginatedUsersAsync(request, filterRequest, ct);
+            return await userServices.GetPaginatedUsersAsync(request, filterRequest, ct);
         });
     }
 }
