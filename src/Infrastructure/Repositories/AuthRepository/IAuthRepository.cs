@@ -6,6 +6,7 @@ namespace Wait.Infrastructure.Repositories;
 
 public interface IAuthRepository
 {
-    Task<RefreshToken?> GetRefreshTokenByUserId(Guid id, CancellationToken ct);
-    Task<RefreshToken> SaveRefreshToken(RefreshToken refreshToken, CancellationToken ct);
-} 
+    Task<RefreshToken?> GetRefreshTokenByUserIdAsync(Guid id, CancellationToken ct);
+    Task<RefreshToken> SaveRefreshTokenAsync(RefreshToken refreshToken, CancellationToken ct);
+    Task<RefreshToken?> RefreshTokenRotationAsync(string refreshToken, CancellationToken ct);
+}
