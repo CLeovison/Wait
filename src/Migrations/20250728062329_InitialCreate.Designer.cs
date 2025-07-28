@@ -12,7 +12,7 @@ using Wait.Database;
 namespace src.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250724141124_InitialCreate")]
+    [Migration("20250728062329_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -30,7 +30,7 @@ namespace src.Migrations
                     b.Property<Guid>("TokenId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasDefaultValueSql("gen_random_uuid ()");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -65,7 +65,7 @@ namespace src.Migrations
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasDefaultValueSql("gen_random_uuid ()");
 
                     b.Property<DateOnly>("Birthday")
                         .HasColumnType("date");

@@ -39,7 +39,7 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
             CreatedAt = DateTime.UtcNow
         };
 
-        var generateRefresh = await authRepository.GenerateRefreshToken(refreshToken, ct);
+        var generateRefresh = await authRepository.SaveRefreshToken(refreshToken, ct);
 
         return new LoginResponse(accessToken, generateRefresh.Token);
     }

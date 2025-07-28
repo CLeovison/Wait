@@ -1,3 +1,4 @@
+using Wait.Contracts.Response;
 using Wait.Domain.Entities;
 
 namespace Wait.Infrastructure.Repositories;
@@ -5,6 +6,6 @@ namespace Wait.Infrastructure.Repositories;
 
 public interface IAuthRepository
 {
-    Task<RefreshToken> GenerateRefreshToken(RefreshToken refreshToken, CancellationToken ct);
-    Task<string> GetRefreshToken(string username, CancellationToken ct);
+    Task<RefreshToken?> GetRefreshTokenByUserId(Guid id, CancellationToken ct);
+    Task<RefreshToken> SaveRefreshToken(RefreshToken refreshToken, CancellationToken ct);
 } 

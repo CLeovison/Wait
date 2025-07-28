@@ -27,7 +27,7 @@ namespace src.Migrations
                     b.Property<Guid>("TokenId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasDefaultValueSql("gen_random_uuid ()");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -62,7 +62,7 @@ namespace src.Migrations
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasDefaultValueSql("gen_random_uuid ()");
 
                     b.Property<DateOnly>("Birthday")
                         .HasColumnType("date");
