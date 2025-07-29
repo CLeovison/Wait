@@ -47,8 +47,8 @@ Its goal is to demonstrate a clean architecture approach with separation of conc
    ```
 #### Project Structure
 
-
-``` src
+```
+ src
     ├───Abstract
     │   └───Results
     ├───Configurations
