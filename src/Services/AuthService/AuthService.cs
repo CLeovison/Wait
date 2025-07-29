@@ -12,7 +12,7 @@ IAuthRepository authRepository,
 ITokenProvider tokenProvider,
 IPasswordHasher<Users> passwordHasher) : IAuthService
 {
-    public async Task<LoginResponse> LoginUserAsync(string username, string password, CancellationToken ct)
+    public async Task<AuthResponse> LoginUserAsync(string username, string password, CancellationToken ct)
     {
         var userRequest = await userRepositories.GetUserByUsernameAsync(username, ct);
 
@@ -39,8 +39,13 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
             CreatedAt = DateTime.UtcNow
         };
 
-        var generateRefresh = await authRepository.SaveRefreshToken(refreshToken, ct);
+        var generateRefresh = await authRepository.SaveRefreshTokenAsync(refreshToken, ct);
 
-        return new LoginResponse(accessToken, generateRefresh.Token);
+        return new AuthResponse(accessToken, generateRefresh.Token);
+    }
+
+    public async Task<AuthResponse> GetUserRefreshTokenAsync(string refreshToken, CancellationToken ct)
+    {
+
     }
 }
