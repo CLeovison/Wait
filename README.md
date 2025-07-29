@@ -46,7 +46,9 @@ Its goal is to demonstrate a clean architecture approach with separation of conc
    dotnet restore
    ```
 #### Project Structure
-src
+
+
+``` src
     ├───Abstract
     │   └───Results
     ├───Configurations
@@ -82,3 +84,5 @@ src
         ├───CartService
         ├───ProductServices
         └───UserServices
+
+```
