@@ -1,3 +1,4 @@
+
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -74,17 +75,5 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
         return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
     }
 
-    public ClaimsPrincipal GetClaimsPrincipal(string accessToken)
-    {
-        var tokenValidation = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidIssuer = configuration["Jwt: Issuer"],
-            ValidAudience = configuration["Jwt: Audience"],
-            ValidateLifetime = false,
-            ClockSkew = TimeSpan.Zero,
-            IssuerSigningKey = new
-        };
-    }
+
 }

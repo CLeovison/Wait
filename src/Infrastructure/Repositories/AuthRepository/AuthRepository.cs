@@ -21,4 +21,10 @@ public sealed class AuthRepostiory(AppDbContext dbContext) : IAuthRepository
         return await dbContext.RefreshToken.Include(x => x.User).FirstOrDefaultAsync(x => x.Token == refreshToken);
     }
 
+    public async Task<bool> RevokeRefreshTokenAsync(Guid id, CancellationToken ct)
+    {
+        await dbContext.RefreshToken.Where(x => x.UserId == id).ExecuteDeleteAsync();
+        return true;
+    }
+
 }

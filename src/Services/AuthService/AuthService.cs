@@ -46,6 +46,21 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
     public async Task<AuthResponse> GetUserRefreshTokenAsync(string refreshToken, CancellationToken ct)
     {
+        var userTokenRotation = await authRepository.RefreshTokenRotationAsync(refreshToken, ct);
+
+        if (userTokenRotation is null || userTokenRotation.ExpiresAt < DateTime.UtcNow)
+        {
+            throw new ApplicationException("The RefreshToken is Expired");
+        }
+
+        string accessToken = tokenProvider.GenerateToken(userTokenRotation.User!);
+
+        userTokenRotation.Token = tokenProvider.GenerateRefreshToken();
+        userTokenRotation.ExpiresAt = DateTime.UtcNow;
+
+        return new AuthResponse(accessToken, userTokenRotation.Token);
 
     }
+
+    
 }
