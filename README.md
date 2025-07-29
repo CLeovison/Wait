@@ -45,3 +45,40 @@ Its goal is to demonstrate a clean architecture approach with separation of conc
    ```sh
    dotnet restore
    ```
+#### Project Structure
+src
+    ├───Abstract
+    │   └───Results
+    ├───Configurations
+    ├───Contracts
+    │   ├───Data
+    │   ├───Request
+    │   │   ├───Common
+    │   │   ├───ProductRequest
+    │   │   └───UserRequest
+    │   └───Response
+    ├───Database
+    ├───Domain
+    │   ├───Entities
+    │   └───Validation
+    │       └───UserValidation
+    ├───Endpoint
+    │   ├───AuthEndpoint
+    │   ├───ProductEndpoint
+    │   └───UserEndpoint
+    ├───Extensions
+    ├───Helper
+    ├───Infrastructure
+    │   ├───Authentication
+    │   ├───Mapping
+    │   └───Repositories
+    │       ├───AuthRepository
+    │       ├───ProductRepository
+    │       └───UserRepository
+    ├───Migrations
+    ├───Properties
+    └───Services
+        ├───AuthService
+        ├───CartService
+        ├───ProductServices
+        └───UserServices
