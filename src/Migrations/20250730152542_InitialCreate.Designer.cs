@@ -12,7 +12,7 @@ using Wait.Database;
 namespace src.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250728062329_InitialCreate")]
+    [Migration("20250730152542_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -57,7 +57,7 @@ namespace src.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshToken");
                 });
 
             modelBuilder.Entity("Wait.Domain.Entities.Users", b =>

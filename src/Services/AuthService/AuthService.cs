@@ -59,8 +59,7 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
         userTokenRotation.ExpiresAt = DateTime.UtcNow;
 
         return new AuthResponse(accessToken, userTokenRotation.Token);
-
     }
 
-    
+
 }

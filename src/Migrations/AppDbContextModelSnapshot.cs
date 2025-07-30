@@ -54,7 +54,7 @@ namespace src.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshToken");
                 });
 
             modelBuilder.Entity("Wait.Domain.Entities.Users", b =>

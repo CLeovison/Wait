@@ -55,20 +55,20 @@ namespace src.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RefreshTokens",
+                name: "RefreshToken",
                 columns: table => new
                 {
                     TokenId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid ()"),
                     Token = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "current_date"),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "current_date")
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "current_date"),
+                    ExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "current_date")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RefreshTokens", x => x.TokenId);
+                    table.PrimaryKey("PK_RefreshToken", x => x.TokenId);
                     table.ForeignKey(
-                        name: "FK_RefreshTokens_Users_UserId",
+                        name: "FK_RefreshToken_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -76,14 +76,14 @@ namespace src.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_Token",
-                table: "RefreshTokens",
+                name: "IX_RefreshToken_Token",
+                table: "RefreshToken",
                 column: "Token",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_UserId",
-                table: "RefreshTokens",
+                name: "IX_RefreshToken_UserId",
+                table: "RefreshToken",
                 column: "UserId");
         }
 
@@ -94,7 +94,7 @@ namespace src.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "RefreshTokens");
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "Users");
