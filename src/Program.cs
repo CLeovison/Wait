@@ -1,19 +1,15 @@
 // Microsoft Packages
 using System.Reflection;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 // Data Access
 using Wait.Database;
-using Wait.Domain.Entities;
 
 // Business Logic Access
 using Wait.Extensions;
-using Wait.Infrastructure.Authentication;
 
 // Validation
 using FluentValidation;
-using Wait.Abstract;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
 // Configure authentication/authorization
-builder.Services.AddAuthentication().AddJwtBearer();
+
 builder.Services.AddAuthorization();
 builder.Services.AddRateLimiter();
 
@@ -30,9 +26,7 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 builder.Services.AddRepositoriesCollection();
 builder.Services.AddServicesCollection();
-
-builder.Services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
-builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddAuthenticationCollection();
 
 // FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();

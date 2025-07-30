@@ -1,4 +1,8 @@
 //Repository Collection
+using Microsoft.AspNetCore.Identity;
+using Wait.Abstract;
+using Wait.Domain.Entities;
+using Wait.Infrastructure.Authentication;
 using Wait.Infrastructure.Repositories;
 using Wait.Infrastructure.Repositories.ProductRepository;
 using Wait.Infrastructure.Repositories.UserRepository;
@@ -26,6 +30,16 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IAuthService, AuthService>();
 
+        return services;
+    }
+
+    public static IServiceCollection AddAuthenticationCollection(this IServiceCollection services)
+    {
+        services.AddAuthentication()
+        .AddJwtBearer();
+
+        services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
+        services.AddScoped<ITokenProvider, TokenProvider>();
         return services;
     }
 }
