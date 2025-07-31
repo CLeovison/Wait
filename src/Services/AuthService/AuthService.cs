@@ -48,17 +48,23 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
     {
         var userTokenRotation = await authRepository.RefreshTokenRotationAsync(refreshToken, ct);
 
-        if (userTokenRotation is null || userTokenRotation.ExpiresAt < DateTime.UtcNow)
+        if (userTokenRotation is null || userTokenRotation.IsExpired)
         {
             throw new ApplicationException("The RefreshToken is Expired");
         }
 
-        string accessToken = tokenProvider.GenerateToken(userTokenRotation.User!);
+        if (userTokenRotation.Token is null || userTokenRotation.Token.User is null)
+        {
+            throw new ApplicationException("Associated user not found for the refresh token.");
+        }
+        string accessToken = tokenProvider.GenerateToken(userTokenRotation.Token.User);
 
-        userTokenRotation.Token = tokenProvider.GenerateRefreshToken();
-        userTokenRotation.ExpiresAt = DateTime.UtcNow;
+        userTokenRotation.Token.Token = tokenProvider.GenerateRefreshToken();
+        userTokenRotation.Token.ExpiresAt = DateTime.UtcNow.AddDays(7);
 
-        return new AuthResponse(accessToken, userTokenRotation.Token);
+        await authRepository.RefreshTokenUpdate(userTokenRotation.Token, ct);
+        
+        return new AuthResponse(accessToken, userTokenRotation.Token.Token);
     }
 
 
