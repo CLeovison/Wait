@@ -26,6 +26,6 @@ public sealed class PaginatedUserEndpoint : IEndpoint
                 CreatedAt = filters.CreatedAt
             };
             return await userServices.GetPaginatedUsersAsync(request, filterRequest, ct);
-        });
+        }).RequireAuthorization();
     }
 }

@@ -10,6 +10,6 @@ public sealed class GetUserByIdEndpoint : IEndpoint
         app.MapGet("/api/users/{id}", async (Guid id, IUserServices userServices, CancellationToken ct) =>
         {
             return await userServices.GetUserByIdAsync(id, ct);
-        });
+        }).RequireAuthorization();
     }
 }

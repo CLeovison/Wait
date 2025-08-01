@@ -33,7 +33,6 @@ public sealed class AuthRepostiory(AppDbContext dbContext) : IAuthRepository
     public async Task<bool> RevokeRefreshTokenAsync(Guid id, CancellationToken ct)
     {
         await dbContext.RefreshToken.Where(x => x.UserId == id).ExecuteDeleteAsync();
-
         return true;
     }
 

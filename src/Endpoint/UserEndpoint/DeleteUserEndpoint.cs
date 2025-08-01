@@ -15,6 +15,6 @@ public sealed class DeleteUserEndpoint : IEndpoint
                 return Results.NotFound(new { message = "User not found or could not be deleted." });
 
             return Results.Ok(new { message = "The user was successfully deleted." });
-        });
+        }).RequireAuthorization();
     }
 }

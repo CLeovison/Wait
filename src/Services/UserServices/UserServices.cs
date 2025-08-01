@@ -59,7 +59,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     public async Task<Users?> UpdateUserAsync(Guid id, UserDto users, CancellationToken ct)
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
-
+            
         if (existingUser is null)
         {
             return null;
