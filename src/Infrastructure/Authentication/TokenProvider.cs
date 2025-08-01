@@ -1,4 +1,5 @@
 
+
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -48,15 +49,15 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
 
             Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:Expirations")),
             SigningCredentials = credentials,
-            Issuer = configuration["Jwt: Issuer"],
-            Audience = configuration["Jwt: Audience"]
+            Issuer = configuration["Jwt:Issuer"],
+            Audience = configuration["Jwt:Audience"]
         };
 
         var handler = new JsonWebTokenHandler();
 
-        string token = handler.CreateToken(tokenDescriptor);
+        var token = handler.CreateToken(tokenDescriptor);
 
-        return handler.CreateToken(token);
+        return token;
     }
     /// <summary>
     /// Generates a cryptographically secure, random 32-byte refresh token encoded in Base64 format.
@@ -74,6 +75,4 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
     {
         return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
     }
-
-
 }
