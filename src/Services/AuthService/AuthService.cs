@@ -1,4 +1,8 @@
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 using Wait.Abstract;
 using Wait.Contracts.Response;
 using Wait.Domain.Entities;
@@ -10,6 +14,7 @@ namespace Wait.Services.AuthService;
 public sealed class AuthService(IUserRepositories userRepositories,
 IAuthRepository authRepository,
 ITokenProvider tokenProvider,
+IConfiguration configuration,
 IPasswordHasher<Users> passwordHasher) : IAuthService
 {
     public async Task<AuthResponse> LoginUserAsync(string username, string password, CancellationToken ct)
@@ -63,9 +68,29 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
         userTokenRotation.Token.ExpiresAt = DateTime.UtcNow.AddDays(7);
 
         await authRepository.RefreshTokenUpdate(userTokenRotation.Token, ct);
-        
+
         return new AuthResponse(accessToken, userTokenRotation.Token.Token);
     }
 
+    public async Task <ClaimsPrincipal> GetClaimsPrincipalFromToken(string accessToken)
+    {
+        var tokenValidation = new TokenValidationParameters
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = configuration["Jwt:Issuer"],
+            ValidAudience = configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!))
+        };
 
+        var handler = new JsonWebTokenHandler();
+
+        var principal = await handler.ValidateTokenAsync(accessToken, tokenValidation);
+
+        if(principal.)
+
+        return principal;
+    }
 }

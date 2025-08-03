@@ -40,6 +40,8 @@ public static class ServiceCollectionExtensions
         services.AddAuthentication()
         .AddJwtBearer(options =>
         {
+            options.SaveToken = true;
+            options.RequireHttpsMetadata = false;
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateAudience = true,
@@ -49,7 +51,7 @@ public static class ServiceCollectionExtensions
                 ValidIssuer = configuration["Jwt:Issuer"],
                 ValidAudience = configuration["Jwt:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!))
-                
+
             };
         });
 
