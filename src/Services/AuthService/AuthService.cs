@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
@@ -72,7 +73,7 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
         return new AuthResponse(accessToken, userTokenRotation.Token.Token);
     }
 
-    public async Task <ClaimsPrincipal> GetClaimsPrincipalFromToken(string accessToken)
+    public async Task<ClaimsPrincipal> GetClaimsPrincipalFromToken(string accessToken)
     {
         var tokenValidation = new TokenValidationParameters
         {
@@ -87,9 +88,13 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         var handler = new JsonWebTokenHandler();
 
-        var principal = await handler.ValidateTokenAsync(accessToken, tokenValidation);
+        var result = await handler.ValidateTokenAsync(accessToken, tokenValidation);
 
-        if(principal.)
+        if (!result.IsValid || result.ClaimsIdentity == null)
+        {
+            throw new SecurityTokenException("Invalid token");
+        }
+        var principal = new ClaimsPrincipal(result.ClaimsIdentity);
 
         return principal;
     }
