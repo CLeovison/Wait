@@ -9,6 +9,7 @@ using Wait.Contracts.Response;
 using Wait.Domain.Entities;
 using Wait.Infrastructure.Repositories;
 using Wait.Infrastructure.Repositories.UserRepository;
+using Wait.Services.UserServices;
 
 namespace Wait.Services.AuthService;
 
@@ -49,30 +50,6 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         return new AuthResponse(accessToken, generateRefresh.Token);
     }
-
-    public async Task<AuthResponse> GetUserRefreshTokenAsync(string refreshToken, CancellationToken ct)
-    {
-        var userTokenRotation = await authRepository.RefreshTokenRotationAsync(refreshToken, ct);
-
-        if (userTokenRotation is null || userTokenRotation.IsExpired)
-        {
-            throw new ApplicationException("The RefreshToken is Expired");
-        }
-
-        if (userTokenRotation.Token is null || userTokenRotation.Token.User is null)
-        {
-            throw new ApplicationException("Associated user not found for the refresh token.");
-        }
-        string accessToken = tokenProvider.GenerateToken(userTokenRotation.Token.User);
-
-        userTokenRotation.Token.Token = tokenProvider.GenerateRefreshToken();
-        userTokenRotation.Token.ExpiresAt = DateTime.UtcNow.AddDays(7);
-
-        await authRepository.RefreshTokenUpdate(userTokenRotation.Token, ct);
-
-        return new AuthResponse(accessToken, userTokenRotation.Token.Token);
-    }
-
     public async Task<ClaimsPrincipal> GetClaimsPrincipalFromToken(string accessToken)
     {
         var tokenValidation = new TokenValidationParameters
@@ -98,4 +75,31 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         return principal;
     }
+    public async Task<AuthResponse> GetUserRefreshTokenAsync(AuthResponse response)
+    {
+        var userTokenRotation = await authRepository.RefreshTokenRotationAsync(response.RefreshToken);
+        var principal = await GetClaimsPrincipalFromToken(response.AccessToken);
+
+        if (userTokenRotation is null || userTokenRotation.IsExpired)
+        {
+            throw new ApplicationException("The RefreshToken is Expired");
+        }
+
+        if (userTokenRotation.Token is null || userTokenRotation.Token.User is null)
+        {
+            throw new ApplicationException("Associated user not found for the refresh token.");
+        }
+
+
+        string accessToken = tokenProvider.GenerateToken(userTokenRotation.Token.User);
+
+        userTokenRotation.Token.Token = tokenProvider.GenerateRefreshToken();
+        userTokenRotation.Token.ExpiresAt = DateTime.UtcNow.AddDays(7);
+
+        await authRepository.RefreshTokenUpdate(userTokenRotation.Token);
+
+        return new AuthResponse(accessToken, userTokenRotation.Token.Token);
+    }
+
+
 }
