@@ -79,6 +79,8 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
     {
         var userTokenRotation = await authRepository.RefreshTokenRotationAsync(response.RefreshToken);
         var principal = await GetClaimsPrincipalFromToken(response.AccessToken);
+        var username = principal.Identity.Name;
+
 
         if (userTokenRotation is null || userTokenRotation.IsExpired)
         {
