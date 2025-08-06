@@ -1,5 +1,6 @@
 //Repository Collection
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Wait.Abstract;
 using Wait.Domain.Entities;
 using Wait.Infrastructure.Authentication;
@@ -36,7 +37,15 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddAuthenticationCollection(this IServiceCollection services)
     {
         services.AddAuthentication()
-        .AddJwtBearer();
+        .AddJwtBearer(x =>
+        {
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                
+            };
+        });
 
         services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
         services.AddScoped<ITokenProvider, TokenProvider>();
