@@ -1,15 +1,22 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 using Wait.Abstract;
 using Wait.Contracts.Response;
 using Wait.Domain.Entities;
 using Wait.Infrastructure.Repositories;
 using Wait.Infrastructure.Repositories.UserRepository;
+using Wait.Services.UserServices;
 
 namespace Wait.Services.AuthService;
 
 public sealed class AuthService(IUserRepositories userRepositories,
 IAuthRepository authRepository,
 ITokenProvider tokenProvider,
+IConfiguration configuration,
 IPasswordHasher<Users> passwordHasher) : IAuthService
 {
     public async Task<AuthResponse> LoginUserAsync(string username, string password, CancellationToken ct)
@@ -43,10 +50,37 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         return new AuthResponse(accessToken, generateRefresh.Token);
     }
-
-    public async Task<AuthResponse> GetUserRefreshTokenAsync(string refreshToken, CancellationToken ct)
+    public async Task<ClaimsPrincipal> GetClaimsPrincipalFromToken(string accessToken)
     {
-        var userTokenRotation = await authRepository.RefreshTokenRotationAsync(refreshToken, ct);
+        var tokenValidation = new TokenValidationParameters
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = configuration["Jwt:Issuer"],
+            ValidAudience = configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!))
+        };
+
+        var handler = new JsonWebTokenHandler();
+
+        var result = await handler.ValidateTokenAsync(accessToken, tokenValidation);
+
+        if (!result.IsValid || result.ClaimsIdentity == null)
+        {
+            throw new SecurityTokenException("Invalid token");
+        }
+        var principal = new ClaimsPrincipal(result.ClaimsIdentity);
+
+        return principal;
+    }
+    public async Task<AuthResponse> GetUserRefreshTokenAsync(AuthResponse response)
+    {
+        var userTokenRotation = await authRepository.RefreshTokenRotationAsync(response.RefreshToken);
+        var principal = await GetClaimsPrincipalFromToken(response.AccessToken);
+        var username = principal.Identity.Name;
+
 
         if (userTokenRotation is null || userTokenRotation.IsExpired)
         {
@@ -57,13 +91,15 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
         {
             throw new ApplicationException("Associated user not found for the refresh token.");
         }
+
+
         string accessToken = tokenProvider.GenerateToken(userTokenRotation.Token.User);
 
         userTokenRotation.Token.Token = tokenProvider.GenerateRefreshToken();
         userTokenRotation.Token.ExpiresAt = DateTime.UtcNow.AddDays(7);
 
-        await authRepository.RefreshTokenUpdate(userTokenRotation.Token, ct);
-        
+        await authRepository.RefreshTokenUpdate(userTokenRotation.Token);
+
         return new AuthResponse(accessToken, userTokenRotation.Token.Token);
     }
 

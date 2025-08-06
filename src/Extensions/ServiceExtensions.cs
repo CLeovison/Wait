@@ -1,6 +1,8 @@
 //Repository Collection
+using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+
 using Wait.Abstract;
 using Wait.Domain.Entities;
 using Wait.Infrastructure.Authentication;
@@ -34,16 +36,23 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddAuthenticationCollection(this IServiceCollection services)
+    public static IServiceCollection AddAuthenticationCollection(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication()
-        .AddJwtBearer(x =>
+        .AddJwtBearer(options =>
         {
-            x.TokenValidationParameters = new TokenValidationParameters
+            options.SaveToken = true;
+            options.RequireHttpsMetadata = false;
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = true,
                 ValidateAudience = true,
-                
+                ValidateIssuer = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration["Jwt:Issuer"],
+                ValidAudience = configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!))
+
             };
         });
 
