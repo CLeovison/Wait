@@ -11,6 +11,6 @@ public interface IProductRepository
     // Task<(List<Product>, int totalCount)> GetPaginatedProductAsync(int page, int pageSize, string sortBy,
     // bool desc, string searchTerm, CancellationToken ct);
     Task<Product?> GetProductByIdAsync(int id, CancellationToken ct);
-    // Task<bool> DeleteProductAsync(int id, CancellationToken ct);
+    Task<bool> DeleteProductAsync(int id, CancellationToken ct);
     // Task<Product?> UpdateProductAsync(int id, CancellationToken ct);
 }

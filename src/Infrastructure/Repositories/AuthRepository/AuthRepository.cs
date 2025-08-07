@@ -17,15 +17,15 @@ public sealed class AuthRepostiory(AppDbContext dbContext) : IAuthRepository
         await dbContext.SaveChangesAsync(ct);
         return token.Entity;
     }
-    public async Task<RefreshTokenResponse> RefreshTokenRotationAsync(string refreshToken, CancellationToken ct)
+    public async Task<RefreshTokenResponse> RefreshTokenRotationAsync(string refreshToken)
     {
         var token = await dbContext.RefreshToken
         .Include(x => x.User)
-        .FirstOrDefaultAsync(x => x.Token == refreshToken, ct);
+        .FirstOrDefaultAsync(x => x.Token == refreshToken);
 
         return new RefreshTokenResponse { Token = token };
     }
-    public async Task RefreshTokenUpdate(RefreshToken refreshToken, CancellationToken ct)
+    public async Task RefreshTokenUpdate(RefreshToken refreshToken)
     {
         dbContext.RefreshToken.Update(refreshToken);
         await dbContext.SaveChangesAsync();
