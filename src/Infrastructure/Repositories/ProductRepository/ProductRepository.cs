@@ -9,8 +9,6 @@ public sealed class ProductRepository(AppDbContext dbContext) : IProductReposito
     {
         await dbContext.Product.AddAsync(product, ct);
         await dbContext.SaveChangesAsync(ct);
-
-
         return product;
     }
     public async Task<Product?> GetProductByIdAsync(int id, CancellationToken ct)
