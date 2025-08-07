@@ -2,6 +2,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+
 using Wait.Abstract;
 using Wait.Domain.Entities;
 using Wait.Infrastructure.Authentication;
