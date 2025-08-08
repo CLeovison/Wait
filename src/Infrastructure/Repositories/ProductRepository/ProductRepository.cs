@@ -24,9 +24,10 @@ public sealed class ProductRepository(AppDbContext dbContext) : IProductReposito
         return request is not null;
     }
 
-    // public async Task<(List<Product>, int totalCount)> GetPaginatedProductAsync(int page,
-    // int pageSize, string sortBy, bool desc, string searchTerm, CancellationToken ct)
-    // {
-
-    // }
+    public async Task<Product?> UpdateProductAsync(Product product, CancellationToken ct)
+    {
+         dbContext.Update(product);
+        await dbContext.SaveChangesAsync(ct);
+        return product;
+    }
 }
