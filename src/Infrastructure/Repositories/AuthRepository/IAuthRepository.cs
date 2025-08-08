@@ -12,4 +12,8 @@ public interface IAuthRepository
     Task<RefreshTokenResponse> RefreshTokenRotationAsync(string refreshToken);
     Task RefreshTokenUpdate(RefreshToken refreshToken);
     Task<bool> RevokeRefreshTokenAsync(Guid id, CancellationToken ct);
+
+    //ForgotPassword
+    //ResetPassword
+    //Email Verification
 }

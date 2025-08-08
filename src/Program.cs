@@ -1,17 +1,15 @@
 // Microsoft Packages
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-
 // Data Access
 using Wait.Database;
-
 // Business Logic Access
 using Wait.Extensions;
-
 // Validation
 using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 // Configure EF Core with PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -26,7 +24,7 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 builder.Services.AddRepositoriesCollection();
 builder.Services.AddServicesCollection();
-builder.Services.AddAuthenticationCollection();
+builder.Services.AddAuthenticationCollection(configuration);
 
 // FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
