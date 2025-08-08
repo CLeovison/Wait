@@ -1,5 +1,6 @@
 //Repository Collection
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -38,7 +39,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddAuthenticationCollection(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAuthentication()
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
             options.SaveToken = true;
