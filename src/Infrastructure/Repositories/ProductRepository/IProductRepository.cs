@@ -11,5 +11,5 @@ public interface IProductRepository
     // bool desc, string searchTerm, CancellationToken ct);
     Task<Product?> GetProductByIdAsync(int id, CancellationToken ct);
     Task<bool> DeleteProductAsync(int id, CancellationToken ct);
-    Task<Product?> UpdateProductAsync(int id, CancellationToken ct);
+    Task<Product?> UpdateProductAsync(Product product, CancellationToken ct);
 }

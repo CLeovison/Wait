@@ -26,7 +26,7 @@ public sealed class ProductRepository(AppDbContext dbContext) : IProductReposito
 
     public async Task<Product?> UpdateProductAsync(Product product, CancellationToken ct)
     {
-         dbContext.Update(product);
+        dbContext.Update(product);
         await dbContext.SaveChangesAsync(ct);
         return product;
     }

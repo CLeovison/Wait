@@ -34,14 +34,16 @@ public static class EndpointExtensions
     /// </summary>
     /// <param name="app">The WebApplication instance to configure.</param>
     /// <returns>The configured WebApplication.</returns>
-    public static WebApplication Endpoint(this WebApplication app)
+    public static WebApplication Endpoint(this WebApplication app, RouteGroupBuilder? routeGroupBuilder = null)
     {
         var routeBuilder = (IEndpointRouteBuilder)app;
 
         using var scope = app.Services.CreateScope();
         var endpoints = scope.ServiceProvider.GetServices<IEndpoint>();
+        IEndpointRouteBuilder builder = routeGroupBuilder is null ? app : routeGroupBuilder;
 
-        foreach (var endpoint in endpoints)
+
+        foreach (IEndpoint endpoint in endpoints)
         {
             endpoint.Endpoint(routeBuilder);
         }
