@@ -1,5 +1,3 @@
-using Wait.Contracts.Data;
-using Wait.Contracts.Response;
 using Wait.Entities;
 
 namespace Wait.Infrastructure.Repositories.ProductRepository;

@@ -11,7 +11,6 @@ public sealed class TokenConfiguration : IEntityTypeConfiguration<RefreshToken>
     {
         builder.HasKey(x => x.TokenId);
 
-
         builder.Property(x => x.TokenId)
        .HasDefaultValueSql("gen_random_uuid ()")
         .ValueGeneratedOnAdd();
