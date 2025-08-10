@@ -9,7 +9,6 @@ using Wait.Contracts.Response;
 using Wait.Domain.Entities;
 using Wait.Infrastructure.Repositories;
 using Wait.Infrastructure.Repositories.UserRepository;
-using Wait.Services.UserServices;
 
 namespace Wait.Services.AuthService;
 
@@ -58,6 +57,7 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
             ValidateIssuer = true,
             ValidateLifetime = false,
             ValidateIssuerSigningKey = true,
+            RequireExpirationTime = true,
             ValidIssuer = configuration["Jwt:Issuer"],
             ValidAudience = configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!))
@@ -78,24 +78,30 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
     public async Task<AuthResponse> GetUserRefreshTokenAsync(AuthResponse response)
     {
         var userTokenRotation = await authRepository.RefreshTokenRotationAsync(response.RefreshToken);
-        var principal = await GetClaimsPrincipalFromToken(response.AccessToken);
-        var username = principal.Identity.Name;
 
-
-        if (userTokenRotation is null || userTokenRotation.IsExpired)
+        if (userTokenRotation is null || userTokenRotation.ExpiresAt)
         {
             throw new ApplicationException("The RefreshToken is Expired");
         }
 
-        if (userTokenRotation.Token is null || userTokenRotation.Token.User is null)
+        var requestUserDb = userTokenRotation.Token?.User;
+
+        if (requestUserDb is null)
         {
             throw new ApplicationException("Associated user not found for the refresh token.");
         }
 
+        var principal = await GetClaimsPrincipalFromToken(response.AccessToken);
+        var username = principal.Identity?.Name;
 
-        string accessToken = tokenProvider.GenerateToken(userTokenRotation.Token.User);
+        if (!string.Equals(username, requestUserDb.Username, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new SecurityTokenArgumentException("Access token user does not match refresh token owner.");
+        }
+        string accessToken = tokenProvider.GenerateToken(requestUserDb);
+        string refreshToken = tokenProvider.GenerateRefreshToken();
 
-        userTokenRotation.Token.Token = tokenProvider.GenerateRefreshToken();
+        userTokenRotation.Token.Token = refreshToken;
         userTokenRotation.Token.ExpiresAt = DateTime.UtcNow.AddDays(7);
 
         await authRepository.RefreshTokenUpdate(userTokenRotation.Token);

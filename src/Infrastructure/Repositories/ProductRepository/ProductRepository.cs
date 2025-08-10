@@ -16,17 +16,16 @@ public sealed class ProductRepository(AppDbContext dbContext) : IProductReposito
         return await dbContext.Product.FindAsync(id, ct);
     }
 
-    public async Task<bool> DeleteProductAsync(int id, CancellationToken ct)
+    public async Task<bool> DeleteProductAsync(Product product, CancellationToken ct)
     {
-        var request = dbContext.Remove(id);
+        dbContext.Product.Remove(product);
         await dbContext.SaveChangesAsync(ct);
-
-        return request is not null;
+        return product is not null;
     }
 
     public async Task<Product?> UpdateProductAsync(Product product, CancellationToken ct)
     {
-        dbContext.Update(product);
+        dbContext.Product.Update(product);
         await dbContext.SaveChangesAsync(ct);
         return product;
     }
