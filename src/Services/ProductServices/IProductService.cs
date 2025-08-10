@@ -7,5 +7,6 @@ public interface IProductService
 {
     Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct);
     Task<ProductDto?> GetProductByIdAsync(int id, CancellationToken ct);
+    Task<ProductDto?> GetPaginatedProductAsync(int id, CancellationToken ct);
 
 }

@@ -10,5 +10,5 @@ public class CreateUserRequest
     public required string ConfirmPassword { get; init; }
     public required string Email { get; init; }
     public DateOnly Birthday { get; init; }
-    public DateTime CreatedAt { get; set; }
+    public DateOnly CreatedAt { get; set; }
 }

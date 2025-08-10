@@ -12,6 +12,6 @@ public class UserDto
     public string Email { get; set; } = string.Empty;
     public DateOnly Birthday { get; set; }
     public DateOnly CreatedAt { get; set; }
-    public DateTime ModifiedAt { get; set; }
+    public DateOnly ModifiedAt { get; set; }
 
 }

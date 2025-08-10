@@ -1,10 +1,12 @@
+using Wait.Common;
+
 namespace Wait.Domain.Entities;
 
 /// <summary>
 /// This Class Is The Entity Based Class of the User
 /// </summary>
 
-public sealed class Users
+public sealed class Users : AuditableEntity
 {
     public Guid UserId { get; set; }
     public string FirstName { get; set; } = string.Empty;
@@ -14,6 +16,4 @@ public sealed class Users
     public string Email { get; set; } = string.Empty;
     public bool IsVerifiedEmail { get; set; }
     public DateOnly Birthday { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? ModifiedAt { get; set; }
 }

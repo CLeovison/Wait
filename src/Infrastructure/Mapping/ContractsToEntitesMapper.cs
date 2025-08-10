@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+
 using Wait.Contracts.Request.UserRequest;
 using Wait.Domain.Entities;
 
@@ -23,7 +23,7 @@ public static class ContractsToEntitiesMapper
 
     }
 
-    public static Users ToUpdate(this UpdateUserRequest req, IPasswordHasher<Users> passwordHasher)
+    public static Users ToUpdate(this UpdateUserRequest req)
     {
         return new Users
         {

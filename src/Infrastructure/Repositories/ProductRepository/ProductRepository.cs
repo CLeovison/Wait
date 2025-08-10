@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Wait.Database;
 using Wait.Entities;
 
@@ -8,14 +7,20 @@ public sealed class ProductRepository(AppDbContext dbContext) : IProductReposito
 {
     public async Task<Product> CreateProductAsync(Product product, CancellationToken ct)
     {
-        var request = await dbContext.AddAsync(product, ct);
+        await dbContext.Product.AddAsync(product, ct);
         await dbContext.SaveChangesAsync(ct);
 
-        return request.Entity;
+        return product;
     }
     public async Task<Product?> GetProductByIdAsync(int id, CancellationToken ct)
     {
         return await dbContext.Product.FindAsync(id, ct);
 
     }
+
+    // public async Task<(List<Product>, int totalCount)> GetPaginatedProductAsync(int page,
+    // int pageSize, string sortBy, bool desc, string searchTerm, CancellationToken ct)
+    // {
+
+    // }
 }
