@@ -53,12 +53,13 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
         {
             throw new ApplicationException("The RefreshToken is Expired");
         }
+
         if (userTokenRotation.ExpiresAt < DateTime.Now)
             throw new ApplicationException("The refresh token is expired.");
 
-        var requestUserDb = userTokenRotation.User;
+        var requestUser = userTokenRotation.User;
 
-        if (requestUserDb is null)
+        if (requestUser is null)
         {
             throw new ApplicationException("Associated user not found for the refresh token.");
         }
@@ -66,11 +67,12 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
         var principal = await tokenProvider.GetClaimsPrincipalFromToken(response.AccessToken);
         var username = principal.Identity?.Name;
 
-        if (!string.Equals(username, requestUserDb.Username, StringComparison.OrdinalIgnoreCase))
+        if (!string.Equals(username, requestUser.Username, StringComparison.OrdinalIgnoreCase))
         {
             throw new SecurityTokenArgumentException("Access token user does not match refresh token owner.");
         }
-        string accessToken = tokenProvider.GenerateToken(requestUserDb);
+
+        string accessToken = tokenProvider.GenerateToken(requestUser);
         string refreshToken = tokenProvider.GenerateRefreshToken();
 
         userTokenRotation.Token = refreshToken;
