@@ -1,4 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
+
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
@@ -49,40 +49,17 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         return new AuthResponse(accessToken, generateRefresh.Token);
     }
-    public async Task<ClaimsPrincipal> GetClaimsPrincipalFromToken(string accessToken)
-    {
-        var tokenValidation = new TokenValidationParameters
-        {
-            ValidateAudience = true,
-            ValidateIssuer = true,
-            ValidateLifetime = false,
-            ValidateIssuerSigningKey = true,
-            RequireExpirationTime = true,
-            ValidIssuer = configuration["Jwt:Issuer"],
-            ValidAudience = configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!))
-        };
-
-        var handler = new JsonWebTokenHandler();
-
-        var result = await handler.ValidateTokenAsync(accessToken, tokenValidation);
-
-        if (!result.IsValid || result.ClaimsIdentity == null)
-        {
-            throw new SecurityTokenException("Invalid token");
-        }
-        var principal = new ClaimsPrincipal(result.ClaimsIdentity);
-
-        return principal;
-    }
+ 
     public async Task<AuthResponse> GetUserRefreshTokenAsync(AuthResponse response)
     {
         var userTokenRotation = await authRepository.RefreshTokenRotationAsync(response.RefreshToken);
 
-        if (userTokenRotation is null || userTokenRotation.ExpiresAt)
+        if (userTokenRotation is null)
         {
             throw new ApplicationException("The RefreshToken is Expired");
         }
+        if (userTokenRotation.ExpiresAt)
+            throw new ApplicationException("The refresh token is expired.");
 
         var requestUserDb = userTokenRotation.Token?.User;
 
@@ -91,7 +68,7 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
             throw new ApplicationException("Associated user not found for the refresh token.");
         }
 
-        var principal = await GetClaimsPrincipalFromToken(response.AccessToken);
+        var principal = await tokenProvider.GetClaimsPrincipalFromToken(response.AccessToken);
         var username = principal.Identity?.Name;
 
         if (!string.Equals(username, requestUserDb.Username, StringComparison.OrdinalIgnoreCase))

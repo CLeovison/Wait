@@ -12,11 +12,7 @@ namespace Wait.Infrastructure.Authentication;
 
 public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
 {
-    /// <summary>
-    /// Generates a signed JWT token containing user-specific claims using application configuration settings.
-    /// </summary>
-    /// <param name="users">The user information to encode in the token, including ID, username, and email verification status.</param>
-    /// <returns>A string representing the generated JWT.</returns>
+    
     public string GenerateToken(Users users)
     {
         //Retrive secretkey from the configuration and convert into bytes
@@ -59,20 +55,36 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
 
         return token;
     }
-    /// <summary>
-    /// Generates a cryptographically secure, random 32-byte refresh token encoded in Base64 format.
-    /// </summary>
-    /// <returns>
-    /// A unique refresh token string used to maintain session state between authentication cycles.
-    /// </returns>
-    /// <remarks>
-    /// Refresh tokens are typically used in token-based authentication systems to obtain new access tokens 
-    /// without requiring the user to re-authenticate. This implementation uses a strong random generator to 
-    /// reduce predictability and enhance security against token forgery.
-    /// </remarks>
 
     public string GenerateRefreshToken()
     {
         return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+    }
+
+    public async Task<ClaimsPrincipal> GetClaimsPrincipalFromToken(string accessToken)
+    {
+        var tokenValidation = new TokenValidationParameters
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            RequireExpirationTime = true,
+            ValidIssuer = configuration["Jwt:Issuer"],
+            ValidAudience = configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!))
+        };
+
+        var handler = new JsonWebTokenHandler();
+
+        var result = await handler.ValidateTokenAsync(accessToken, tokenValidation);
+
+        if (!result.IsValid || result.ClaimsIdentity == null)
+        {
+            throw new SecurityTokenException("Invalid token");
+        }
+        var principal = new ClaimsPrincipal(result.ClaimsIdentity);
+
+        return principal;
     }
 }
