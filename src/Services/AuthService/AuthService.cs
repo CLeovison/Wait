@@ -53,10 +53,10 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
         {
             throw new ApplicationException("The RefreshToken is Expired");
         }
-        if (userTokenRotation.ExpiresAt)
+        if (userTokenRotation.ExpiresAt < DateTime.Now)
             throw new ApplicationException("The refresh token is expired.");
 
-        var requestUserDb = userTokenRotation.Token?.User;
+        var requestUserDb = userTokenRotation.User;
 
         if (requestUserDb is null)
         {
@@ -73,11 +73,11 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
         string accessToken = tokenProvider.GenerateToken(requestUserDb);
         string refreshToken = tokenProvider.GenerateRefreshToken();
 
-        userTokenRotation.Token.Token = refreshToken;
-        userTokenRotation.Token.ExpiresAt = DateTime.UtcNow.AddDays(7);
+        userTokenRotation.Token = refreshToken;
+        userTokenRotation.ExpiresAt = DateTime.UtcNow.AddDays(7);
 
-        await authRepository.RefreshTokenUpdate(userTokenRotation.Token);
+        await authRepository.RefreshTokenUpdate(userTokenRotation);
 
-        return new AuthResponse(accessToken, userTokenRotation.Token.Token);
+        return new AuthResponse(accessToken, userTokenRotation.Token);
     }
 }
