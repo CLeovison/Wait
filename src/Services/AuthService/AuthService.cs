@@ -1,8 +1,4 @@
-
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Wait.Abstract;
 using Wait.Contracts.Response;
@@ -15,7 +11,6 @@ namespace Wait.Services.AuthService;
 public sealed class AuthService(IUserRepositories userRepositories,
 IAuthRepository authRepository,
 ITokenProvider tokenProvider,
-IConfiguration configuration,
 IPasswordHasher<Users> passwordHasher) : IAuthService
 {
     public async Task<AuthResponse> LoginUserAsync(string username, string password, CancellationToken ct)
@@ -49,7 +44,7 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         return new AuthResponse(accessToken, generateRefresh.Token);
     }
- 
+
     public async Task<AuthResponse> GetUserRefreshTokenAsync(AuthResponse response)
     {
         var userTokenRotation = await authRepository.RefreshTokenRotationAsync(response.RefreshToken);
@@ -85,6 +80,4 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         return new AuthResponse(accessToken, userTokenRotation.Token.Token);
     }
-
-
 }
