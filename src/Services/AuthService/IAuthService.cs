@@ -1,5 +1,3 @@
-
-using System.Security.Claims;
 using Wait.Contracts.Response;
 
 namespace Wait.Services.AuthService;
@@ -7,6 +5,12 @@ namespace Wait.Services.AuthService;
 public interface IAuthService
 {
     Task<AuthResponse> LoginUserAsync(string username, string password, CancellationToken ct);
-    Task<AuthResponse> GetUserRefreshTokenAsync(AuthResponse response);
+    Task<AuthResponse> RefreshTokenAsync(AuthResponse response);
+    
+    // Task<bool> RevokeRefreshTokenAsync();
+    // Task<bool> SendEmailVerificationAsync();
+    // Task<bool> VerificationEmailAsync();
+    // Task<bool> ForgotPasswordAsync();
+    // Task<bool> ResetPasswordAsync();
 
 }

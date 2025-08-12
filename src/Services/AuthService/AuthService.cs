@@ -45,7 +45,7 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
         return new AuthResponse(accessToken, generateRefresh.Token);
     }
 
-    public async Task<AuthResponse> GetUserRefreshTokenAsync(AuthResponse response)
+    public async Task<AuthResponse> RefreshTokenAsync(AuthResponse response)
     {
         var userTokenRotation = await authRepository.RefreshTokenRotationAsync(response.RefreshToken);
 
