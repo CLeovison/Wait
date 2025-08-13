@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Wait.Abstract;
@@ -11,6 +12,7 @@ namespace Wait.Services.AuthService;
 public sealed class AuthService(IUserRepositories userRepositories,
 IAuthRepository authRepository,
 ITokenProvider tokenProvider,
+IHttpContextAccessor httpContext,
 IPasswordHasher<Users> passwordHasher) : IAuthService
 {
     public async Task<AuthResponse> LoginUserAsync(string username, string password, CancellationToken ct)
@@ -82,4 +84,21 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         return new AuthResponse(accessToken, userTokenRotation.Token);
     }
+
+    public async Task<bool> RevokeRefreshTokenAsync(Guid id, CancellationToken ct)
+    {
+        var user = await authRepository.RevokeRefreshTokenAsync(id, ct);
+
+        if (id != UserCredentials())
+        {
+            throw new SecurityTokenArgumentException("The User doesn't exist");
+        }
+        return user;
+    }
+
+    private Guid? UserCredentials()
+    {
+        return Guid.TryParse(httpContext?.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid parsed) ? parsed : null;
+    }   
+   
 }
