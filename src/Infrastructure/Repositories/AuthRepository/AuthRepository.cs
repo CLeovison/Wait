@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Wait.Contracts.Response;
 using Wait.Database;
 using Wait.Domain.Entities;
 
@@ -13,17 +12,15 @@ public sealed class AuthRepostiory(AppDbContext dbContext) : IAuthRepository
     }
     public async Task<RefreshToken> SaveRefreshTokenAsync(RefreshToken refreshToken, CancellationToken ct)
     {
-        var token = await dbContext.RefreshToken.AddAsync(refreshToken);
+        await dbContext.RefreshToken.AddAsync(refreshToken);
         await dbContext.SaveChangesAsync(ct);
-        return token.Entity;
+        return refreshToken;
     }
     public async Task<RefreshToken?> RefreshTokenRotationAsync(string refreshToken)
     {
         return await dbContext.RefreshToken
         .Include(x => x.User)
         .FirstOrDefaultAsync(x => x.Token == refreshToken);
-
-
     }
     public async Task RefreshTokenUpdate(RefreshToken refreshToken)
     {

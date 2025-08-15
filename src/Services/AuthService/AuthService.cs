@@ -56,7 +56,7 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
             throw new ApplicationException("The RefreshToken is Expired");
         }
 
-        if (userTokenRotation.ExpiresAt < DateTime.Now)
+        if (userTokenRotation.ExpiresAt < DateTime.UtcNow)
             throw new ApplicationException("The refresh token is expired.");
 
         var requestUser = userTokenRotation.User;
@@ -87,18 +87,31 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
     public async Task<bool> RevokeRefreshTokenAsync(Guid id, CancellationToken ct)
     {
-        var user = await authRepository.RevokeRefreshTokenAsync(id, ct);
+        var currentUser = UserCredentials();
 
-        if (id != UserCredentials())
+        if (currentUser is null)
         {
             throw new SecurityTokenArgumentException("The User doesn't exist");
         }
-        return user;
+
+        if (currentUser != id)
+        {
+            throw new SecurityTokenValidationException("The User Doesn't Match");
+        }
+
+        var deleteUser = await authRepository.RevokeRefreshTokenAsync(id, ct);
+
+        if (!deleteUser)
+        {
+            throw new SecurityTokenException("No active refresh tokens found for this user.");
+        }
+
+        return true;
     }
 
     private Guid? UserCredentials()
     {
         return Guid.TryParse(httpContext?.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid parsed) ? parsed : null;
-    }   
-   
+    }
+
 }
