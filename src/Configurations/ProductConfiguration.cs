@@ -37,15 +37,14 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.ImageUrl)
         .IsRequired();
 
-        builder.Property(x => x.IsSoftDelete)
-        .HasDefaultValue(false);
-
         builder.Property(d => d.CreatedAt)
         .HasDefaultValueSql("current_date");
 
         builder.Property(x => x.ModifiedAt)
+        .ValueGeneratedOnUpdate()
         .HasDefaultValueSql("current_date");
 
+        builder.HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId);
         builder.ToTable("Products");
     }
 }

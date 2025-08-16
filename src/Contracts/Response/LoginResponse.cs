@@ -1,8 +1,8 @@
 namespace Wait.Contracts.Response;
 
 
-public sealed class AuthResponse(string accessToken, string refreshToken)
+public sealed class AuthResponse
 {
-    public string AccessToken { get; set; } = accessToken;
-    public string RefreshToken { get; set; } = refreshToken;
+    public string AccessToken { get; set; } = string.Empty;
+    public string RefreshToken { get; set; } = string.Empty;
 }

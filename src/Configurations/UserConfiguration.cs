@@ -41,6 +41,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<Users>
             .HasDefaultValueSql("current_date");
 
         builder.Property(d => d.ModifiedAt)
+            .ValueGeneratedOnUpdate()
             .HasDefaultValueSql("current_date");
 
         builder.Property(b => b.Birthday)

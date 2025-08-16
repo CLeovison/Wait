@@ -44,10 +44,14 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         var generateRefresh = await authRepository.SaveRefreshTokenAsync(refreshToken, ct);
 
-        return new AuthResponse(accessToken, generateRefresh.Token);
+        return new AuthResponse
+        {
+            AccessToken = accessToken,
+            RefreshToken = generateRefresh.Token
+        };
     }
 
-    public async Task<AuthResponse> RefreshTokenAsync(AuthResponse response)
+    public async Task<AuthResponse?> RefreshTokenAsync(AuthResponse response)
     {
         var userTokenRotation = await authRepository.RefreshTokenRotationAsync(response.RefreshToken);
 
@@ -82,7 +86,11 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         await authRepository.RefreshTokenUpdate(userTokenRotation);
 
-        return new AuthResponse(accessToken, userTokenRotation.Token);
+        return new AuthResponse
+        {
+            AccessToken = accessToken,
+            RefreshToken = userTokenRotation.Token
+        };
     }
 
     public async Task<bool> RevokeRefreshTokenAsync(Guid id, CancellationToken ct)
