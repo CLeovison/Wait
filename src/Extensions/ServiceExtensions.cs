@@ -56,7 +56,7 @@ public static class ServiceCollectionExtensions
 
             };
         });
-
+        services.AddAuthorization();
         services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
         services.AddScoped<ITokenProvider, TokenProvider>();
         return services;

@@ -12,7 +12,7 @@ using Wait.Database;
 namespace src.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250730152542_InitialCreate")]
+    [Migration("20250816173206_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,6 +24,22 @@ namespace src.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Wait.Domain.Entities.Category", b =>
+                {
+                    b.Property<Guid>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Category");
+                });
 
             modelBuilder.Entity("Wait.Domain.Entities.RefreshToken", b =>
                 {
@@ -70,9 +86,9 @@ namespace src.Migrations
                     b.Property<DateOnly>("Birthday")
                         .HasColumnType("date");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateOnly>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("date")
                         .HasDefaultValueSql("current_date");
 
                     b.Property<string>("Email")
@@ -84,6 +100,9 @@ namespace src.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsVerifiedEmail")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
@@ -94,9 +113,9 @@ namespace src.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<DateTime?>("ModifiedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly>("ModifiedAt")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("date")
                         .HasDefaultValueSql("current_date");
 
                     b.Property<string>("Password")
@@ -116,15 +135,12 @@ namespace src.Migrations
 
             modelBuilder.Entity("Wait.Entities.Product", b =>
                 {
-                    b.Property<int>("ProductId")
+                    b.Property<Guid>("ProductId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProductId"));
-
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateOnly>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -139,18 +155,16 @@ namespace src.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsSoftDelete")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<DateOnly>("ModifiedAt")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("date")
                         .HasDefaultValueSql("current_date");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
@@ -167,7 +181,9 @@ namespace src.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.ToTable("Products", (string)null);
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Wait.Domain.Entities.RefreshToken", b =>
@@ -179,6 +195,17 @@ namespace src.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Wait.Entities.Product", b =>
+                {
+                    b.HasOne("Wait.Domain.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 #pragma warning restore 612, 618
         }

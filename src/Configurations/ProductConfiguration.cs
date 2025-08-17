@@ -18,9 +18,6 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         .HasMaxLength(100)
         .IsRequired();
 
-        builder.Property(x => x.Category)
-        .IsRequired();
-
         builder.Property(x => x.Description)
         .IsRequired();
 
@@ -45,6 +42,6 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         .HasDefaultValueSql("current_date");
 
         builder.HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId);
-        builder.ToTable("Products");
+       
     }
 }

@@ -3,7 +3,7 @@ namespace Wait.Domain.Entities;
 
 public sealed class Category
 {
-    public int CategoryId { get; set; }
+    public Guid CategoryId { get; set; } = Guid.CreateVersion7();
     public string CategoryName { get; set; } = string.Empty;
 
 }
