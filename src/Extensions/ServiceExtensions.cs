@@ -39,7 +39,13 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddAuthenticationCollection(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services.AddAuthentication(option =>
+        {
+            option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            option.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+
+        })
         .AddJwtBearer(options =>
         {
             options.SaveToken = true;

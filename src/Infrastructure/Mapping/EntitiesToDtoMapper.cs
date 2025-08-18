@@ -5,7 +5,6 @@ using Wait.Entities;
 
 namespace Wait.Infrastructure.Mapping;
 
-
 public static class EntitiesToDtoMapper
 {
     public static Users ToEntities(this UserDto userDto, IPasswordHasher<Users> passwordHasher)
