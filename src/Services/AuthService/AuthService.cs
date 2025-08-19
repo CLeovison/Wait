@@ -57,7 +57,7 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         if (userTokenRotation is null)
         {
-            throw new ApplicationException("The RefreshToken is Expired");
+            throw new ApplicationException("Unable to retrive user for refresh token");
         }
 
         if (userTokenRotation.ExpiresAt < DateTime.UtcNow)

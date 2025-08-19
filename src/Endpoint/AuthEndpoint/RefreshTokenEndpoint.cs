@@ -10,14 +10,13 @@ public sealed class RefreshtTokenEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/refresh-token", async (RefreshTokenRequest request, string accessToken, IAuthService authService, CancellationToken ct) =>
+        app.MapPost("/api/refresh-token", async (RefreshTokenRequest request, IAuthService authService, CancellationToken ct) =>
         {
             var requestRefresh = new AuthResponse
             {
-                AccessToken = accessToken,
                 RefreshToken = request.RefreshToken
             };
-         
+
             return await authService.RefreshTokenAsync(requestRefresh);
         });
     }

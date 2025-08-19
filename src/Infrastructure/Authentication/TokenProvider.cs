@@ -67,7 +67,7 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
         {
             ValidateAudience = true,
             ValidateIssuer = true,
-            ValidateLifetime = false,
+            ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             RequireExpirationTime = true,
             ValidIssuer = configuration["Jwt:Issuer"],
@@ -83,8 +83,7 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
         {
             throw new SecurityTokenException("Invalid token");
         }
-        var principal = new ClaimsPrincipal(result.ClaimsIdentity);
 
-        return principal;
+        return new ClaimsPrincipal(result.ClaimsIdentity);
     }
 }

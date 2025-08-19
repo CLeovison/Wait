@@ -32,7 +32,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     }
 
 
-    public async Task<Users?> GetUserByIdAsync(Guid id, CancellationToken ct)
+    public async Task<UserDto?> GetUserByIdAsync(Guid id, CancellationToken ct)
     {
         var getUser = await userRepositories.GetUserByIdAsync(id, ct);
 
@@ -44,7 +44,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         return getUser;
     }
 
-    public async Task<PaginatedResponse<Users>> GetPaginatedUsersAsync(PaginatedRequest req, FilterUserRequest filters, CancellationToken ct)
+    public async Task<PaginatedResponse<UserDto>> GetPaginatedUsersAsync(PaginatedRequest req, FilterUserRequest filters, CancellationToken ct)
     {
         var pagination = PaginationProcessor.Create(req);
 
@@ -56,7 +56,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
     }
 
 
-    public async Task<Users?> UpdateUserAsync(Guid id, UserDto users, CancellationToken ct)
+    public async Task<UserDto?> UpdateUserAsync(Guid id, UserDto users, CancellationToken ct)
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
             
