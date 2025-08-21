@@ -67,7 +67,7 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
         {
             ValidateAudience = true,
             ValidateIssuer = true,
-            ValidateLifetime = true,
+            ValidateLifetime = false,
             ValidateIssuerSigningKey = true,
             RequireExpirationTime = true,
             ValidIssuer = configuration["Jwt:Issuer"],

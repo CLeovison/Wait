@@ -21,6 +21,7 @@ public static class EntitiesToDtoMapper
         };
     }
 
+  
 
     public static Product ToCreate(this ProductDto productDto)
     {
