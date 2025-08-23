@@ -58,7 +58,9 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             req.SearchTerm, pagination.Skip, pagination.Take,
             pagination.SortBy, pagination.Descending, ct);
 
-        return new PaginatedResponse<Users>(users, pagination.Page, pagination.PageSize, totalCount);
+        var userMap = users.Select(x => x.ToUserDto(passwordHasher)).ToList();
+        
+        return new PaginatedResponse<UserDto>(userMap, pagination.Page, pagination.PageSize, totalCount);
     }
 
 
