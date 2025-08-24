@@ -1,5 +1,4 @@
-
-
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,35 +11,22 @@ namespace Wait.Infrastructure.Authentication;
 
 public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
 {
-    
+
     public string GenerateToken(Users users)
     {
-        //Retrive secretkey from the configuration and convert into bytes
-        string secretKey = configuration["Jwt:SecretKey"]!;
+     
+        string? secretKey = configuration["Jwt:SecretKey"]!;
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
-        //Generate signing credentials that uses SHA-256 for cryptography
-        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        /// <summary>
-        /// Constructs a SecurityTokenDescriptor that defines the structure and metadata of the JWT token.
-        /// </summary>
-        /// <remarks>
-        /// This descriptor includes user-specific claims, token expiration, signing credentials, issuer, and audience.
-        /// These properties are essential for generating a secure and verifiable JWT token.
-        /// </remarks>
-        /// <example>
-        /// Claims include user ID, username, and email verification status. 
-        /// The token is set to expire based on a value from the configuration, and is signed using HMAC-SHA256.
-        /// Issuer and audience values are pulled from the configuration settings.
-        /// </example>
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity([
-                new Claim(JwtRegisteredClaimNames.Sub, users.UserId.ToString()),
-                new Claim(JwtRegisteredClaimNames.PreferredUsername, users.Username),
-                new Claim(JwtRegisteredClaimNames.EmailVerified, users.IsVerifiedEmail.ToString())
+                new Claim(ClaimTypes.NameIdentifier, users.UserId.ToString()),
+                new Claim(ClaimTypes.Name, users.Username),
+                new Claim(ClaimTypes.Email, users.IsVerifiedEmail.ToString())
             ]),
 
             Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:Expirations")),
@@ -49,11 +35,9 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
             Audience = configuration["Jwt:Audience"]
         };
 
-        var handler = new JsonWebTokenHandler();
+        var handler = new JwtSecurityTokenHandler();
 
-        var token = handler.CreateToken(tokenDescriptor);
-
-        return token;
+        return handler.CreateEncodedJwt(tokenDescriptor);
     }
 
     public string GenerateRefreshToken()
@@ -61,7 +45,7 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
         return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
     }
 
-    public async Task<ClaimsPrincipal> GetClaimsPrincipalFromToken(string accessToken)
+    public ClaimsPrincipal GetClaimsPrincipalFromToken(string accessToken)
     {
         var tokenValidation = new TokenValidationParameters
         {
@@ -72,18 +56,20 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
             RequireExpirationTime = true,
             ValidIssuer = configuration["Jwt:Issuer"],
             ValidAudience = configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!)),
+            NameClaimType = ClaimTypes.NameIdentifier,
+           
         };
 
-        var handler = new JsonWebTokenHandler();
-
-        var result = await handler.ValidateTokenAsync(accessToken, tokenValidation);
-
-        if (!result.IsValid || result.ClaimsIdentity == null)
+         var handler = new JwtSecurityTokenHandler();
+        try
         {
-            throw new SecurityTokenException("Invalid token");
+            var principal = handler.ValidateToken(accessToken, tokenValidation, out _);
+            return principal;
         }
-
-        return new ClaimsPrincipal(result.ClaimsIdentity);
+        catch (Exception ex)
+        {
+            throw new SecurityTokenException("Invalid token", ex);
+        };
     }
 }

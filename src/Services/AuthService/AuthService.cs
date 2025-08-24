@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Wait.Abstract;
 using Wait.Contracts.Response;
 using Wait.Domain.Entities;
+using Wait.Extensions;
 using Wait.Infrastructure.Repositories;
 using Wait.Infrastructure.Repositories.UserRepository;
 
@@ -51,48 +52,45 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
         };
     }
 
-    public async Task<AuthResponse?> RefreshTokenAsync(AuthResponse response)
+    public async Task<AuthResponse?> RefreshTokenAsync(string expiredAccessToken, string refreshToken)
     {
-        var userTokenRotation = await authRepository.RefreshTokenRotationAsync(response.RefreshToken);
+        if (string.IsNullOrWhiteSpace(expiredAccessToken))
+            throw new ArgumentException("Access token is missing.", nameof(expiredAccessToken));
+
+        if (string.IsNullOrWhiteSpace(refreshToken))
+            throw new ArgumentException("Refresh token is missing.", nameof(refreshToken));
+
+        var userTokenRotation = await authRepository.RefreshTokenRotationAsync(refreshToken);
 
         if (userTokenRotation is null)
-        {
-            throw new ApplicationException("Unable to retrive user for refresh token");
-        }
+            throw new ApplicationException("Unable to retrieve user for refresh token");
 
         if (userTokenRotation.ExpiresAt < DateTime.UtcNow)
             throw new ApplicationException("The refresh token is expired.");
 
-        var requestUser = userTokenRotation.User;
+        var requestUser = userTokenRotation.User ?? throw new ApplicationException("Associated user not found for the refresh token.");
 
-        if (requestUser is null)
-        {
-            throw new ApplicationException("Associated user not found for the refresh token.");
-        }
-
-        var principal = await tokenProvider.GetClaimsPrincipalFromToken(response.AccessToken);
-        var username = principal.Identity?.Name;
+       
+        var principal = tokenProvider.GetClaimsPrincipalFromToken(expiredAccessToken);
+        var username = principal.GetUsername();
 
         if (!string.Equals(username, requestUser.Username, StringComparison.OrdinalIgnoreCase))
-        {
             throw new SecurityTokenArgumentException("Access token user does not match refresh token owner.");
-        }
 
-        string accessToken = tokenProvider.GenerateToken(requestUser);
-        string refreshToken = tokenProvider.GenerateRefreshToken();
+        string newAccessToken = tokenProvider.GenerateToken(requestUser);
+        string newRefreshToken = tokenProvider.GenerateRefreshToken();
 
-        userTokenRotation.Token = refreshToken;
+        userTokenRotation.Token = newRefreshToken;
         userTokenRotation.ExpiresAt = DateTime.UtcNow.AddDays(7);
 
         await authRepository.RefreshTokenUpdate(userTokenRotation);
 
         return new AuthResponse
         {
-            AccessToken = accessToken,
+            AccessToken = newAccessToken,
             RefreshToken = userTokenRotation.Token
         };
     }
-
     public async Task<bool> RevokeRefreshTokenAsync(Guid id, CancellationToken ct)
     {
         var currentUser = UserCredentials();

@@ -58,5 +58,5 @@ public interface ITokenProvider
     /// <exception cref="SecurityTokenException">
     /// Thrown when the token is invalid or cannot be validated.
     /// </exception>
-    Task<ClaimsPrincipal> GetClaimsPrincipalFromToken(string accessToken);
+    ClaimsPrincipal GetClaimsPrincipalFromToken(string accessToken);
 }
