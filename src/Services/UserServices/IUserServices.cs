@@ -1,7 +1,6 @@
 using Wait.Contracts.Data;
 using Wait.Contracts.Request.Common;
 using Wait.Contracts.Response;
-using Wait.Domain.Entities;
 using Wait.Contracts.Request.UserRequest;
 
 namespace Wait.Services.UserServices;

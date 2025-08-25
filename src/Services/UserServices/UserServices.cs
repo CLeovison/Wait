@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Wait.Domain.Entities;
-
 using Wait.Contracts.Data;
 using Wait.Contracts.Response;
 using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.UserRequest;
-
 using Wait.Helper;
-
 using Wait.Infrastructure.Mapping;
 using Wait.Infrastructure.Repositories.UserRepository;
 

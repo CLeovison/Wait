@@ -70,7 +70,6 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         var requestUser = userTokenRotation.User ?? throw new ApplicationException("Associated user not found for the refresh token.");
 
-       
         var principal = tokenProvider.GetClaimsPrincipalFromToken(expiredAccessToken);
         var username = principal.GetUsername();
 

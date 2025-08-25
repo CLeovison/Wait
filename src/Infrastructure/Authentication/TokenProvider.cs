@@ -2,7 +2,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Wait.Abstract;
 using Wait.Domain.Entities;
@@ -14,10 +13,8 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
 
     public string GenerateToken(Users users)
     {
-     
         string? secretKey = configuration["Jwt:SecretKey"]!;
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-
 
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
@@ -58,10 +55,10 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
             ValidAudience = configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!)),
             NameClaimType = ClaimTypes.NameIdentifier,
-           
+
         };
 
-         var handler = new JwtSecurityTokenHandler();
+        var handler = new JwtSecurityTokenHandler();
         try
         {
             var principal = handler.ValidateToken(accessToken, tokenValidation, out _);
@@ -70,6 +67,9 @@ public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
         catch (Exception ex)
         {
             throw new SecurityTokenException("Invalid token", ex);
-        };
+        }
+        ;
     }
+    
+    
 }

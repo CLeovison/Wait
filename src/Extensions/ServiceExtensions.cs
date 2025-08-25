@@ -61,6 +61,16 @@ public static class ServiceCollectionExtensions
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!))
 
             };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    context.Token = context.Request.Cookies["accessToken"];
+                    return Task.CompletedTask;
+                }
+            };
+
         });
         services.AddAuthorization();
         services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
