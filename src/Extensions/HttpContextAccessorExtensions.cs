@@ -1,15 +1,15 @@
 namespace Wait.Extensions;
 
 
-public static class HttpContextExtensions
+public static class HttpContextAccessorExtensions
 {
 
-    public static void WriteTokenAsHttpOnlyCookie(this IHttpContextAccessor httpContextAccessor,
+    public static void WriteTokenAsHttpOnlyCookie(this IHttpContextAccessor accessor,
     string cookieName,
     string token,
     DateTime expiration)
     {
-        httpContextAccessor?.HttpContext?.Response.Cookies.Append(cookieName, token,
+        accessor?.HttpContext?.Response.Cookies.Append(cookieName, token,
         new CookieOptions
         {
             HttpOnly = true,
