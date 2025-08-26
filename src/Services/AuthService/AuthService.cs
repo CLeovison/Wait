@@ -84,6 +84,8 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
 
         await authRepository.RefreshTokenUpdate(userTokenRotation);
 
+        httpContext.WriteTokenAsHttpOnlyCookie("accessToken", newAccessToken, DateTime.Now.AddMinutes(15));
+        httpContext.WriteTokenAsHttpOnlyCookie("refreshToken", newRefreshToken, DateTime.Now.AddDays(7));
         return new AuthResponse
         {
             AccessToken = newAccessToken,
