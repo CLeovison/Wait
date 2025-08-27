@@ -16,14 +16,10 @@ ITokenProvider tokenProvider,
 IHttpContextAccessor httpContext,
 IPasswordHasher<Users> passwordHasher) : IAuthService
 {
-    public async Task<AuthResponse> LoginUserAsync(string username, string password, CancellationToken ct)
+    public async Task LoginUserAsync(string username, string password, CancellationToken ct)
     {
-        var userRequest = await userRepositories.GetUserByUsernameAsync(username, ct);
-
-        if (userRequest is null)
-        {
-            throw new ApplicationException("The user does not exist!");
-        }
+        var userRequest = await userRepositories.GetUserByUsernameAsync(username, ct)
+        ?? throw new ApplicationException("The user does not exist!");
 
         var verificationResult = passwordHasher.VerifyHashedPassword(userRequest, userRequest.Password, password);
         bool verifiedPassword = verificationResult == PasswordVerificationResult.Success;
@@ -43,16 +39,13 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
             CreatedAt = DateTime.UtcNow
         };
 
-        var generateRefresh = await authRepository.SaveRefreshTokenAsync(refreshToken, ct);
-
-        return new AuthResponse
-        {
-            AccessToken = accessToken,
-            RefreshToken = generateRefresh.Token
-        };
+        await authRepository.SaveRefreshTokenAsync(refreshToken, ct);
+        httpContext.WriteTokenAsHttpOnlyCookie("accessToken", accessToken, DateTime.Now.AddMinutes(15));
+        httpContext.WriteTokenAsHttpOnlyCookie("refreshToken", refreshToken.Token, DateTime.Now.AddDays(7));
+     
     }
 
-    public async Task<AuthResponse?> RefreshTokenAsync(string expiredAccessToken, string refreshToken)
+    public async Task RefreshTokenAsync(string expiredAccessToken, string refreshToken)
     {
         if (string.IsNullOrWhiteSpace(expiredAccessToken))
             throw new ArgumentException("Access token is missing.", nameof(expiredAccessToken));
@@ -85,12 +78,8 @@ IPasswordHasher<Users> passwordHasher) : IAuthService
         await authRepository.RefreshTokenUpdate(userTokenRotation);
 
         httpContext.WriteTokenAsHttpOnlyCookie("accessToken", newAccessToken, DateTime.Now.AddMinutes(15));
-        httpContext.WriteTokenAsHttpOnlyCookie("refreshToken", newRefreshToken, DateTime.Now.AddDays(7));
-        return new AuthResponse
-        {
-            AccessToken = newAccessToken,
-            RefreshToken = userTokenRotation.Token
-        };
+        httpContext.WriteTokenAsHttpOnlyCookie("refreshToken", newRefreshToken, DateTime.Now.AddDays(7), path: "/api/refresh-token");
+     
     }
     public async Task<bool> RevokeRefreshTokenAsync(Guid id, CancellationToken ct)
     {

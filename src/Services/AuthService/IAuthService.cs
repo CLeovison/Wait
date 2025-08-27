@@ -5,8 +5,8 @@ namespace Wait.Services.AuthService;
 public interface IAuthService
 {
     // Task<RegisterUserDto> RegisterUserAsync();
-    Task<AuthResponse> LoginUserAsync(string username, string password, CancellationToken ct);
-    Task<AuthResponse?> RefreshTokenAsync(string expiredAccessToken, string refreshToken);
+    Task LoginUserAsync(string username, string password, CancellationToken ct);
+    Task RefreshTokenAsync(string expiredAccessToken, string refreshToken);
 
     Task<bool> RevokeRefreshTokenAsync(Guid id, CancellationToken ct);
 

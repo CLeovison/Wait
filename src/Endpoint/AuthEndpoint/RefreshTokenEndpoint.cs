@@ -1,6 +1,5 @@
 using Wait.Abstract;
-using Wait.Contracts.Request.AuthRequest;
-using Wait.Contracts.Response;
+
 using Wait.Services.AuthService;
 
 namespace Wait.Endpoint.AuthEndpoint;
@@ -10,16 +9,18 @@ public sealed class RefreshTokenEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/refresh-token", async (HttpContext context, RefreshTokenRequest request, IAuthService authService, CancellationToken ct) =>
+        app.MapPost("/api/refresh-token", async (HttpContext context, IAuthService authService) =>
         {
-            var expiredAccessToken = context.Request.Headers["Authorization"]
-                .ToString()
-                .Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var expiredAccessToken = context.Request.Cookies["accessToken"];
+            var refreshToken = context.Request.Cookies["refreshToken"];
 
-            if (string.IsNullOrWhiteSpace(expiredAccessToken))
+            if (string.IsNullOrWhiteSpace(expiredAccessToken) || string.IsNullOrWhiteSpace(refreshToken))
                 throw new ArgumentException("Access token is required in the Authorization header.");
 
-            return await authService.RefreshTokenAsync(expiredAccessToken, request.RefreshToken);
+            await authService.RefreshTokenAsync(expiredAccessToken, refreshToken);
+
+
+            return TypedResults.NoContent();
         });
     }
 }

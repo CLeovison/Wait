@@ -7,7 +7,8 @@ public static class HttpContextAccessorExtensions
     public static void WriteTokenAsHttpOnlyCookie(this IHttpContextAccessor accessor,
     string cookieName,
     string token,
-    DateTime expiration)
+    DateTime expiration,
+    string path = "/")
     {
         accessor?.HttpContext?.Response.Cookies.Append(cookieName, token,
         new CookieOptions
@@ -16,7 +17,8 @@ public static class HttpContextAccessorExtensions
             Expires = expiration,
             IsEssential = true,
             Secure = true,
-            SameSite = SameSiteMode.Strict
+            SameSite = SameSiteMode.Strict,
+            Path = path
         });
     }
 }

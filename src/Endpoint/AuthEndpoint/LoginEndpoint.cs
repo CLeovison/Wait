@@ -11,7 +11,8 @@ public sealed class LoginEndpoint : IEndpoint
     {
         app.MapPost("/api/login", async (LoginUserRequest req, IAuthService authService, CancellationToken ct) =>
         {
-            return await authService.LoginUserAsync(req.Username, req.Password, ct);
+            await authService.LoginUserAsync(req.Username, req.Password, ct);
+            return TypedResults.NoContent();
 
 
         });
