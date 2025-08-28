@@ -11,6 +11,12 @@ public sealed class ProductRepository(AppDbContext dbContext) : IProductReposito
         await dbContext.SaveChangesAsync(ct);
         return product;
     }
+
+    // public async Task<(List<Product>, int totalCount)> GetPaginatedProductAsync(int page, int pageSize, string sortBy,
+    // bool desc, string searchTerm, CancellationToken ct)
+    // {
+    //     var productQuery = await dbContext.Product
+    // }
     public async Task<Product?> GetProductByIdAsync(int id, CancellationToken ct)
     {
         return await dbContext.Product.FindAsync(id, ct);

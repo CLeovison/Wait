@@ -28,7 +28,6 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         return result.ToUserDto(passwordHasher);
     }
 
-
     public async Task<UserDto?> GetUserByIdAsync(Guid id, CancellationToken ct)
     {
         var user = await userRepositories.GetUserByIdAsync(id, ct);
@@ -60,7 +59,6 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         return new PaginatedResponse<UserDto>(userMap, pagination.Page, pagination.PageSize, totalCount);
     }
 
-
     public async Task<UserDto?> UpdateUserAsync(Guid id, UserDto users, CancellationToken ct)
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
@@ -84,6 +82,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         return existingUser?.ToUserDto(passwordHasher);
 
     }
+    
     public async Task<bool> DeleteUserAsync(Guid id, CancellationToken ct)
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);
