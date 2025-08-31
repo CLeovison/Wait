@@ -11,7 +11,7 @@ public static class QueryableExtensions
 
         if (filter is null)
         {
-            throw new ArgumentException(nameof(filter));
+            throw new ArgumentNullException(nameof(filter));
         }
 
         if (expressions is not null)
@@ -21,7 +21,7 @@ public static class QueryableExtensions
                 filter = filter.Where(expression);
             }
         }
-        
+
         return filter;
     }
 
