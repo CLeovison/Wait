@@ -1,5 +1,6 @@
 using Wait.Database;
 using Wait.Entities;
+using Wait.Extensions;
 
 namespace Wait.Infrastructure.Repositories.ProductRepository;
 
@@ -12,11 +13,11 @@ public sealed class ProductRepository(AppDbContext dbContext) : IProductReposito
         return product;
     }
 
-    // public async Task<(List<Product>, int totalCount)> GetPaginatedProductAsync(int page, int pageSize, string sortBy,
-    // bool desc, string searchTerm, CancellationToken ct)
-    // {
-    //     var productQuery = await dbContext.Product
-    // }
+    public async Task<(List<Product>, int totalCount)> GetPaginatedProductAsync(int page, int pageSize, string sortBy,
+    bool desc, string searchTerm, CancellationToken ct)
+    {
+        var productQuery = dbContext.Product.Filter<Product>();
+    }
     public async Task<Product?> GetProductByIdAsync(int id, CancellationToken ct)
     {
         return await dbContext.Product.FindAsync(id, ct);
