@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using Wait.Contracts.Request.ProductRequest;
-using Wait.Contracts.Request.UserRequest;
 using Wait.Entities;
 
 namespace Wait.Extensions;
@@ -48,7 +47,7 @@ public static class ProductRepositoryExtensions
         {
             "productname" => product => product.ProductName,
             "price" => product => product.Price,
-            "color" => product => product.Color ,
+            "color" => product => product.Color,
             _ => product => product.ProductId
         };
 
