@@ -48,11 +48,12 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
 
     public async Task<PaginatedResponse<UserDto>> GetPaginatedUsersAsync(PaginatedRequest req, FilterUserRequest filters, CancellationToken ct)
     {
-        var pagination = PaginationProcessor.Create(req);
+        var defaultSort = SortDefaults.GetDefaultSortField("FirstName");
+        var pagination = PaginationProcessor.Create(req, defaultSort);
 
         var (users, totalCount) = await userRepositories.GetPaginatedUserAsync(filters,
             req.SearchTerm, pagination.Skip, pagination.Take,
-            pagination.SortBy, pagination.Descending, ct);
+            pagination.EffectiveSortBy, pagination.Descending, ct);
 
         var userMap = users.Select(x => x.ToUserDto(passwordHasher)).ToList();
         
