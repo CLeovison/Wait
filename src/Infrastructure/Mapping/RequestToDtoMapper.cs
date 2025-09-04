@@ -49,7 +49,7 @@ public static class RequestToDtoMapper
             ProductName = req.ProductName,
             Price = req.Price,
             Description = req.Description,
-            ProductSize = req.ProductSize,
+            Size = req.Size,
             Category = req.Category,
             Quantity = req.Quantity,
             CreatedAt = req.CreatedAt

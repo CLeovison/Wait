@@ -29,7 +29,7 @@ public static class EntitiesToDtoMapper
         {
             ProductName = productDto.ProductName,
             Description = productDto.Description,
-            ProductSize = productDto.ProductSize,
+            Size = productDto.Size,
             Quantity = productDto.Quantity,
             CreatedAt = productDto.CreatedAt
 
