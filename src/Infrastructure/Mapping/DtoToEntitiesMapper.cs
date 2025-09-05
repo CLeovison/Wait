@@ -38,7 +38,7 @@ public static class DtoToEntitiesMapper
         return new ProductDto
         {
             ProductName = product.ProductName,
-            ProductSize = product.ProductSize,
+            Size = product.Size,
             Quantity = product.Quantity,
             Description = product.Description,
             CreatedAt = product.CreatedAt,

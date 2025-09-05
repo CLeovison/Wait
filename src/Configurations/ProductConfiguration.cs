@@ -27,7 +27,7 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Quantity)
         .IsRequired();
 
-        builder.Property(x => x.ProductSize)
+        builder.Property(x => x.Size)
         .HasMaxLength(50)
         .IsRequired();
 
@@ -41,7 +41,7 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         .ValueGeneratedOnUpdate()
         .HasDefaultValueSql("current_date");
 
-        builder.HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId);
+            builder.HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId);
        
     }
 }
