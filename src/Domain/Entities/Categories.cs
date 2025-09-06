@@ -1,9 +1,10 @@
+using Wait.Common;
 using Wait.Entities;
 
 namespace Wait.Domain.Entities;
 
 
-public sealed class Category
+public sealed class Category : AuditableEntity
 {
     public Guid CategoryId { get; set; } = Guid.CreateVersion7();
     public string CategoryName { get; set; } = string.Empty;
