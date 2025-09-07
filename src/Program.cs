@@ -19,8 +19,6 @@ builder.Services.AddRateLimiter();
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
-builder.Services.AddRepositoriesCollection();
-builder.Services.AddServicesCollection();
 builder.Services.AddAuthenticationCollection(configuration);
 
 // FluentValidation

@@ -1,6 +1,6 @@
 using Wait.Abstract;
 
-namespace Wait.Features.Users;
+namespace Wait.Features.Users.GetAlluser;
 
 
 public sealed class GetAllUser : IEndpoint
