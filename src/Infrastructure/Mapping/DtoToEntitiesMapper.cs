@@ -45,4 +45,12 @@ public static class DtoToEntitiesMapper
         };
     }
 
+    public static CategoryDto ToDto(this Category category)
+    {
+        return new CategoryDto
+        {
+            CategoryName = category.CategoryName,
+            CreatedAt = category.CreatedAt
+        };
+    }
 }

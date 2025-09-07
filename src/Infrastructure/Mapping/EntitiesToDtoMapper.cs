@@ -21,7 +21,7 @@ public static class EntitiesToDtoMapper
         };
     }
 
-  
+
 
     public static Product ToCreate(this ProductDto productDto)
     {
@@ -32,7 +32,15 @@ public static class EntitiesToDtoMapper
             Size = productDto.Size,
             Quantity = productDto.Quantity,
             CreatedAt = productDto.CreatedAt
+        };
+    }
 
+    public static Category ToCreate(this CategoryDto categoryDto)
+    {
+        return new Category
+        {
+            CategoryName = categoryDto.CategoryName,
+            CreatedAt = categoryDto.CreatedAt,
         };
     }
 }

@@ -15,6 +15,7 @@ using Wait.Infrastructure.Repositories.UserRepository;
 
 //Service Collection
 using Wait.Services.AuthService;
+using Wait.Services.Categories;
 using Wait.Services.ProductServices;
 using Wait.Services.UserServices;
 
@@ -36,6 +37,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserServices, UserServices>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ICategoriesService, CategoriesService>();
 
         return services;
     }

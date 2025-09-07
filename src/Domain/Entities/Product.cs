@@ -1,4 +1,5 @@
-using Wait.Common;
+
+using Wait.Domain.Common;
 using Wait.Domain.Entities;
 
 namespace Wait.Entities;
