@@ -5,5 +5,5 @@ namespace Wait.Services.Categories;
 
 public interface ICategoriesService
 {
-    Task<CategoryDto> CreateCategoryAsync(Category category, CancellationToken ct);
+    Task<CategoryDto> CreateCategoryAsync(CategoryDto category, CancellationToken ct);
 }

@@ -17,7 +17,7 @@ public static class PaginationMapper
     /// <param name="sortBy">Optional field name for sorting.</param>
     /// <param name="sortDirection">Sort direction (e.g., "asc" or "desc").</param>
     /// <returns>A <c>PaginatedRequest</c> object populated with the provided parameters.</returns>
-    public static PaginatedRequest ToPaginate(string? searchTerm, int page, int pageSize, string? sortBy, string? sortDirection)
+    public static PaginatedRequest ToPaginate(string searchTerm, int page, int pageSize, string? sortBy, string? sortDirection)
     {
         return new PaginatedRequest
         {

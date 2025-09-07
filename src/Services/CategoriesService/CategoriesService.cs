@@ -7,10 +7,11 @@ namespace Wait.Services.Categories;
 
 public sealed class CategoriesService(ICategoriesRepository categoriesRepository) : ICategoriesService
 {
-    public async Task<CategoryDto> CreateCategoryAsync(Category category, CancellationToken ct)
+    public async Task<CategoryDto> CreateCategoryAsync(CategoryDto category, CancellationToken ct)
     {
-        var categoryRequest = await categoriesRepository.CreateCategoriesAsync(category, ct);
-        var categoryMap = categoryRequest.ToDto();
-        return categoryMap;
+        var categoryMap = category.ToCreate();
+        var categoryRequest = await categoriesRepository.CreateCategoriesAsync(categoryMap, ct);
+        var categoryEntity = categoryRequest.ToDto();
+        return categoryEntity;
     }
 }

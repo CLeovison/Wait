@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
+using Wait.Contracts.Request.CategoriesRequest;
 using Wait.Contracts.Request.ProductRequest;
 using Wait.Contracts.Request.UserRequest;
 using Wait.Domain.Entities;
@@ -56,4 +57,13 @@ public static class RequestToDtoMapper
         };
     }
 
+    public static CategoryDto ToCreateCategory(this CreateCategoriesRequest req)
+    {
+        return new CategoryDto
+        {
+            CategoryName = req.CategoryName,
+            CategoryDescription = req.CategoryDescription,
+            ImageUrl = req.ImageUrl
+        };
+    }
 }

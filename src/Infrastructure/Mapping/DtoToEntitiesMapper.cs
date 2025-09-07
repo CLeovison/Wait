@@ -50,7 +50,10 @@ public static class DtoToEntitiesMapper
         return new CategoryDto
         {
             CategoryName = category.CategoryName,
-            CreatedAt = category.CreatedAt
+            CategoryDescription = category.CategoryDescription,
+            ImageUrl = category.ImageUrl,
+            CreatedAt = category.CreatedAt,
+            Products = category.Products
         };
     }
 }

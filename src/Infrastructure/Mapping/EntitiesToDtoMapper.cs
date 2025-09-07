@@ -35,12 +35,16 @@ public static class EntitiesToDtoMapper
         };
     }
 
-    public static Category ToCreate(this CategoryDto categoryDto)
+    public static Category ToCreate(this CategoryDto category)
     {
         return new Category
         {
-            CategoryName = categoryDto.CategoryName,
-            CreatedAt = categoryDto.CreatedAt,
+            CategoryName = category.CategoryName,
+            CategoryDescription = category.CategoryDescription,
+            ImageUrl = category.ImageUrl,
+            CreatedAt = category.CreatedAt,
+            Products = category.Products
+
         };
     }
 }
