@@ -11,15 +11,17 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
     {
         string message = $"The {category.CategoryName} was already exisiting";
 
-        if (category is not null)
-        {
-            throw new InvalidOperationException(message);
-        }
         try
         {
-            var categoryMap = category?.ToCreate();
+            var categoryMap = category.ToCreate();
+
+            if (category is not null)
+            {
+                throw new ArgumentNullException(message);
+            }
             var categoryRequest = await categoriesRepository.CreateCategoriesAsync(categoryMap, ct);
             var categoryEntity = categoryRequest.ToDto();
+
             return categoryEntity;
         }
         catch (Exception ex)
@@ -31,7 +33,60 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
 
     public async Task<CategoryDto> GetCategoryByIdAsync(Guid id, CancellationToken ct)
     {
-        
+        try
+        {
+            var category = await categoriesRepository.GetCategoryByIdAsync(id, ct);
 
+            if (category is null)
+            {
+                throw new ArgumentNullException($"The User ${id} does not exist");
+            }
+
+            var mapCategory = category.ToDto();
+
+            return mapCategory;
+        }
+        catch (Exception ex)
+        {
+            throw new ArgumentException("There is an error", ex);
+        }
+
+    }
+
+    public async Task<CategoryDto> UpdateCategoryAsync(Guid id, CategoryDto category, CancellationToken ct)
+    {
+        var existingCategory = await categoriesRepository.GetCategoryByIdAsync(id, ct);
+
+        if (existingCategory is null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        try
+        {
+            existingCategory.CategoryName = category.CategoryName;
+            existingCategory.CategoryDescription = category.CategoryDescription;
+            existingCategory.ImageUrl = category.ImageUrl;
+            
+            await categoriesRepository.UpdateCategoryAsync(existingCategory, ct);
+            return category;
+        }
+        catch (Exception ex)
+        {
+            throw new ArgumentException("Error", ex);
+        }
+    }
+
+    public async Task<bool> DeleteCategoryAsync(Guid id, CancellationToken ct)
+    {
+        var existingCategory = await categoriesRepository.GetCategoryByIdAsync(id, ct);
+
+        if (existingCategory is null)
+        {
+            throw new ArgumentException("The User does not exist");
+        }
+
+        var removeUser = await categoriesRepository.DeleteCategoryAsync(existingCategory, ct);
+        return removeUser;
     }
 }
