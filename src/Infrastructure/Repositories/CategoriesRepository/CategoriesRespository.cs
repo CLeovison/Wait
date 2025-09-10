@@ -3,9 +3,8 @@ using Wait.Contracts.Request.CategoriesRequest;
 using Wait.Database;
 using Wait.Domain.Entities;
 using Wait.Extensions;
-using Wait.Infrastructure.Repositories.CategoriesRepository;
 
-namespace ait.Infrastructure.Repositories.CategoriesRepository;
+namespace Wait.Infrastructure.Repositories.CategoriesRepository;
 
 
 public sealed class CategoriesRepository(AppDbContext dbContext) : ICategoriesRepository
