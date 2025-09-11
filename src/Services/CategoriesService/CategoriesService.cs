@@ -1,5 +1,9 @@
 
+using Wait.Contracts.Request.CategoriesRequest;
+using Wait.Contracts.Request.Common;
+using Wait.Contracts.Response;
 using Wait.Domain.Entities;
+using Wait.Helper;
 using Wait.Infrastructure.Mapping;
 using Wait.Infrastructure.Repositories.CategoriesRepository;
 
@@ -52,7 +56,20 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
         }
 
     }
+    public async Task<(List<CategoryDto>, int totalCount)> GetAllCategoryAsync(FilterCategoriesRequest filter, PaginatedRequest req, CancellationToken ct)
+    {
+        var sortCategory = SortDefaults.GetDefaultSortField("CategoryName");
+        var pagination = PaginationProcessor.Create(req, sortCategory);
 
+        var (category, totalCount) = await categoriesRepository.GetAllCategoryAsync(filter,
+            req.SearchTerm, pagination.Skip, pagination.Take,
+            pagination.EffectiveSortBy, pagination.Descending, ct);
+
+        var categoryMap = category
+
+        return PaginatedResponse<CategoryDto>(pagination.Page, pagination.PageSize, totalCount);
+
+    }
     public async Task<CategoryDto> UpdateCategoryAsync(Guid id, CategoryDto category, CancellationToken ct)
     {
         var existingCategory = await categoriesRepository.GetCategoryByIdAsync(id, ct);
@@ -67,7 +84,7 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
             existingCategory.CategoryName = category.CategoryName;
             existingCategory.CategoryDescription = category.CategoryDescription;
             existingCategory.ImageUrl = category.ImageUrl;
-            
+
             await categoriesRepository.UpdateCategoryAsync(existingCategory, ct);
             return category;
         }
