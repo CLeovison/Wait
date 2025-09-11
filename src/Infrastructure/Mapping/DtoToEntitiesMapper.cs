@@ -45,4 +45,15 @@ public static class DtoToEntitiesMapper
         };
     }
 
+    public static CategoryDto ToDto(this Category category)
+    {
+        return new CategoryDto
+        {
+            CategoryName = category.CategoryName,
+            CategoryDescription = category.CategoryDescription,
+            ImageUrl = category.ImageUrl,
+            CreatedAt = category.CreatedAt,
+            Products = category.Products
+        };
+    }
 }

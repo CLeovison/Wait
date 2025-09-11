@@ -1,7 +1,10 @@
+
+using Wait.Domain.Common;
+
 namespace Wait.Contracts.Data;
 
 
-public class UserDto
+public class UserDto : AuditableEntity
 {
     public Guid UserId { get; set; }
     public string FirstName { get; set; } = string.Empty;
@@ -11,7 +14,4 @@ public class UserDto
     public string? ConfirmPassword { get; set; }
     public string Email { get; set; } = string.Empty;
     public DateOnly Birthday { get; set; }
-    public DateOnly CreatedAt { get; set; }
-    public DateOnly ModifiedAt { get; set; }
-
 }

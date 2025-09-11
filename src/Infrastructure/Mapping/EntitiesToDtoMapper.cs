@@ -20,9 +20,7 @@ public static class EntitiesToDtoMapper
             ModifiedAt = userDto.ModifiedAt
         };
     }
-
-  
-
+    
     public static Product ToCreate(this ProductDto productDto)
     {
         return new Product
@@ -32,6 +30,18 @@ public static class EntitiesToDtoMapper
             Size = productDto.Size,
             Quantity = productDto.Quantity,
             CreatedAt = productDto.CreatedAt
+        };
+    }
+
+    public static Category ToCreate(this CategoryDto category)
+    {
+        return new Category
+        {
+            CategoryName = category.CategoryName,
+            CategoryDescription = category.CategoryDescription,
+            ImageUrl = category.ImageUrl,
+            CreatedAt = category.CreatedAt,
+            Products = category.Products
 
         };
     }
