@@ -62,12 +62,12 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
         var pagination = PaginationProcessor.Create(req, sortCategory);
 
         var (category, totalCount) = await categoriesRepository.GetAllCategoryAsync(filter,
-            req.SearchTerm, pagination.Skip, pagination.Take,
-            pagination.EffectiveSortBy, pagination.Descending, ct);
+            req.SearchTerm, pagination.EffectiveSortBy, pagination.Descending, pagination.Take,
+          pagination.Skip, ct);
 
-        var categoryMap = category
+        var categoryMap = category.Select(c => c.ToDto()).ToList();
 
-        return PaginatedResponse<CategoryDto>(pagination.Page, pagination.PageSize, totalCount);
+        return (categoryMap, totalCount);
 
     }
     public async Task<CategoryDto> UpdateCategoryAsync(Guid id, CategoryDto category, CancellationToken ct)
