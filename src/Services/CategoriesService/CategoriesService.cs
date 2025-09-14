@@ -19,7 +19,7 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
         {
             var categoryMap = category.ToCreate();
 
-            if (category is not null)
+            if (category is null)
             {
                 throw new ArgumentNullException(message);
             }
