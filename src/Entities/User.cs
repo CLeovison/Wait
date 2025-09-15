@@ -7,7 +7,7 @@ namespace Wait.Domain.Entities;
 /// This Class Is The Entity Based Class of the User
 /// </summary>
 
-public sealed class Users : AuditableEntity
+public sealed class User : AuditableEntity
 {
     public Guid UserId { get; set; }
     public string FirstName { get; set; } = string.Empty;

@@ -1,9 +1,7 @@
 
 using Wait.Domain.Common;
-using Wait.Entities;
 
-namespace Wait.Domain.Entities;
-
+namespace Wait.Entities;
 
 public sealed class Category : AuditableEntity
 {
