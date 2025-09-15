@@ -1,5 +1,6 @@
 //Repository Collection
 using System.Text;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -8,11 +9,13 @@ using Wait.Abstract;
 using Wait.Domain.Entities;
 using Wait.Infrastructure.Authentication;
 using Wait.Infrastructure.Repositories;
+using Wait.Infrastructure.Repositories.CategoriesRepository;
 using Wait.Infrastructure.Repositories.ProductRepository;
 using Wait.Infrastructure.Repositories.UserRepository;
 
 //Service Collection
 using Wait.Services.AuthService;
+using Wait.Services.Categories;
 using Wait.Services.ProductServices;
 using Wait.Services.UserServices;
 
@@ -25,6 +28,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserRepositories, UserRepositories>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IAuthRepository, AuthRepostiory>();
+        services.AddScoped<ICategoriesRepository, CategoriesRepository>();
         return services;
     }
 
@@ -33,6 +37,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserServices, UserServices>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ICategoriesService, CategoriesService>();
 
         return services;
     }
