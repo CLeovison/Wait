@@ -15,7 +15,7 @@ public sealed class CreateCategoriesEndpoint : IEndpoint
 
             var request = await categoriesService.CreateCategoryAsync(mapCategory, ct);
 
-            return Results.Created();
+            return TypedResults.Created();
         });
     }
 }

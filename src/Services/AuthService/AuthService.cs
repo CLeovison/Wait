@@ -2,7 +2,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Wait.Abstract;
-using Wait.Contracts.Response;
 using Wait.Domain.Entities;
 using Wait.Extensions;
 using Wait.Infrastructure.Repositories;

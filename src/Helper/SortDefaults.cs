@@ -5,6 +5,7 @@ public static class SortDefaults
         "User" => "FirstName",
         "Product" => "Name",
         "Order" => "OrderDate",
+        "Category" => "CategoryName",
         _ => "Id"
     };
 }

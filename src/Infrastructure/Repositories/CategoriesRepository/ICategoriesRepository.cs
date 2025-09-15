@@ -13,4 +13,5 @@ public interface ICategoriesRepository
      int take, CancellationToken ct);
     Task<Category> UpdateCategoryAsync(Category category, CancellationToken ct);
     Task<bool> DeleteCategoryAsync(Category category, CancellationToken ct);
+   
 }
