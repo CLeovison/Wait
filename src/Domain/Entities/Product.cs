@@ -6,7 +6,7 @@ namespace Wait.Entities;
 
 public class Product : AuditableEntity
 {
-    public Guid ProductId { get; init; } = Guid.CreateVersion7();
+    public Guid ProductId { get; init; } 
     public string ProductName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Color { get; set; } = string.Empty;
