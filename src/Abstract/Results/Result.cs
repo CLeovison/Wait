@@ -3,12 +3,12 @@ namespace Wait.Abstract.Results;
 public sealed record Error(string Code, string? Description = null)
 {
     public static readonly Error None = new(string.Empty);
-    public static implicit operator Results(Error error) => Results.Failure(error);
+    public static implicit operator Result(Error error) => Result.Failure(error);
 }
 
-public sealed class Results
+public sealed class Result
 {
-    private Results(bool isSuccess, Error error)
+    private Result(bool isSuccess, Error error)
     {
         if (isSuccess && error != Error.None || !isSuccess && error == Error.None)
         {
@@ -23,6 +23,6 @@ public sealed class Results
     public bool IsError => !IsSuccess;
     public Error Error { get; }
 
-    public static Results Success() => new(true, Error.None);
-    public static Results Failure(Error error) => new(false, error);
+    public static Result Success() => new(true, Error.None);
+    public static Result Failure(Error error) => new(false, error);
 }

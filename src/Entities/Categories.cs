@@ -5,7 +5,7 @@ namespace Wait.Entities;
 
 public sealed class Category : AuditableEntity
 {
-    public Guid CategoryId { get; set; } = Guid.CreateVersion7();
+    public Guid CategoryId { get; set; }
     public string CategoryName { get; set; } = string.Empty;
     public string CategoryDescription { get; set; } = string.Empty;
     public string ImageUrl { get; set; } = string.Empty;
