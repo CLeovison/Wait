@@ -12,8 +12,8 @@ var configuration = builder.Configuration;
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 builder.Services.AddHttpContextAccessor();
-// Configure authentication/authorization
 
+// Configure authentication/authorization
 builder.Services.AddAuthorization();
 builder.Services.AddRateLimiter();
 
