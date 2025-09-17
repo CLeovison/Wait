@@ -1,5 +1,6 @@
 
 using Wait.Domain.Common;
+using Wait.Domain.Entities;
 
 namespace Wait.Contracts.Data;
 
@@ -9,8 +10,8 @@ public class ProductDto : AuditableEntity
     public string ProductName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Size { get; set; } = string.Empty;
-    public double Price { get; set; }
+    public decimal Price { get; set; }
     public Guid CategoryId { get; set; }
-    public string Category { get; set; } = string.Empty;
+    public Category? Category { get; set; }
     public int Quantity { get; set; }
 }

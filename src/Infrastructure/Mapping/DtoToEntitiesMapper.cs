@@ -39,9 +39,10 @@ public static class DtoToEntitiesMapper
         {
             ProductName = product.ProductName,
             Size = product.Size,
+            Price = product.Price,
             Quantity = product.Quantity,
             Description = product.Description,
-            CategoryId = product.CategoryId,
+            Category = product.Category,
             CreatedAt = product.CreatedAt,
         };
     }

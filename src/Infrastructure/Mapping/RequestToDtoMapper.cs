@@ -47,11 +47,11 @@ public static class RequestToDtoMapper
     {
         return new ProductDto
         {
-            ProductName = req.ProductName,
+            ProductName = req.ProductName ?? string.Empty,
             Price = req.Price,
             Description = req.Description,
             Size = req.Size,
-            CategoryId = req.CategoryId,
+            Category = req.Category,
             Quantity = req.Quantity,
             CreatedAt = req.CreatedAt
         };
