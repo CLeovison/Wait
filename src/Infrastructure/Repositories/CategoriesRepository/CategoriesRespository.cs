@@ -11,8 +11,8 @@ public sealed class CategoriesRepository(AppDbContext dbContext) : ICategoriesRe
 {
     public async Task<Category> CreateCategoriesAsync(Category category, CancellationToken ct)
     {
-        await dbContext.Category.AddAsync(category);
-        await dbContext.SaveChangesAsync();
+        await dbContext.Category.AddAsync(category, ct);
+        await dbContext.SaveChangesAsync(ct);
 
         return category;
     }
@@ -28,8 +28,13 @@ public sealed class CategoriesRepository(AppDbContext dbContext) : ICategoriesRe
         var filteredCategory = dbContext.Category.Search(searchTerm).Filter(req).Sort(sortBy, desc);
 
         var totalCount = await filteredCategory.CountAsync(ct);
-        var paginatedUser = await filteredCategory.Skip(skip).Take(take).ToListAsync();
+        var paginatedUser = await filteredCategory.Skip(skip).Take(take).ToListAsync(ct);
         return (paginatedUser, totalCount);
+    }
+
+    public async Task<Category?> GetCategoryNameAsync(string categoryName, CancellationToken ct)
+    {
+        return await dbContext.Category.FirstOrDefaultAsync(c => c.CategoryName == categoryName, ct);
     }
     public async Task<Category> UpdateCategoryAsync(Category category, CancellationToken ct)
     {

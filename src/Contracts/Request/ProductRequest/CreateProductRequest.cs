@@ -11,8 +11,8 @@ public sealed class CreateProductRequest
     public required string Description { get; set; }
     public required string Size { get; init; }
 
-    [JsonIgnore]
-    public Category? Category { get; set; }
+    public Guid CategoryId { get; set; }
+    public string Category { get; set; } = string.Empty;
     public int Quantity { get; init; }
     public DateOnly CreatedAt { get; init; }
 }

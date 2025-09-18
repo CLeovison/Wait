@@ -29,7 +29,7 @@ public static class EntitiesToDtoMapper
             Description = productDto.Description,
             Price = productDto.Price,
             Size = productDto.Size,
-            Category = productDto.Category,
+            CategoryId = productDto.CategoryId,
             Quantity = productDto.Quantity,
             CreatedAt = productDto.CreatedAt
         };
@@ -44,7 +44,6 @@ public static class EntitiesToDtoMapper
             ImageUrl = category.ImageUrl,
             CreatedAt = category.CreatedAt,
             Products = category.Products
-
         };
     }
 }

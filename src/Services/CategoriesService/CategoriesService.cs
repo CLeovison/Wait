@@ -19,12 +19,13 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
         {
             var categoryMap = category.ToCreate();
 
+            var categoryName = await categoriesRepository.GetCategoryNameAsync(category.CategoryName, ct);
             if (category is null)
             {
-                throw new ArgumentNullException(message);
+                categoryName = await categoriesRepository.CreateCategoriesAsync(categoryMap, ct);
             }
-            var categoryRequest = await categoriesRepository.CreateCategoriesAsync(categoryMap, ct);
-            var categoryEntity = categoryRequest.ToDto();
+
+            var categoryEntity = categoryName?.ToDto();
 
             return categoryEntity;
         }
