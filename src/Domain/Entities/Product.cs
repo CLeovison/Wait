@@ -1,5 +1,6 @@
 
 using Wait.Domain.Common;
+using Wait.Domain.Entities;
 
 
 namespace Wait.Entities;
@@ -15,5 +16,5 @@ public class Product : AuditableEntity
     public int Quantity { get; set; }
     public string ImageUrl { get; set; } = string.Empty;
     public Guid CategoryId { get; set; }
-    public string Category { get; set; } = string.Empty;
+    public Category? Category { get; set; }
 }

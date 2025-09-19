@@ -42,9 +42,9 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         .HasDefaultValueSql("current_date");
 
         builder.HasOne(x => x.Category)
-        .WithMany()
-        .HasForeignKey(c => c.CategoryId) 
-        .HasPrincipalKey(c => c.CategoryId);
+        .WithMany(c => c.Products)
+        .HasForeignKey(c => c.CategoryId);
+
 
 
     }
