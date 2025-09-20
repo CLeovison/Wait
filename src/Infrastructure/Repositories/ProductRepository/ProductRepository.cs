@@ -27,9 +27,9 @@ public sealed class ProductRepository(AppDbContext dbContext) : IProductReposito
 
     }
 
-    public async Task<Product?> GetProductByIdAsync(int id, CancellationToken ct)
+    public async Task<Product?> GetProductByIdAsync(Guid id, CancellationToken ct)
     {
-        return await dbContext.Product.FindAsync(id, ct);
+        return await dbContext.Product.Include(c => c.Category).FirstOrDefaultAsync(p => p.ProductId == id, ct);
     }
 
     public async Task<bool> DeleteProductAsync(Product product, CancellationToken ct)

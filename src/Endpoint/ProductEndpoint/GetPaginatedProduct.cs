@@ -9,7 +9,7 @@ public sealed class GetPaginatedProduct : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("/api/products/paginated", async (IProductService productService, [AsParameters] FilterProductRequest filters, string? searchTerm,
+        app.MapGet("/api/products/paginated", async (IProductService productService, [AsParameters] FilterProductRequest filters, string searchTerm,
             int page,
             int pageSize,
             string? sortBy,

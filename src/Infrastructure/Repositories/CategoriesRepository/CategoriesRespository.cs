@@ -34,7 +34,7 @@ public sealed class CategoriesRepository(AppDbContext dbContext) : ICategoriesRe
 
     public async Task<Category?> GetCategoryNameAsync(string categoryName, CancellationToken ct)
     {
-        return await dbContext.Category.FirstOrDefaultAsync(c => c.CategoryName == categoryName, ct);
+        return await dbContext.Category.FirstOrDefaultAsync(c => c.CategoryName == categoryName.ToLower(), ct);
     }
     public async Task<Category> UpdateCategoryAsync(Category category, CancellationToken ct)
     {

@@ -21,7 +21,7 @@ public static class EntitiesToDtoMapper
         };
     }
 
-    public static Product ToCreate(this ProductDto productDto)
+    public static Product ToCreate(this ProductDto productDto, Guid categoryId)
     {
         return new Product
         {
@@ -29,7 +29,7 @@ public static class EntitiesToDtoMapper
             Description = productDto.Description,
             Price = productDto.Price,
             Size = productDto.Size,
-            CategoryId = productDto.CategoryId,
+            CategoryId = categoryId,
             Quantity = productDto.Quantity,
             CreatedAt = productDto.CreatedAt
         };
@@ -41,9 +41,8 @@ public static class EntitiesToDtoMapper
         {
             CategoryName = category.CategoryName,
             CategoryDescription = category.CategoryDescription,
-            ImageUrl = category.ImageUrl,
-            CreatedAt = category.CreatedAt,
-            Products = category.Products
+            ImageUrl = category.ImageUrl
         };
     }
+
 }

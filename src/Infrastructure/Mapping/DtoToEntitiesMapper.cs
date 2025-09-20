@@ -43,6 +43,7 @@ public static class DtoToEntitiesMapper
             Quantity = product.Quantity,
             Description = product.Description,
             CategoryId = product.CategoryId,
+            CategoryName = product.Category?.CategoryName ?? string.Empty,
             CreatedAt = product.CreatedAt,
         };
     }
@@ -54,8 +55,7 @@ public static class DtoToEntitiesMapper
             CategoryName = category.CategoryName,
             CategoryDescription = category.CategoryDescription,
             ImageUrl = category.ImageUrl,
-            CreatedAt = category.CreatedAt,
-            Products = category.Products
+
         };
     }
 }

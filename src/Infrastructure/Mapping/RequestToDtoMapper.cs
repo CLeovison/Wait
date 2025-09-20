@@ -53,6 +53,7 @@ public static class RequestToDtoMapper
             Size = req.Size,
             CategoryId = req.CategoryId,
             Quantity = req.Quantity,
+            CategoryName = req.CategoryName,
             CreatedAt = req.CreatedAt
         };
     }

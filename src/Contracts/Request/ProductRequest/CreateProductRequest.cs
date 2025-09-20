@@ -12,7 +12,7 @@ public sealed class CreateProductRequest
     public required string Size { get; init; }
 
     public Guid CategoryId { get; set; }
-    public string Category { get; set; } = string.Empty;
+    public string CategoryName { get; set; } = string.Empty;
     public int Quantity { get; init; }
     public DateOnly CreatedAt { get; init; }
 }

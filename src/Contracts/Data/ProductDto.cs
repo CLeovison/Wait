@@ -12,6 +12,6 @@ public class ProductDto : AuditableEntity
     public string Size { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public Guid CategoryId { get; set; }
-    public Category? Category { get; set; }
+    public string CategoryName { get; set; } = string.Empty;
     public int Quantity { get; set; }
 }

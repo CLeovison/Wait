@@ -43,9 +43,6 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasOne(x => x.Category)
         .WithMany(c => c.Products)
-        .HasForeignKey(c => c.CategoryId);
-
-
-
+        .HasForeignKey(x => x.CategoryId);
     }
 }

@@ -11,10 +11,8 @@ namespace Wait.Services.Categories;
 
 public sealed class CategoriesService(ICategoriesRepository categoriesRepository) : ICategoriesService
 {
-    public async Task<CategoryDto> CreateCategoryAsync(CategoryDto category, CancellationToken ct)
+    public async Task<CategoryDto?> CreateCategoryAsync(CategoryDto category, CancellationToken ct)
     {
-        string message = $"The {category.CategoryName} was already exisiting";
-
         try
         {
             var categoryMap = category.ToCreate();

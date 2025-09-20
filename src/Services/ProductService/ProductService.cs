@@ -1,25 +1,35 @@
+using Npgsql;
 using Wait.Contracts.Data;
 using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.ProductRequest;
 using Wait.Contracts.Response;
+using Wait.Domain.Entities;
 using Wait.Helper;
 using Wait.Infrastructure.Mapping;
+using Wait.Infrastructure.Repositories.CategoriesRepository;
 using Wait.Infrastructure.Repositories.ProductRepository;
 
 namespace Wait.Services.ProductServices;
 
 
-public sealed class ProductService(IProductRepository productRepository) : IProductService
+public sealed class ProductService(IProductRepository productRepository, ICategoriesRepository categoriesRepository) : IProductService
 {
     public async Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct)
     {
-        var productDto = product.ToCreate();
-        var request = await productRepository.CreateProductAsync(productDto, ct);
-        var response = request.ToDto();
-        return response;
-    }
+        var normalizedCategoryName = product.CategoryName.Trim();
 
-    public async Task<ProductDto?> GetProductByIdAsync(int id, CancellationToken ct)
+        var category = await categoriesRepository.GetCategoryNameAsync(normalizedCategoryName, ct);
+        if (category == null)
+        {
+            var newCategoryDto = new CategoryDto { CategoryName = normalizedCategoryName };
+            category = await categoriesRepository.CreateCategoriesAsync(newCategoryDto.ToCreate(), ct);
+        }
+
+        var createProduct = product.ToCreate(category.CategoryId);
+        var request = await productRepository.CreateProductAsync(createProduct, ct);
+        return request.ToDto();
+    }
+    public async Task<ProductDto?> GetProductByIdAsync(Guid id, CancellationToken ct)
     {
         var request = await productRepository.GetProductByIdAsync(id, ct);
 
@@ -40,11 +50,11 @@ public sealed class ProductService(IProductRepository productRepository) : IProd
 
         var (products, totalCount) = await productRepository.GetPaginatedProductAsync(
             filters,
-            pagination.Skip, 
-            pagination.Take, 
+            pagination.Skip,
+            pagination.Take,
             pagination.EffectiveSortBy ?? defaultSort,
-            pagination.Descending, 
-            req.SearchTerm , 
+            pagination.Descending,
+            req.SearchTerm,
             ct
         );
 

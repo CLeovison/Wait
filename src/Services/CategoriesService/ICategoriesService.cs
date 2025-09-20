@@ -7,7 +7,7 @@ namespace Wait.Services.Categories;
 
 public interface ICategoriesService
 {
-    Task<CategoryDto> CreateCategoryAsync(CategoryDto category, CancellationToken ct);
+    Task<CategoryDto?> CreateCategoryAsync(CategoryDto category, CancellationToken ct);
     Task<CategoryDto> GetCategoryByIdAsync(Guid id, CancellationToken ct);
 
     Task<(List<CategoryDto>, int totalCount)> GetAllCategoryAsync(FilterCategoriesRequest filter, PaginatedRequest req, CancellationToken ct);
