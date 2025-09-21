@@ -18,7 +18,7 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
             var categoryMap = category.ToCreate();
 
             var categoryName = await categoriesRepository.GetCategoryNameAsync(category.CategoryName, ct);
-            if (category is null)
+            if (categoryName is null)
             {
                 categoryName = await categoriesRepository.CreateCategoriesAsync(categoryMap, ct);
             }
