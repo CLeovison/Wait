@@ -16,13 +16,12 @@ public sealed class ProductService(IProductRepository productRepository, ICatego
 {
     public async Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct)
     {
-        var normalizedCategoryName = product.CategoryName.Trim();
+        var normalizedCategory = product.CategoryName.Trim();
+        var category = await categoriesRepository.GetCategoryNameAsync(normalizedCategory, ct);
 
-        var category = await categoriesRepository.GetCategoryNameAsync(normalizedCategoryName, ct);
         if (category == null)
         {
-            var newCategoryDto = new CategoryDto { CategoryName = normalizedCategoryName };
-            category = await categoriesRepository.CreateCategoriesAsync(newCategoryDto.ToCreate(), ct);
+            throw new ArgumentNullException("The Category does not exist, please add this shit");
         }
 
         var createProduct = product.ToCreate(category.CategoryId);

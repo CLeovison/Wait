@@ -51,6 +51,7 @@ public static class RequestToDtoMapper
             Price = req.Price,
             Description = req.Description,
             Size = req.Size,
+            Color = req.Color,
             CategoryId = req.CategoryId,
             Quantity = req.Quantity,
             CategoryName = req.CategoryName,

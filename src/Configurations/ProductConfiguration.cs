@@ -21,6 +21,9 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Description)
         .IsRequired();
 
+        builder.Property(x => x.Color)
+        .IsRequired();
+        
         builder.Property(x => x.Price)
         .IsRequired();
 
