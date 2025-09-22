@@ -8,7 +8,7 @@ public record CreateUserRequest(string FirstName, string LastName, string Userna
 public record CreateUserResponse(string status, string message, List<UserDto> data);
 
 
-internal sealed class CreateUserHandler(AppDbContext dbContext, Users users)
+internal sealed class CreateUserHandler(AppDbContext dbContext, Users users) 
 {
     var request = dbContext.User.Add(users);
 }
