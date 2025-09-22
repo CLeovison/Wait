@@ -1,4 +1,6 @@
-namespace Wait.Domain.Entities;
+using Wait.Domain.Entities;
+
+namespace Wait.Entities;
 
 
 public class RefreshToken
@@ -8,5 +10,5 @@ public class RefreshToken
     public string Token { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime ExpiresAt { get; set; }
-    public Users? User { get; set; }
+    public User? User { get; set; }
 }

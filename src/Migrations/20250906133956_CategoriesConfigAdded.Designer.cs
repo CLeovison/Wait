@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Wait.Database;
@@ -11,9 +12,11 @@ using Wait.Database;
 namespace src.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250906133956_CategoriesConfigAdded")]
+    partial class CategoriesConfigAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,9 +41,7 @@ namespace src.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateOnly>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
-                        .HasDefaultValueSql("current_date");
+                        .HasColumnType("date");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -50,9 +51,7 @@ namespace src.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateOnly>("ModifiedAt")
-                        .ValueGeneratedOnUpdate()
-                        .HasColumnType("date")
-                        .HasDefaultValueSql("current_date");
+                        .HasColumnType("date");
 
                     b.HasKey("CategoryId");
 

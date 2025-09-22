@@ -11,7 +11,7 @@ namespace Wait.Infrastructure.Authentication;
 public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
 {
 
-    public string GenerateToken(Users users)
+    public string GenerateToken(User users)
     {
         string? secretKey = configuration["Jwt:SecretKey"]!;
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
