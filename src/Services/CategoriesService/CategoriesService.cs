@@ -1,7 +1,6 @@
 
 using Wait.Contracts.Request.CategoriesRequest;
 using Wait.Contracts.Request.Common;
-using Wait.Contracts.Response;
 using Wait.Domain.Entities;
 using Wait.Helper;
 using Wait.Infrastructure.Mapping;
