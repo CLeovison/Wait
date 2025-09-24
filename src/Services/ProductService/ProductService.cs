@@ -42,7 +42,7 @@ public sealed class ProductService(IProductRepository productRepository, ICatego
         return productResponse;
     }
 
-    public async Task<PaginatedResponse<ProductDto>> GetPaginatedProductAsync(FilterProductRequest filters, PaginatedRequest req, CancellationToken ct)
+    public async Task<PaginatedResponse<ProductDto>> GetPaginatedProductAsync(PaginatedRequest req, FilterProductRequest filters, CancellationToken ct)
     {
         var defaultSort = SortDefaults.GetDefaultSortField("ProductName");
         var pagination = PaginationProcessor.Create(req, defaultSort);

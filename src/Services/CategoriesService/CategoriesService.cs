@@ -1,6 +1,7 @@
 
 using Wait.Contracts.Request.CategoriesRequest;
 using Wait.Contracts.Request.Common;
+using Wait.Contracts.Response;
 using Wait.Domain.Entities;
 using Wait.Helper;
 using Wait.Infrastructure.Mapping;
@@ -54,7 +55,7 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
         }
 
     }
-    public async Task<(List<CategoryDto>, int totalCount)> GetAllCategoryAsync(FilterCategoriesRequest filter, PaginatedRequest req, CancellationToken ct)
+    public async Task<PaginatedResponse<CategoryDto>> GetAllCategoryAsync(FilterCategoriesRequest filter, PaginatedRequest req, CancellationToken ct)
     {
         var sortCategory = SortDefaults.GetDefaultSortField("CategoryName");
         var pagination = PaginationProcessor.Create(req, sortCategory);
@@ -65,7 +66,7 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
 
         var categoryMap = category.Select(c => c.ToDto()).ToList();
 
-        return (categoryMap, totalCount);
+        return new PaginatedResponse<CategoryDto> { categoryMap, pagination.Page, pagination.PageSize, totalCount };
 
     }
     public async Task<CategoryDto> UpdateCategoryAsync(Guid id, CategoryDto category, CancellationToken ct)

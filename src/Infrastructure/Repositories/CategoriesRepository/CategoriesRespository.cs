@@ -28,8 +28,8 @@ public sealed class CategoriesRepository(AppDbContext dbContext) : ICategoriesRe
         var filteredCategory = dbContext.Category.Search(searchTerm).Filter(req).Sort(sortBy, desc);
 
         var totalCount = await filteredCategory.CountAsync(ct);
-        var paginatedUser = await filteredCategory.Skip(skip).Take(take).Include(c => c.Products).ToListAsync(ct);
-        return (paginatedUser, totalCount);
+        var paginatedCategory = await filteredCategory.Skip(skip).Take(take).Include(c => c.Products).ToListAsync(ct);
+        return (paginatedCategory, totalCount);
     }
 
     public async Task<Category?> GetCategoryNameAsync(string categoryName, CancellationToken ct)

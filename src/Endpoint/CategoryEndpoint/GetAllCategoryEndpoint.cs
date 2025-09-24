@@ -9,7 +9,7 @@ public sealed class GetAllCategoryEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("/api/category", async (ICategoriesService categoriesService, [AsParameters] FilterCategoriesRequest filter,
+        app.MapGet("/api/category/paginated", async (ICategoriesService categoriesService, [AsParameters] FilterCategoriesRequest filter,
             string? searchTerm,
             int page,
             int pageSize,
