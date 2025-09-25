@@ -55,7 +55,7 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
         }
 
     }
-    public async Task<PaginatedResponse<CategoryDto>> GetAllCategoryAsync(FilterCategoriesRequest filter, PaginatedRequest req, CancellationToken ct)
+    public async Task<PaginatedResponse<CategoryDto>> GetAllCategoryAsync(PaginatedRequest req, FilterCategoriesRequest filter, CancellationToken ct)
     {
         var sortCategory = SortDefaults.GetDefaultSortField("CategoryName");
         var pagination = PaginationProcessor.Create(req, sortCategory);
@@ -66,7 +66,7 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
 
         var categoryMap = category.Select(c => c.ToDto()).ToList();
 
-        return new PaginatedResponse<CategoryDto> { categoryMap, pagination.Page, pagination.PageSize, totalCount };
+        return new PaginatedResponse<CategoryDto>(categoryMap, pagination.Page, pagination.PageSize, totalCount);
 
     }
     public async Task<CategoryDto> UpdateCategoryAsync(Guid id, CategoryDto category, CancellationToken ct)

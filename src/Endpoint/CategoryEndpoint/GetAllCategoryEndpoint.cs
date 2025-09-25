@@ -17,14 +17,12 @@ public sealed class GetAllCategoryEndpoint : IEndpoint
             string? sortDirection,
             CancellationToken ct) =>
         {
-
-
             var request = PaginationMapper.ToPaginate(searchTerm, page, pageSize, sortBy, sortDirection);
             var filters = new FilterCategoriesRequest
             {
                 CategoryName = filter.CategoryName
             };
-            return await categoriesService.GetAllCategoryAsync(filter, request, ct);
+            return await categoriesService.GetAllCategoryAsync(request, filter, ct);
         });
     }
 }
