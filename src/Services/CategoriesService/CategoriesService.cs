@@ -61,10 +61,10 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
         var pagination = PaginationProcessor.Create(req, sortCategory);
 
         var (category, totalCount) = await categoriesRepository.GetAllCategoryAsync(filter,
-            req.SearchTerm, pagination.EffectiveSortBy, pagination.Descending, pagination.Take,
-          pagination.Skip, ct);
+            req.SearchTerm, pagination.Skip, pagination.Take,
+            pagination.EffectiveSortBy, pagination.Descending, ct);
 
-        var categoryMap = category.Select(c => c.ToDto()).ToList();
+        var categoryMap = category.ToList();
 
         return new PaginatedResponse<CategoryDto>(categoryMap, pagination.Page, pagination.PageSize, totalCount);
 

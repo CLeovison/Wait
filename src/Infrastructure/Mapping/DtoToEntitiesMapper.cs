@@ -55,6 +55,7 @@ public static class DtoToEntitiesMapper
         {
             CategoryName = category.CategoryName,
             CategoryDescription = category.CategoryDescription,
+       
             ImageUrl = category.ImageUrl,
 
         };

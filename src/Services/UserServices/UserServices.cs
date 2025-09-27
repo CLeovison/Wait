@@ -56,8 +56,9 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
             pagination.EffectiveSortBy, pagination.Descending, ct);
 
         var userMap = users.Select(x => x.ToUserDto(passwordHasher)).ToList();
-        
+
         return new PaginatedResponse<UserDto>(userMap, pagination.Page, pagination.PageSize, totalCount);
+
     }
 
     public async Task<UserDto?> UpdateUserAsync(Guid id, UserDto users, CancellationToken ct)

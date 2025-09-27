@@ -22,7 +22,7 @@ public sealed class GetAllCategoryEndpoint : IEndpoint
             {
                 CategoryName = filter.CategoryName
             };
-            return await categoriesService.GetAllCategoryAsync(request, filter, ct);
+            return await categoriesService.GetAllCategoryAsync(request, filters, ct);
         });
     }
 }
