@@ -11,5 +11,5 @@ public sealed class CategoryDto : AuditableEntity
     public string CategoryName { get; set; } = string.Empty;
     public string CategoryDescription { get; set; } = string.Empty;
     public string ImageUrl { get; set; } = string.Empty;
-    public  ICollection<ProductDto>? Products { get; set; } 
+    public  ICollection<ProductDtoTest>? Products { get; set; } 
 }

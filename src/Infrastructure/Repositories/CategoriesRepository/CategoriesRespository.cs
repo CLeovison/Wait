@@ -38,7 +38,7 @@ public sealed class CategoriesRepository(AppDbContext dbContext) : ICategoriesRe
         {
             CategoryId = c.CategoryId,
             CategoryName = c.CategoryName,
-            Products = c.Products.Select(p => new ProductDto
+            Products = c.Products.Select(p => new ProductDtoTest
             {
                 ProductName = p.ProductName,
                 Description = p.Description,
