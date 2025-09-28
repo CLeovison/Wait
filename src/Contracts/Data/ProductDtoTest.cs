@@ -1,9 +1,6 @@
-
-
-
 namespace Wait.Contracts.Data;
 
-public class ProductDtoTest 
+public class ProductDtoTest
 {
 
     public string ProductName { get; set; } = string.Empty;

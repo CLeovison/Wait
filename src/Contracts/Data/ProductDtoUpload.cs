@@ -4,17 +4,18 @@ using Wait.Domain.Common;
 
 namespace Wait.Contracts.Data;
 
-public class ProductDto : AuditableEntity
+public class ProductDtoUpload : AuditableEntity
 {
-    public Guid ProductId { get; init; }
+
     public string ProductName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Color { get; set; } = string.Empty;
     public string Size { get; set; } = string.Empty;
-    public IFormFile? Image { get; set; }
-    public string ImageName { get; set; } = string.Empty;
-    public decimal Price { get; set; }
-    public Guid CategoryId { get; set; }
-    public string CategoryName { get; set; } = string.Empty;
     public int Quantity { get; set; }
+    public IFormFile? Image { get; set; }
+
+    public string ImageName { get; set; } = string.Empty;
+
+
+
 }
