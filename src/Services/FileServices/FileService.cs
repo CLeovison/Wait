@@ -1,7 +1,7 @@
 namespace Wait.Services.FileServices;
 
 
-public sealed class FileService(IWebHostEnvironment environment) : IFileService
+public sealed class FileService(IWebHostEnvironment environment, IConfiguration configuration) : IFileService
 {
     public async Task<string> SaveFileAsync(IFormFile imageFile, string[] imageFileExtension)
     {
@@ -25,7 +25,7 @@ public sealed class FileService(IWebHostEnvironment environment) : IFileService
             throw new ArgumentException($"Only {string.Join(",", imageFileExtension)} are allowed");
         }
 
-        var fileName = $"{Guid.NewGuid().ToString()}{extensions}";
+        var fileName = $"{Guid.NewGuid()}{extensions}";
         var fileNamePath = Path.Combine(path, fileName);
         using var stream = new FileStream(fileNamePath, FileMode.Create);
         await imageFile.CopyToAsync(stream);
@@ -35,6 +35,19 @@ public sealed class FileService(IWebHostEnvironment environment) : IFileService
 
     public async Task<bool> DeleteFileAsync(string imageFileExtension)
     {
-        return imageFileExtension is not null;
+        if (string.IsNullOrWhiteSpace(imageFileExtension))
+        {
+            throw new ArgumentNullException(nameof(imageFileExtension));
+        }
+
+        var contentPath = environment.ContentRootPath;
+        var path = Path.Combine(contentPath, $"Uploads", imageFileExtension);
+
+        if (!File.Exists(path))
+        {
+            throw new ArgumentNullException("The File didn't exist");
+        }
+
+        File.Delete(path);
     }
 }
