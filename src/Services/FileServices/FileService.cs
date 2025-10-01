@@ -3,7 +3,7 @@ namespace Wait.Services.FileServices;
 
 public sealed class FileService(IWebHostEnvironment environment, IConfiguration configuration) : IFileService
 {
-    public async Task<string> SaveFileAsync(IFormFile imageFile, string[] imageFileExtension)
+    public async Task<string> UploadImageAsync(IFormFile imageFile, string[] imageFileExtension)
     {
         if (imageFile is null)
         {
@@ -11,18 +11,18 @@ public sealed class FileService(IWebHostEnvironment environment, IConfiguration 
         }
 
         var contentPath = environment.ContentRootPath;
-        var path = Path.Combine(contentPath, "Uploads");
+        var path = Path.Combine(contentPath, configuration["UploadFolder"]!);
 
         if (!Directory.Exists(path))
         {
-            Directory.CreateDirectory(path); 
+            Directory.CreateDirectory(path);
         }
 
         var extensions = Path.GetExtension(imageFile.FileName);
 
         if (!imageFileExtension.Contains(extensions))
         {
-            throw new ArgumentException($"Only {string.Join(",", imageFileExtension)} are allowed");
+            throw new FileNotFoundException($"Only {string.Join(",", imageFileExtension)} are allowed");
         }
 
         var fileName = $"{Guid.NewGuid()}{extensions}";
@@ -33,15 +33,15 @@ public sealed class FileService(IWebHostEnvironment environment, IConfiguration 
 
     }
 
-    public async Task<bool> DeleteFileAsync(string imageFileExtension)
+    public Task DeleteImageAsync(string imageFile)
     {
-        if (string.IsNullOrWhiteSpace(imageFileExtension))
+        if (string.IsNullOrWhiteSpace(imageFile))
         {
-            throw new ArgumentNullException(nameof(imageFileExtension));
+            throw new FileNotFoundException(nameof(imageFile));
         }
 
         var contentPath = environment.ContentRootPath;
-        var path = Path.Combine(contentPath, $"Uploads", imageFileExtension);
+        var path = Path.Combine(contentPath, configuration["UploadFolder"]!, imageFile);
 
         if (!File.Exists(path))
         {
@@ -49,5 +49,8 @@ public sealed class FileService(IWebHostEnvironment environment, IConfiguration 
         }
 
         File.Delete(path);
+
+        return Task.CompletedTask;
+
     }
 }
