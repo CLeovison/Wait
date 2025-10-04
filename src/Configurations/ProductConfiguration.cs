@@ -34,7 +34,7 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         .HasMaxLength(50)
         .IsRequired();
 
-        builder.Property(x => x.ImageUrl)
+        builder.Property(x => x.ImageName)
         .IsRequired();
 
         builder.Property(d => d.CreatedAt)
