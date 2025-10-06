@@ -11,7 +11,8 @@ public sealed class CreateProductRequest
     public required string Description { get; set; }
     public required string Size { get; init; }
     public required string Color { get; init; }
-    public required string ImageName{ get; init; }
+    public IFormFile Image { get; init; }
+
     public Guid CategoryId { get; set; }
     public string CategoryName { get; set; } = string.Empty;
     public int Quantity { get; init; }

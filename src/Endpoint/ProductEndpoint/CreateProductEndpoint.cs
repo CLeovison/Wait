@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+
 using Wait.Abstract;
 using Wait.Contracts.Request.ProductRequest;
 using Wait.Infrastructure.Mapping;
