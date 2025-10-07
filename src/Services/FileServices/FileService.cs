@@ -11,7 +11,7 @@ public sealed class FileService(IWebHostEnvironment environment, IConfiguration 
         }
 
         var contentPath = environment.ContentRootPath;
-        var path = Path.Combine(contentPath, configuration["UploadFolder"]!);
+        var path = Path.Combine(contentPath, configuration["UploadDirectory"]!);
 
         if (!Directory.Exists(path))
         {

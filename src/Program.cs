@@ -34,11 +34,7 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseRateLimiter();
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
-    RequestPath = "/Resources"
-});
+
 // Register endpoints cleanly
 app.Endpoint();
 

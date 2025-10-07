@@ -1,7 +1,6 @@
 
 using Wait.Domain.Common;
 
-
 namespace Wait.Contracts.Data;
 
 public class ProductDto : AuditableEntity

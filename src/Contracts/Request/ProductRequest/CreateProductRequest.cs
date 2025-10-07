@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-using Wait.Domain.Entities;
 
 namespace Wait.Contracts.Request.ProductRequest;
 
@@ -11,7 +9,7 @@ public sealed class CreateProductRequest
     public required string Description { get; set; }
     public required string Size { get; init; }
     public required string Color { get; init; }
-    public IFormFile Image { get; init; }
+    public IFormFile? Image { get; init; }
 
     public Guid CategoryId { get; set; }
     public string CategoryName { get; set; } = string.Empty;

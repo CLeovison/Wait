@@ -13,7 +13,7 @@ using Wait.Services.FileServices;
 namespace Wait.Services.ProductServices;
 
 
-public sealed class ProductService(IProductRepository productRepository, ICategoriesRepository categoriesRepository, IFileService fileService) : IProductService
+public sealed class ProductService(IProductRepository productRepository, ICategoriesRepository categoriesRepository) : IProductService
 {
     public async Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct)
     {
@@ -25,16 +25,7 @@ public sealed class ProductService(IProductRepository productRepository, ICatego
             throw new ArgumentNullException("The Category does not exist, please add this shit");
         }
 
-        if (product.Image?.Length > 5 * 1024 * 1024)
-        {
-            throw new FileLoadException("File size should not exceed 1 MB");
-        }
-
-        string[] allowedFileExtension = [".jpg", ".png", ".jpeg"];
-        string createImage = await fileService.UploadImageAsync(product.Image!, allowedFileExtension);
-
         var createProduct = product.ToCreate(category.CategoryId);
-        createProduct.ImageName = createImage;
 
         var request = await productRepository.CreateProductAsync(createProduct, ct);
         return request.ToDto();
