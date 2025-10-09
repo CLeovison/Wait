@@ -1,3 +1,4 @@
+using SixLabors.ImageSharp;
 using Wait.Services.FileServices;
 
 namespace Wait.Services.ImageServices;
@@ -35,5 +36,15 @@ public sealed class ImageService : IImageService
         await file.CopyToAsync(stream);
 
         return originalFilePath;
+    }
+
+    public async Task<IEnumerable<string>> GenerateThumbnailAsync(string originalFilePath, string folderPath, string fileNameWithoutExtension, int[]? widths = null)
+    {
+        var thumbnailPaths = new List<string>();
+        var extension = Path.GetExtension(originalFilePath);
+
+        widths ??= ThumbnailsWidth;
+
+        using var image = await Image.LoadAsync(originalFilePath);
     }
 }
