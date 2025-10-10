@@ -46,5 +46,10 @@ public sealed class ImageService : IImageService
         widths ??= ThumbnailsWidth;
 
         using var image = await Image.LoadAsync(originalFilePath);
+
+        foreach(var width in widths)
+        {
+            var thumbnailFile = $"{fileNameWithoutExtension}_w{width}{extension}";
+        }
     }
 }
