@@ -16,6 +16,7 @@ public class CreateProductEndpoint : IEndpoint
             var productDto = req.ToCreateRequest();
             var productRequest = await productService.CreateProductAsync(productDto, ct);
             return productRequest;
-        });
+        })
+        .DisableAntiforgery();
     }
 }
