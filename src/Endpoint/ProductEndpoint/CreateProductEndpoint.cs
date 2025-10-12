@@ -17,6 +17,7 @@ public class CreateProductEndpoint : IEndpoint
             var productRequest = await productService.CreateProductAsync(productDto, ct);
             return productRequest;
         })
-        .DisableAntiforgery();
+        .DisableAntiforgery()
+        .RequireAuthorization();
     }
 }

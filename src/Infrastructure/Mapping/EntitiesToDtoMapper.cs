@@ -30,6 +30,7 @@ public static class EntitiesToDtoMapper
             Price = productDto.Price,
             Color = productDto.Color,
             Size = productDto.Size,
+            ImageName = productDto.ImageUrl,
             CategoryId = categoryId,
             Quantity = productDto.Quantity,
             CreatedAt = productDto.CreatedAt
@@ -42,7 +43,7 @@ public static class EntitiesToDtoMapper
         {
             CategoryName = category.CategoryName,
             CategoryDescription = category.CategoryDescription,
-            ImageUrl = category.ImageUrl
+            ImageName = category.ImageUrl
         };
     }
 

@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Wait.Database;
 using Wait.Extensions;
 using FluentValidation;
-using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -17,7 +16,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthorization();
 builder.Services.AddRateLimiter();
-
+builder.Services.AddAntiforgery();
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 builder.Services.AddRepositoriesCollection();
@@ -34,7 +33,7 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseRateLimiter();
-
+app.UseAntiforgery();
 // Register endpoints cleanly
 app.Endpoint();
 
