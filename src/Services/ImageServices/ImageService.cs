@@ -100,4 +100,6 @@ public sealed class ImageService : IImageService
         // Return all the generated thumbnail paths.
         return thumbnailPaths;
     }
+
+    
 }

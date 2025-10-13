@@ -20,7 +20,7 @@ IImageService imageService,
 IConfiguration configuration) : IProductService
 {
 
-    private readonly string _uploadDirectory = configuration["UploadDirectory : UploadFolder"];
+    private readonly string _uploadDirectory = configuration["UploadDirectory : UploadFolder"] ?? "Uploads";
     public async Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct)
     {
         var normalizedCategory = product.CategoryName.Trim();
