@@ -16,7 +16,6 @@ namespace Wait.Services.ProductServices;
 public sealed class ProductService(
     IProductRepository productRepository,
 ICategoriesRepository categoriesRepository,
-IImageService imageService,
 IConfiguration configuration) : IProductService
 {
 
@@ -29,23 +28,6 @@ IConfiguration configuration) : IProductService
         if (category is null)
         {
             throw new ArgumentNullException("The Category does not exist, please add this shit");
-        }
-
-        string? imageName = "no-image.png";
-
-        if (product.Image is not null && imageService.IsValidImage(product.Image))
-        {
-            var imageId = Guid.NewGuid().ToString();
-            var folderPath = Path.Combine(_uploadDirectory, "images", imageId);
-            var fileName = $"{imageId}{Path.GetExtension(product.Image.FileName)}";
-
-
-            var savedPath = await imageService.SaveOriginalImageAsync(product.Image, folderPath, fileName);
-
-            //Base Name of Generating an Thumbnail Directory
-            var baseName = Path.GetFileNameWithoutExtension(fileName);
-            await imageService.GenerateThumbnailAsync(savedPath, folderPath, baseName);
-       
         }
 
         var createProduct = product.ToCreate(category.CategoryId);
