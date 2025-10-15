@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Wait.Database;
 using Wait.Extensions;
 using FluentValidation;
+using Wait.Infrastructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -13,6 +14,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 builder.Services.AddHttpContextAccessor();
 // Configure authentication/authorization
+builder.Services.Configure<UploadDirectoryOptions>(
+    builder.Configuration.GetSection("UploadDirectory"));
 
 builder.Services.AddAuthorization();
 builder.Services.AddRateLimiter();

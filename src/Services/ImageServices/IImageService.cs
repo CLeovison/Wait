@@ -1,3 +1,5 @@
+using Wait.Infrastructure.Common;
+
 namespace Wait.Services.FileServices;
 
 
@@ -7,5 +9,5 @@ public interface IImageService
     Task<string> SaveOriginalImageAsync(IFormFile file, string folderPath, string folderName);
     Task<IEnumerable<string>> GenerateThumbnailAsync(string originalPath, string folderPath, string fileNameWithoutExtensions, int[]? width = null);
 
-    Task<string> UploadImageAsync(IFormFile file, CancellationToken ct);
+    Task<ImageUploadResult> UploadImageAsync(IFormFile file, CancellationToken ct);
 }

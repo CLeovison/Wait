@@ -1,19 +1,16 @@
+using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using Wait.Infrastructure.Common;
+using Wait.Infrastructure.Configuration;
 using Wait.Services.FileServices;
 
 namespace Wait.Services.ImageServices;
 
 
-public sealed class ImageService(IConfiguration configuration) : IImageService
+public sealed class ImageService(IOptions<UploadDirectoryOptions> options) : IImageService
 {
-    private static readonly int[] ThumbnailsWidth = [32, 64, 128, 256, 512, 1024];
-
-    private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png", ".gif"];
-
-    private static readonly string[] AllowedMimeTypes = ["image/jpeg", "image/png", "image/gif"];
-
-    private readonly string uploadDirectory = configuration["UploadDirectory : UploadFolder"]!;
+    private readonly UploadDirectoryOptions settings = options.Value;
 
     public bool IsValidImage(IFormFile file)
     {
@@ -24,7 +21,7 @@ public sealed class ImageService(IConfiguration configuration) : IImageService
 
         var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
-        return AllowedExtensions.Contains(extension) && AllowedMimeTypes.Contains(file.ContentType);
+        return settings.AllowedExtensions.Contains(extension) && settings.AllowedMimeTypes.Contains(file.ContentType);
     }
 
     public async Task<string> SaveOriginalImageAsync(IFormFile file, string folderPath, string folderName)
@@ -57,7 +54,7 @@ public sealed class ImageService(IConfiguration configuration) : IImageService
 
         var extension = Path.GetExtension(originalFilePath);
 
-        widths ??= ThumbnailsWidth;
+        widths ??= options.Value.ThumbnailsWidth;
 
 
         using var image = await Image.LoadAsync(originalFilePath);
@@ -78,18 +75,22 @@ public sealed class ImageService(IConfiguration configuration) : IImageService
         return thumbnailPaths;
     }
 
-    public async Task<string> UploadImageAsync(IFormFile file, CancellationToken ct)
+    public async Task<ImageUploadResult> UploadImageAsync(IFormFile file, CancellationToken ct)
     {
-        if (IsValidImage(file))
+        if (!IsValidImage(file))
         {
-            throw new ArgumentException("Invalid Image File");
+            throw new ArgumentException("Invalid Image Filetype");
         }
 
         var imageId = Guid.NewGuid().ToString();
-        var folderPath = Path.Combine(uploadDirectory, "images", imageId);
+        var folderPath = Path.Combine(settings.UploadFolder, "images", imageId);
         var fileName = $"{imageId}{Path.Combine(file.FileName)}";
 
         var originalPath = await SaveOriginalImageAsync(file, folderPath, fileName);
+
+        var job = new ThumbnailGenerationJob(imageId, originalPath, folderPath);
+
+        return new ImageUploadResult { };
     }
 
 }
