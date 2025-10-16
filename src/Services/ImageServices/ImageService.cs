@@ -90,7 +90,13 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options) : IIm
 
         var job = new ThumbnailGenerationJob(imageId, originalPath, folderPath);
 
-        return new ImageUploadResult { };
+        return new ImageUploadResult
+        {
+            ImageId = imageId,
+            ImagePath = originalPath,
+            UploadedAt = DateTime.UtcNow,
+            ImageName = file.FileName
+        };
     }
 
 }
