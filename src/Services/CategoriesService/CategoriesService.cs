@@ -82,7 +82,7 @@ public sealed class CategoriesService(ICategoriesRepository categoriesRepository
         {
             existingCategory.CategoryName = category.CategoryName;
             existingCategory.CategoryDescription = category.CategoryDescription;
-            existingCategory.ImageUrl = category.ImageUrl;
+          
 
             await categoriesRepository.UpdateCategoryAsync(existingCategory, ct);
             return category;
