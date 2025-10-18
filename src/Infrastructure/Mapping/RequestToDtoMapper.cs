@@ -66,7 +66,7 @@ public static class RequestToDtoMapper
         {
             CategoryName = req.CategoryName,
             CategoryDescription = req.CategoryDescription,
-            ImageUrl = req.ImageUrl
+
         };
     }
 }

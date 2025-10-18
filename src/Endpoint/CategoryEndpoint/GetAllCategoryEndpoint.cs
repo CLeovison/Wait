@@ -17,7 +17,7 @@ public sealed class GetAllCategoryEndpoint : IEndpoint
             string? sortDirection,
             CancellationToken ct) =>
         {
-            var request = PaginationMapper.ToPaginate(searchTerm, page, pageSize, sortBy, sortDirection);
+            var request = PaginationMapper.ToPaginate(searchTerm!, page, pageSize, sortBy, sortDirection);
             var filters = new FilterCategoriesRequest
             {
                 CategoryName = filter.CategoryName
