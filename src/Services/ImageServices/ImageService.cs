@@ -1,4 +1,6 @@
+using System.Threading.Channels;
 using Microsoft.Extensions.Options;
+
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Wait.Infrastructure.Common;
@@ -19,27 +21,41 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options) : IIm
             return false;
         }
 
-        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        try
+        {
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
-        return settings.AllowedExtensions.Contains(extension) && settings.AllowedMimeTypes.Contains(file.ContentType);
+            return settings.AllowedExtensions.Contains(extension) && settings.AllowedMimeTypes.Contains(file.ContentType);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error validating image", ex);
+        }
     }
 
-    public async Task<string> SaveOriginalImageAsync(IFormFile file, string folderPath, string folderName)
+    public async Task<string> SaveOriginalImageAsync(IFormFile file, string folderPath, string folderName, CancellationToken ct)
     {
         if (!IsValidImage(file))
         {
             throw new ArgumentException("Invalid image file", nameof(file));
         }
 
-        var originalFilePath = Path.Combine(folderPath, folderName);
+        try
+        {
+            var originalFilePath = Path.Combine(folderPath, folderName);
 
-        Directory.CreateDirectory(originalFilePath);
+            Directory.CreateDirectory(folderPath);
 
-        using var stream = new FileStream(originalFilePath, FileMode.Create);
+            using var stream = new FileStream(originalFilePath, FileMode.Create);
 
-        await file.CopyToAsync(stream);
+            await file.CopyToAsync(stream, ct);
 
-        return originalFilePath;
+            return originalFilePath;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error saving original image", ex);
+        }
     }
 
 
@@ -57,22 +73,29 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options) : IIm
         widths ??= options.Value.ThumbnailsWidth;
 
 
-        using var image = await Image.LoadAsync(originalFilePath);
-
-        foreach (var width in widths)
+        try
         {
-            var thumbnailFileName = $"{fileNameWithoutExtension}_w{width}{extension}";
+            using var image = await Image.LoadAsync(originalFilePath);
 
-            var thumbnailPath = Path.Combine(folderPath, thumbnailFileName);
+            foreach (var width in widths)
+            {
+                var thumbnailFileName = $"{fileNameWithoutExtension}_w{width}{extension}";
 
-            var resizedImage = image.Clone(x => x.Resize(width, 0));
+                var thumbnailPath = Path.Combine(folderPath, thumbnailFileName);
 
-            await resizedImage.SaveAsync(thumbnailPath);
+                using var resizedImage = image.Clone(x => x.Resize(width, 0));
 
-            thumbnailPaths.Add(thumbnailPath);
+                await resizedImage.SaveAsync(thumbnailPath);
+
+                thumbnailPaths.Add(thumbnailPath);
+            }
+
+            return thumbnailPaths;
         }
-
-        return thumbnailPaths;
+        catch (Exception ex)
+        {
+            throw new Exception("Error generating thumbnails", ex);
+        }
     }
 
     public async Task<ImageUploadResult> UploadImageAsync(IFormFile file, CancellationToken ct)
@@ -86,9 +109,8 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options) : IIm
         var folderPath = Path.Combine(settings.UploadFolder, "images", imageId);
         var fileName = $"{imageId}{Path.Combine(file.FileName)}";
 
-        var originalPath = await SaveOriginalImageAsync(file, folderPath, fileName);
-
-        var job = new ThumbnailGenerationJob(imageId, originalPath, folderPath);
+        // TODO: Enqueue thumbnail generation job when background processing is introduced.
+        var originalPath = await SaveOriginalImageAsync(file, folderPath, fileName, ct);
 
         return new ImageUploadResult
         {
