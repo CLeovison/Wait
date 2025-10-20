@@ -20,8 +20,9 @@ IConfiguration configuration) : IProductService
 {
 
     private readonly string _uploadDirectory = configuration["UploadDirectory : UploadFolder"] ?? "Uploads";
-    public async Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct)
+    public async Task<ProductDto> CreateProductAsync(CreateProductWithImageRequest product, CancellationToken ct)
     {
+        
         var normalizedCategory = product.CategoryName.Trim();
         var category = await categoriesRepository.GetCategoryNameAsync(normalizedCategory, ct);
 
@@ -30,6 +31,10 @@ IConfiguration configuration) : IProductService
             throw new ArgumentNullException("The Category does not exist, please add this shit");
         }
 
+
+        string? imagePath = string.Empty;
+
+        if()
         var createProduct = product.ToCreate(category.CategoryId);
 
         var request = await productRepository.CreateProductAsync(createProduct, ct);
