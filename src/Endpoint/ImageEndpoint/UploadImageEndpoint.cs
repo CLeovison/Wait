@@ -29,13 +29,14 @@ public sealed class UploadImageEndpoint : IEndpoint
                 var upload = await imageService.UploadImageAsync(file, ct);
                 return TypedResults.Ok(upload);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Results.Problem("An error occurred while uploading the image.");
 
             }
 
-        });
+        })
+        .DisableAntiforgery();
     }
 
 }

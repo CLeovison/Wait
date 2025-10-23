@@ -1,13 +1,11 @@
 namespace Wait.Infrastructure.Configuration;
 
 
-public sealed class UploadDirectoryOptions
+public class UploadDirectoryOptions
 {
     public string UploadFolder { get; set; } = string.Empty;
-    public string[] AllowedExtensions { get; set; } = [];
-    public string[] AllowedMimeTypes { get; set; } = [];
-    public int[] ThumbnailsWidth { get; set; } = [];
-
+    public List<string> AllowedExtensions { get; set; } = new();
+    public List<string> AllowedMimeTypes { get; set; } = new();
+    public int[] ThumbnailsWidth { get; set; } = Array.Empty<int>();
     public long ImageFileSize { get; set; }
-
 }
