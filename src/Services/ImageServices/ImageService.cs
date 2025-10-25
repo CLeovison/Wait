@@ -1,4 +1,3 @@
-using System.Threading.Channels;
 using Microsoft.Extensions.Options;
 
 using SixLabors.ImageSharp;
@@ -10,7 +9,7 @@ using Wait.Services.FileServices;
 namespace Wait.Services.ImageServices;
 
 
-public sealed class ImageService(IOptions<UploadDirectoryOptions> options) : IImageService
+public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttpContextAccessor httpContext) : IImageService
 {
     private readonly UploadDirectoryOptions settings = options.Value;
 
@@ -105,20 +104,31 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options) : IIm
             throw new ArgumentException("Invalid Image Filetype");
         }
 
-        var imageId = Guid.NewGuid().ToString();
-        var folderPath = Path.Combine(settings.UploadFolder, "images", imageId);
-        var fileName = $"{imageId}{Path.Combine(file.FileName)}";
-
-        // TODO: Enqueue thumbnail generation job when background processing is introduced.
-        var originalPath = await SaveOriginalImageAsync(file, folderPath, fileName, ct);
-
-        return new ImageUploadResult
+        try
         {
-            ImageId = imageId,
-            ImagePath = originalPath,
-            UploadedAt = DateTime.UtcNow,
-            ImageName = file.FileName
-        };
+            var imageId = Guid.NewGuid().ToString();
+            var folderPath = Path.Combine(settings.UploadFolder, "images", imageId);
+            var fileName = $"{imageId}{Path.Combine(file.FileName)}";
+
+            // TODO: Enqueue thumbnail generation job when background processing is introduced.
+            var originalPath = await SaveOriginalImageAsync(file, folderPath, fileName, ct);
+
+            var context = httpContext.HttpContext;
+            var relativePath = Path.Combine("uploads", "images", imageId, fileName).Replace("\\", "/");
+            var url = $"{context?.Request.Scheme}://{context?.Request.Host}/{relativePath}";
+            return new ImageUploadResult
+            {
+                ImageId = imageId,
+                ImagePath = originalPath,
+                Url = url,
+                UploadedAt = DateTime.UtcNow,
+                ImageName = file.FileName
+            };
+        }
+        catch (Exception)
+        {
+           throw new ArgumentException("The Image cannot be uploaded");
+        }
     }
 
 }
