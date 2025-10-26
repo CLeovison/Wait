@@ -116,6 +116,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
             var context = httpContext.HttpContext;
             var relativePath = Path.Combine("uploads", "images", imageId, fileName).Replace("\\", "/");
             var url = $"{context?.Request.Scheme}://{context?.Request.Host}/{relativePath}";
+
             return new ImageUploadResult
             {
                 ImageId = imageId,
@@ -125,9 +126,9 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
                 ImageName = file.FileName
             };
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-           throw new ArgumentException("The Image cannot be uploaded");
+           throw new ArgumentException("The Image cannot be uploaded", ex);
         }
     }
 
