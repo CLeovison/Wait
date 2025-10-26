@@ -1,5 +1,5 @@
 using FluentValidation;
-using Wait.Features.Users.Create;
+using Wait.Features.Users.CreateUser;
 
 namespace Wait.Features.Users.CreateUser;
 
