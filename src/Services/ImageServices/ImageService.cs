@@ -128,7 +128,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
         }
         catch (Exception ex)
         {
-           throw new ArgumentException("The Image cannot be uploaded", ex);
+            throw new ArgumentException("The Image cannot be uploaded", ex);
         }
     }
 

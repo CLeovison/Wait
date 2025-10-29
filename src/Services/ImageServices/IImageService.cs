@@ -13,5 +13,5 @@ public interface IImageService
         int[]? width = null);
 
     Task<ImageUploadResult> UploadImageAsync(IFormFile file, CancellationToken ct);
-    
+
 }
