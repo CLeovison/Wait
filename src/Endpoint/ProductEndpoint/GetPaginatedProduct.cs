@@ -26,7 +26,7 @@ public sealed class GetPaginatedProduct : IEndpoint
                 Size = filters.Size,
                 Color = filters.Color
             };
-            return await productService.GetPaginatedProductAsync(request,filterRequest,ct);
+            return await productService.GetPaginatedProductAsync(request, filterRequest, ct);
         });
     }
 }

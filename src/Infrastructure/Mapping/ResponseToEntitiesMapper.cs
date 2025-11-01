@@ -23,10 +23,10 @@ public static class ResponseToEntitiesMapper
     {
         return new UserResponse
         {
-            FirstName = paginated.Data.FirstOrDefault()?.FirstName,
-            LastName = paginated.Data.FirstOrDefault()?.LastName,
-            Username = paginated.Data.FirstOrDefault()?.Username,
-            Email = paginated.Data.FirstOrDefault()?.Email,
+            FirstName = paginated.Data.FirstOrDefault()?.FirstName ?? string.Empty,
+            LastName = paginated.Data.FirstOrDefault()?.LastName ?? string.Empty,
+            Username = paginated.Data.FirstOrDefault()?.Username ?? string.Empty,
+            Email = paginated.Data.FirstOrDefault()?.Email ?? string.Empty,
 
         };
     }
