@@ -48,41 +48,54 @@ Its goal is to demonstrate a clean architecture approach with separation of conc
 #### Project Structure
 
 ```
- src
+└───src
     ├───Abstract
     │   └───Results
     ├───Configurations
     ├───Contracts
     │   ├───Data
     │   ├───Request
+    │   │   ├───AuthRequest
+    │   │   ├───CategoriesRequest
     │   │   ├───Common
     │   │   ├───ProductRequest
     │   │   └───UserRequest
     │   └───Response
     ├───Database
     ├───Domain
+    │   ├───Common
     │   ├───Entities
     │   └───Validation
+    │       ├───AuthValidation
     │       └───UserValidation
     ├───Endpoint
     │   ├───AuthEndpoint
+    │   ├───CategoryEndpoint
+    │   ├───ImageEndpoint
     │   ├───ProductEndpoint
     │   └───UserEndpoint
     ├───Extensions
     ├───Helper
     ├───Infrastructure
     │   ├───Authentication
+    │   ├───Common
+    │   ├───Configuration
     │   ├───Mapping
     │   └───Repositories
     │       ├───AuthRepository
+    │       ├───CategoriesRepository
     │       ├───ProductRepository
     │       └───UserRepository
     ├───Migrations
     ├───Properties
-    └───Services
-        ├───AuthService
-        ├───CartService
-        ├───ProductServices
-        └───UserServices
-
+    ├───Services
+    │   ├───AuthService
+    │   ├───CartService
+    │   ├───CategoriesService
+    │   ├───ImageServices
+    │   ├───OrderServices
+    │   ├───ProductService
+    │   ├───ThumbnailGenerationService
+    │   └───UserServices
+    └───Uploads
 ```

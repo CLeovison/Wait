@@ -4,4 +4,5 @@ public interface IThumbnailGenerationService
 {
     Task ProcessThumbnailAsync(CancellationToken ct);
     Task ExecuteAsync(CancellationToken ct);
+    Task GetThumbnailStatusAsync(CancellationToken ct);
 }
