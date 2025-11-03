@@ -1,8 +1,8 @@
 using System.Collections.Concurrent;
 using System.Threading.Channels;
-using Newtonsoft.Json.Linq;
-using SixLabors.ImageSharp;
+using Microsoft.Extensions.Options;
 using Wait.Infrastructure.Common;
+using Wait.Infrastructure.Configuration;
 using Wait.Services.FileServices;
 
 namespace Wait.Services.ThumbnailGenerationService;
@@ -11,7 +11,8 @@ public sealed class ThumbnailGenerationService(
 
 Channel<ThumbnailGenerationJob> channel,
 ConcurrentDictionary<string, ThumbnailGenerationStatus> status,
-IImageService imageService) : IThumbnailGenerationService
+IImageService imageService,
+IOptions<UploadDirectoryOptions> options) : IThumbnailGenerationService
 {
     public async Task ExecuteAsync(CancellationToken ct)
     {
@@ -19,7 +20,7 @@ IImageService imageService) : IThumbnailGenerationService
         {
             try
             {
-                await ProcessThumbnailAsync(job, ct);
+                await ProcessThumbnailAsync(job);
             }
             catch (OperationCanceledException)
             {
@@ -34,7 +35,7 @@ IImageService imageService) : IThumbnailGenerationService
         }
     }
 
-    private async Task ProcessThumbnailAsync(ThumbnailGenerationJob job, CancellationToken ct)
+    public async Task ProcessThumbnailAsync(ThumbnailGenerationJob job)
     {
         status[job.id] = ThumbnailGenerationStatus.Processing;
 
@@ -48,6 +49,11 @@ IImageService imageService) : IThumbnailGenerationService
             status[job.id] = ThumbnailGenerationStatus.Failed;
             throw new DirectoryNotFoundException("The Thumbnail Cannot be Generated", ex);
         }
+    }
+
+    public Task GetThumbnailStatusAsync(string id)
+    {
+        
     }
 
 }

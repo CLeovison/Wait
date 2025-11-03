@@ -5,6 +5,7 @@ namespace Wait.Services.ThumbnailGenerationService;
 public interface IThumbnailGenerationService
 {
     Task ExecuteAsync(CancellationToken ct);
-    Task ProcessThumbnailAsync(ThumbnailGenerationJob job, CancellationToken ct);
-    Task GetThumbnailStatusAsync(CancellationToken ct);
+    Task ProcessThumbnailAsync(ThumbnailGenerationJob job);
+    Task GetThumbnailStatusAsync(string id);
+    Task GetImageIdAsync(string id);
 }
