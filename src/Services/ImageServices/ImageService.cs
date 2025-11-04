@@ -132,4 +132,25 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
         }
     }
 
+    public async Task<ImageUploadResult> DeleteImageAsync(string id, CancellationToken ct)
+    {
+        try
+        {
+            if (id is null)
+            {
+                throw new FileNotFoundException("The Image does not exist");
+            }
+
+
+        }
+        catch (Exception ex)
+        {
+            throw new FileNotFoundException("The File is already deleted", ex);
+        }
+    }
+
+    public async Task DeleteThumbnailAsync(string folderPath, CancellationToken ct)
+    {
+
+    }
 }
