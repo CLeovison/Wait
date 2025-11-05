@@ -132,20 +132,48 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
         }
     }
 
-    public async Task<ImageUploadResult> DeleteImageAsync(string id, CancellationToken ct)
+    public async Task<ImageOperationResult> DeleteImageAsync(string id, CancellationToken ct)
     {
+        if (id is null)
+        {
+            throw new FileNotFoundException("The Image does not exist");
+        }
+
+        var filePath = Path.Combine(settings.UploadFolder, id);
+
+        if (!Directory.Exists(filePath))
+        {
+            throw new DirectoryNotFoundException("The Directory was not existing");
+        }
+
         try
         {
-            if (id is null)
+
+            if (!File.Exists(filePath))
             {
-                throw new FileNotFoundException("The Image does not exist");
+                throw new FileNotFoundException($"Image Not Found {filePath}");
             }
 
+            await Task.Run(() => File.Delete(filePath), ct);
+            return new ImageOperationResult
+            {
+                Success = true,
+                ImageName = id,
+                Message = "Image deleted successfully."
+            };
 
         }
         catch (Exception ex)
         {
+            return new ImageOperationResult
+            {
+                Success = false,
+                ImageName = id,
+                Message = $"Error deleting image: {ex.Message}"
+            };
+
             throw new FileNotFoundException("The File is already deleted", ex);
+
         }
     }
 
