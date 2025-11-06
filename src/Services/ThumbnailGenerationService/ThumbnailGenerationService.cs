@@ -51,9 +51,9 @@ IOptions<UploadDirectoryOptions> options) : IThumbnailGenerationService
         }
     }
 
-    public Task GetThumbnailStatusAsync(string id)
-    {
+    // public Task GetThumbnailStatusAsync(string id)
+    // {
         
-    }
+    // }
 
 }
