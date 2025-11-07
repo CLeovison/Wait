@@ -29,7 +29,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IUserRepositories, UserRepositories>();
         services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<IAuthRepository, AuthRepostiory>();
+        services.AddScoped<IAuthRepository, AuthRepository>();
         services.AddScoped<ICategoriesRepository, CategoriesRepository>();
         return services;
     }

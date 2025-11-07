@@ -178,8 +178,5 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
         }
     }
 
-    public async Task DeleteThumbnailAsync(string folderPath, CancellationToken ct)
-    {
 
-    }
 }

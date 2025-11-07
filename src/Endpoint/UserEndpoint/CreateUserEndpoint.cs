@@ -10,19 +10,21 @@ public class CreateUserEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/create", async (
-            CreateUserRequest req,
-            IUserServices userServices,
-            CancellationToken ct) =>
+        app.MapPost("/api/create", async (CreateUserRequest req, IUserServices userServices, CancellationToken ct) =>
         {
-            var userDto = req.ToCreateRequest();
-            var userCreated = await userServices.CreateUserAsync(userDto, ct);
-            var response = userCreated.ToUserResponse();
-            return Results.Ok(response);
+            try
+            {
+                var userDto = req.ToCreateRequest();
+                var userCreated = await userServices.CreateUserAsync(userDto, ct);
+                var response = userCreated.ToUserResponse();
+                return Results.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(detail: ex.Message, title: "An error occurred while creating the user.");
+
+            }
         })
         .WithValidation<CreateUserRequest>();
-
-
-
     }
 }

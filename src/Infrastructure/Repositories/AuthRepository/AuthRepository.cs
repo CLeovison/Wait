@@ -4,7 +4,7 @@ using Wait.Domain.Entities;
 
 namespace Wait.Infrastructure.Repositories;
 
-public sealed class AuthRepostiory(AppDbContext dbContext) : IAuthRepository
+public sealed class AuthRepository(AppDbContext dbContext) : IAuthRepository
 {
     public async Task<RefreshToken?> GetRefreshTokenByUserIdAsync(Guid id, CancellationToken ct)
     {

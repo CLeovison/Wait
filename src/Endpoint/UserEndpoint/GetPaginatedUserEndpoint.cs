@@ -9,7 +9,9 @@ public sealed class PaginatedUserEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/users/paginated", async (IUserServices userServices, [AsParameters] FilterUserRequest filters,
+        app.MapGet("api/users/paginated", async (
+            IUserServices userServices,
+            [AsParameters] FilterUserRequest filters,
             string? searchTerm,
             int page,
             int pageSize,
@@ -17,19 +19,31 @@ public sealed class PaginatedUserEndpoint : IEndpoint
             string? sortDirection,
             CancellationToken ct) =>
         {
-            var request = PaginationMapper.ToPaginate(searchTerm, page, pageSize, sortBy, sortDirection);
-
-            var filterRequest = new FilterUserRequest
+            try
             {
-                FirstName = filters.FirstName,
-                LastName = filters.LastName,
-                CreatedAt = filters.CreatedAt
-            };
+                var request = PaginationMapper.ToPaginate(searchTerm, page, pageSize, sortBy, sortDirection);
 
-            var paginatedUsers = await userServices.GetPaginatedUsersAsync(request, filterRequest, ct);
+                var filterRequest = new FilterUserRequest
+                {
+                    FirstName = filters.FirstName,
+                    LastName = filters.LastName,
+                    CreatedAt = filters.CreatedAt
+                };
 
+                var paginatedUsers = await userServices.GetPaginatedUsersAsync(request, filterRequest, ct);
 
-            return paginatedUsers;
-        }).RequireAuthorization();
+                return Results.Ok(paginatedUsers);
+            }
+            catch (Exception ex)
+            {
+         
+                return Results.Problem(
+                    detail: ex.Message,
+                    statusCode: 500,
+                    title: "An error occurred while retrieving paginated users"
+                );
+            }
+        })
+        .RequireAuthorization();
     }
 }

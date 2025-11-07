@@ -10,7 +10,9 @@ public sealed class DeleteImageEndpoint : IEndpoint
     {
         app.MapDelete("/api/image/{id}", async (string id, IImageService imageService, CancellationToken ct) =>
         {
+            await imageService.DeleteImageAsync(id, ct);
 
+            return TypedResults.NoContent();
         });
     }
 }

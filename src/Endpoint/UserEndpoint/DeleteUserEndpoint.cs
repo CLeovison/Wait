@@ -9,12 +9,26 @@ public sealed class DeleteUserEndpoint : IEndpoint
     {
         app.MapDelete("/api/users/{id}", async (Guid id, IUserServices userServices, CancellationToken ct) =>
         {
-            var removed = await userServices.DeleteUserAsync(id, ct);
+            try
+            {
+                var removed = await userServices.DeleteUserAsync(id, ct);
 
-            if (!removed)
-                return Results.NotFound(new { message = "User not found or could not be deleted." });
+                if (!removed)
+                {
+                    return Results.NotFound(new { message = "User not found or could not be deleted." });
+                }
 
-            return Results.Ok(new { message = "The user was successfully deleted." });
-        }).RequireAuthorization();
+                return Results.NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(
+                    detail: ex.Message,
+                    statusCode: 500,
+                    title: "An error occurred while deleting the user"
+                );
+            }
+        })
+        .RequireAuthorization();
     }
 }

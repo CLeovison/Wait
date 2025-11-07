@@ -42,7 +42,7 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         }
         catch (Exception ex)
         {
-            throw new ArgumentNullException("The User Does not Exist",ex);
+            throw new ArgumentNullException("The User Does not Exist", ex);
         }
     }
 
@@ -78,13 +78,12 @@ public sealed class UserServices(IUserRepositories userRepositories, IPasswordHa
         }
         catch (Exception ex)
         {
-            Results.NotFound(ex);
+
+            throw new InvalidOperationException("Failed to update user", ex);
         }
-
-        return existingUser?.ToUserDto(passwordHasher);
-
     }
-    
+
+
     public async Task<bool> DeleteUserAsync(Guid id, CancellationToken ct)
     {
         var existingUser = await userRepositories.GetUserByIdAsync(id, ct);

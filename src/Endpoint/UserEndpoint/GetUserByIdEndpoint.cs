@@ -9,7 +9,27 @@ public sealed class GetUserByIdEndpoint : IEndpoint
     {
         app.MapGet("/api/users/{id}", async (Guid id, IUserServices userServices, CancellationToken ct) =>
         {
-            return await userServices.GetUserByIdAsync(id, ct);
-        }).RequireAuthorization();
+            try
+            {
+                var user = await userServices.GetUserByIdAsync(id, ct);
+
+                if (user is null)
+                {
+                    return Results.NotFound(new { message = $"User with id {id} was not found." });
+                }
+
+                return Results.Ok(user);
+            }
+            catch (Exception ex)
+            {
+
+                return Results.Problem(
+                    detail: ex.Message,
+                    statusCode: 500,
+                    title: "An error occurred while retrieving the user"
+                );
+            }
+        })
+        .RequireAuthorization();
     }
 }
