@@ -62,7 +62,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
         string originalFilePath,          // Path of the original image
         string folderPath,                // Where to save thumbnails
         string fileNameWithoutExtension,  // Base name for thumbnails
-        int[]? widths = null)             // Optional custom widths (defaults to ThumbnailsWidth)
+        int[]? widths = null)            
     {
 
         var thumbnailPaths = new List<string>();

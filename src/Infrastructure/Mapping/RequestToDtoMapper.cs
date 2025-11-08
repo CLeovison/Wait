@@ -29,14 +29,14 @@ public static class RequestToDtoMapper
             Email = req.Email ?? string.Empty
         };
     }
-    public static UserDto ToRequestUpdate(this UpdateUserRequest req, IPasswordHasher<Users> passwordHasher)
+    public static UserDto ToRequestUpdate(this UpdateUserRequest req, IPasswordHasher<UserDto> passwordHasher)
     {
         return new UserDto
         {
             FirstName = req.FirstName ?? string.Empty,
             LastName = req.LastName ?? string.Empty,
             Username = req.Username ?? string.Empty,
-            Password = passwordHasher.HashPassword(new Users(), req.Password ?? string.Empty),
+            Password = passwordHasher.HashPassword(new UserDto(), req.Password ?? string.Empty),
             ConfirmPassword = req.ConfirmPassword ?? string.Empty,
             Birthday = DateOnly.Parse(req.Birthday.ToString()),
             Email = req.Email ?? string.Empty
