@@ -27,8 +27,10 @@ public sealed class UpdateUserEndpoint : IEndpoint
             catch (Exception ex)
             {
                 return Results.Problem(
-           detail: ex.Message,
-           statusCode: StatusCodes.Status500InternalServerError);
+                 detail: ex.Message,
+                 statusCode: 500,
+                 title: "An error occurred while deleting the user"
+             );
 
             }
         })
