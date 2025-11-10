@@ -62,7 +62,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
         string originalFilePath,          // Path of the original image
         string folderPath,                // Where to save thumbnails
         string fileNameWithoutExtension,  // Base name for thumbnails
-        int[]? widths = null)            
+        int[]? widths = null)
     {
 
         var thumbnailPaths = new List<string>();
@@ -97,6 +97,27 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
         }
     }
 
+    public async Task<Stream> GetImageByIdAsync(string id, string fileName, int? width = null, CancellationToken ct = default)
+    {
+        var folderPath = Path.Combine(settings.UploadFolder, "images", id);
+
+        if (!Directory.Exists(folderPath))
+        {
+            throw new DirectoryNotFoundException("The Directory was not existing");
+        }
+
+        var pattern = width is null ? $"{id}.*" : $"{id}_w{width}.*";
+        var filePath = Directory.GetFiles(folderPath, pattern).FirstOrDefault();
+
+        if (string.IsNullOrEmpty(fileName) || !File.Exists(fileName))
+        {
+            throw new FileNotFoundException("The File was not exisitng");
+        }
+
+        var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+        File(fileStream, "image/jpeg");
+        return File(fileStream, "image/jpeg");
+    }
     public async Task<ImageResult> UploadImageAsync(IFormFile file, CancellationToken ct)
     {
         if (!IsValidImage(file))
@@ -146,7 +167,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
             throw new DirectoryNotFoundException("The Directory was not existing");
         }
 
-        
+
         try
         {
 
