@@ -12,7 +12,7 @@ public interface IImageService
         string fileNameWithoutExtensions,
         int[]? width = null);
 
-    Task<ImageUploadResult> UploadImageAsync(IFormFile file, CancellationToken ct);
-    Task GetImageIdAsync(string id, CancellationToken ct);
+    Task<ImageResult> UploadImageAsync(IFormFile file, CancellationToken ct);
+    Task<ImageResult> GetImageAsync(string id, CancellationToken ct);
     Task<ImageOperationResult> DeleteImageAsync(string id, CancellationToken ct);
 }

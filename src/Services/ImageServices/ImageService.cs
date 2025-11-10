@@ -97,7 +97,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
         }
     }
 
-    public async Task<ImageUploadResult> UploadImageAsync(IFormFile file, CancellationToken ct)
+    public async Task<ImageResult> UploadImageAsync(IFormFile file, CancellationToken ct)
     {
         if (!IsValidImage(file))
         {
@@ -117,7 +117,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
             var relativePath = Path.Combine("uploads", "images", imageId, fileName).Replace("\\", "/");
             var url = $"{context?.Request.Scheme}://{context?.Request.Host}/{relativePath}";
 
-            return new ImageUploadResult
+            return new ImageResult
             {
                 ImageId = imageId,
                 ImagePath = originalPath,

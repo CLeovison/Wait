@@ -1,7 +1,7 @@
 namespace Wait.Infrastructure.Common;
 
 
-public sealed class ImageUploadResult
+public sealed class ImageResult
 {
     public string ImageId { get; set; } = string.Empty;
     public string ImagePath { get; set; } = string.Empty;
