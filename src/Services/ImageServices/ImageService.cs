@@ -97,7 +97,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
         }
     }
 
-    public async Task<Stream> GetImageByIdAsync(string id, string fileName, int? width = null, CancellationToken ct = default)
+    public async Task<Stream> GetImageByIdAsync(string id, string fileName, int? width, CancellationToken ct)
     {
         var folderPath = Path.Combine(settings.UploadFolder, "images", id);
 
@@ -115,8 +115,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
         }
 
         var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-        File(fileStream, "image/jpeg");
-        return File(fileStream, "image/jpeg");
+
     }
     public async Task<ImageResult> UploadImageAsync(IFormFile file, CancellationToken ct)
     {
