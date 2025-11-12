@@ -5,6 +5,7 @@ using Wait.Infrastructure.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 using Wait.Extensions;
+using Wait.Domain.Entities;
 
 
 namespace Wait.Endpoint.UserEndpoint;
@@ -13,7 +14,7 @@ public sealed class UpdateUserEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("/api/users/{id}", async (Guid id, UpdateUserRequest request, IUserServices userServices, IPasswordHasher<UserDto> passwordHasher, CancellationToken ct) =>
+        app.MapPut("/api/users/{id}", async (Guid id, UpdateUserRequest request, IUserServices userServices, IPasswordHasher<Users> passwordHasher, CancellationToken ct) =>
         {
 
             try

@@ -116,6 +116,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
 
         var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
 
+        return fileStream;
     }
     public async Task<ImageResult> UploadImageAsync(IFormFile file, CancellationToken ct)
     {

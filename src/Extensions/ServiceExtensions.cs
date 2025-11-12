@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 using Wait.Abstract;
+using Wait.Contracts.Data;
 using Wait.Domain.Entities;
 using Wait.Infrastructure.Authentication;
 using Wait.Infrastructure.Repositories;
