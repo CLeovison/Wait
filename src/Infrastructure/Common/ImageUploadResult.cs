@@ -8,5 +8,6 @@ public sealed class ImageResult
 
     public string ImageName { get; set; } = string.Empty;
     public string Url { get; set; } = string.Empty;
+    public string UploadedBy { get; set; } = string.Empty;
     public DateTime UploadedAt { get; set; }
 }
