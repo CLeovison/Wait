@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Wait.Domain.Entities;
 using Wait.Entities;
+using Wait.Infrastructure.Common;
 
 namespace Wait.Database;
 
@@ -29,6 +30,7 @@ public sealed class AppDbContext(DbContextOptions options) : DbContext(options)
     public required DbSet<Product> Product { get; init; }
     public required DbSet<RefreshToken> RefreshToken { get; init; }
     public required DbSet<Category> Category { get; init; }
+    public required DbSet<ImageResult> Image { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
