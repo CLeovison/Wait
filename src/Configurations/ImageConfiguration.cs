@@ -13,7 +13,6 @@ public sealed class ImageConfiguration : IEntityTypeConfiguration<ImageResult>
     builder.Property(x => x.ImageName).IsRequired();
     builder.Property(x => x.ImagePath).IsRequired();
     builder.Property(x => x.Url).IsRequired();
-    builder.Property(x => x.UploadedBy).IsRequired();
     builder.Property(x => x.UploadedAt).IsRequired();
   }
 }
