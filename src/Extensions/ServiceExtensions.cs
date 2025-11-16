@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-
+using SixLabors.ImageSharp;
 using Wait.Abstract;
 using Wait.Contracts.Data;
 using Wait.Domain.Entities;
@@ -32,6 +32,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IAuthRepository, AuthRepository>();
         services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+        services.AddScoped<IImageRepository, ImageRepository>();
         return services;
     }
 
@@ -42,6 +43,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICategoriesService, CategoriesService>();
         services.AddScoped<IImageService, ImageService>();
+
         return services;
     }
 

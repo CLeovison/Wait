@@ -4,12 +4,13 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Wait.Infrastructure.Common;
 using Wait.Infrastructure.Configuration;
+using Wait.Infrastructure.Repositories;
 using Wait.Services.FileServices;
 
 namespace Wait.Services.ImageServices;
 
 
-public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttpContextAccessor httpContext) : IImageService
+public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttpContextAccessor httpContext, IImageRepository imageRepository) : IImageService
 {
     private readonly UploadDirectoryOptions settings = options.Value;
 
@@ -99,24 +100,36 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
 
     public async Task<Stream> GetImageByIdAsync(string id, string fileName, int? width, CancellationToken ct)
     {
-        var folderPath = Path.Combine(settings.UploadFolder, "images", id);
-
-        if (!Directory.Exists(folderPath))
+        try
         {
-            throw new DirectoryNotFoundException("The Directory was not existing");
+            var folderPath = Path.Combine(settings.UploadFolder, "images", id);
+
+            if (!Directory.Exists(folderPath))
+            {
+                throw new DirectoryNotFoundException("The Directory was not existing");
+            }
+
+            var pattern = width is null ? $"{id}.*" : $"{id}_w{width}.*";
+            var filePath = Directory.GetFiles(folderPath, pattern).FirstOrDefault();
+
+            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+            {
+                throw new FileNotFoundException("The File was not exisitng");
+            }
+
+            if (!Directory.Exists(filePath))
+            {
+                throw new DirectoryNotFoundException("The Directory does not exist");
+            }
+
+            var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+
+            return fileStream;
         }
-
-        var pattern = width is null ? $"{id}.*" : $"{id}_w{width}.*";
-        var filePath = Directory.GetFiles(folderPath, pattern).FirstOrDefault();
-
-        if (string.IsNullOrEmpty(fileName) || !File.Exists(fileName))
+        catch (Exception ex)
         {
-            throw new FileNotFoundException("The File was not exisitng");
+            throw new IOException("Error : The Image cannot be retrived", ex);
         }
-
-        var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-
-        return fileStream;
     }
     public async Task<ImageResult> UploadImageAsync(IFormFile file, CancellationToken ct)
     {
@@ -138,7 +151,8 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
             var relativePath = Path.Combine("uploads", "images", imageId, fileName).Replace("\\", "/");
             var url = $"{context?.Request.Scheme}://{context?.Request.Host}/{relativePath}";
 
-            return new ImageResult
+
+            var imageResult = new ImageResult
             {
                 ImageId = imageId,
                 ImagePath = originalPath,
@@ -146,6 +160,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
                 UploadedAt = DateTime.UtcNow,
                 ImageName = file.FileName
             };
+            return await imageRepository.UploadImageAsync(imageResult, ct);
         }
         catch (Exception ex)
         {
