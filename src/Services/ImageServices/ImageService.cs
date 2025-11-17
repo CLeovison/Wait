@@ -117,12 +117,9 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
                 throw new FileNotFoundException("The File was not exisitng");
             }
 
-            if (!Directory.Exists(filePath))
-            {
-                throw new DirectoryNotFoundException("The Directory does not exist");
-            }
 
-            var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+
+            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
 
             return fileStream;
         }

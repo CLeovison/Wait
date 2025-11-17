@@ -18,16 +18,16 @@ public sealed class UploadImageEndpoint : IEndpoint
             {
                 if (file is null)
                 {
-                    return TypedResults.BadRequest("No uploaded image");
+                    return Results.BadRequest("No uploaded image");
                 }
 
                 if (!imageService.IsValidImage(file))
                 {
-                    return TypedResults.BadRequest("Invalid image file. Only JPG, PNG, and GIF formats are allowed.");
+                    return Results.BadRequest("Invalid image file. Only JPG, PNG, and GIF formats are allowed.");
 
                 }
                 var upload = await imageService.UploadImageAsync(file, ct);
-                return TypedResults.Ok(upload);
+                return Results.Ok(upload);
             }
             catch (Exception)
             {
