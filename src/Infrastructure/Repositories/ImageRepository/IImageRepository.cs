@@ -5,4 +5,5 @@ namespace Wait.Infrastructure.Repositories;
 public interface IImageRepository
 {
     Task<ImageResult> UploadImageAsync(ImageResult imageResult, CancellationToken ct);
+    Task<ImageResult?> GetImageByIdAsync(string id, CancellationToken ct);
 }

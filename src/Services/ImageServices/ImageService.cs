@@ -106,7 +106,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
 
             if (!Directory.Exists(folderPath))
             {
-                throw new DirectoryNotFoundException("The Directory was not existing");
+                throw new DirectoryNotFoundException("The Directory does not exist");
             }
 
             var pattern = width is null ? $"{id}.*" : $"{id}_w{width}.*";
@@ -117,10 +117,8 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
                 throw new FileNotFoundException("The File was not exisitng");
             }
 
-
-
             var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-
+            var fetchImageById = await imageRepository.GetImageByIdAsync(id, ct);
             return fileStream;
         }
         catch (Exception ex)

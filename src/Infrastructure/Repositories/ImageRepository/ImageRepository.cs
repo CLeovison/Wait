@@ -13,4 +13,11 @@ public sealed class ImageRepository(AppDbContext dbContext) : IImageRepository
 
         return imageResult;
     }
+    public async Task<ImageResult?> GetImageByIdAsync(string id, CancellationToken ct)
+    {
+        return await dbContext.Image.FindAsync(id, ct);
+
+
+    }
+
 }

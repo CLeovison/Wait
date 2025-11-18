@@ -21,7 +21,7 @@ public sealed class CategoriesRepository(AppDbContext dbContext) : ICategoriesRe
 
     public async Task<Category?> GetCategoryByIdAsync(Guid id, CancellationToken ct)
     {
-        return await dbContext.Category.FindAsync(id);
+        return await dbContext.Category.FindAsync(id, ct);
     }
 
     public async Task<(List<CategoryDto>, int totalCount)> GetAllCategoryAsync(FilterCategoriesRequest req, string? searchTerm,
