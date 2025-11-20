@@ -102,6 +102,13 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
     {
         try
         {
+            var imageRequest = await imageRepository.GetImageByIdAsync(id, ct);
+
+            if (imageRequest is null)
+            {
+                throw new FileNotFoundException("The file cannot be found");
+            }
+
             var folderPath = Path.Combine(settings.UploadFolder, "images", id);
 
             if (!Directory.Exists(folderPath))
