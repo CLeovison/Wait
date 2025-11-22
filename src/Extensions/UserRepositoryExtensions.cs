@@ -10,7 +10,6 @@ public static class UserRepositoryExtensions
     public static IQueryable<Users> Filter(this IQueryable<Users> filter, FilterUserRequest req)
     {
         if (req is null) return filter;
-
         if (!string.IsNullOrWhiteSpace(req.FirstName))
         {
             filter = filter.Where(x => x.FirstName.Contains(req.FirstName));
