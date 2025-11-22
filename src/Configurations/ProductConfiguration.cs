@@ -38,6 +38,7 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         .IsRequired();
 
         builder.Property(d => d.CreatedAt)
+        .ValueGeneratedOnAdd()
         .HasDefaultValueSql("current_date");
 
         builder.Property(x => x.ModifiedAt)

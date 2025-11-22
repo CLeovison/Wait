@@ -157,10 +157,10 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
             var imageResult = new ImageResult
             {
                 ImageId = imageId,
-                ImagePath = originalPath,
-                Url = url,
-                UploadedAt = DateTime.UtcNow,
-                ImageName = file.FileName
+                ObjectKey = originalPath,
+                StorageUrl = url,
+                DateUploaded = DateTime.UtcNow,
+                OriginalFileName = file.FileName
             };
             return await imageRepository.UploadImageAsync(imageResult, ct);
         }
