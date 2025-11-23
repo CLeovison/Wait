@@ -10,7 +10,6 @@ public sealed class ImageConfiguration : IEntityTypeConfiguration<ImageResult>
   {
     builder.HasKey(x => x.ImageId);
 
-    builder.Property(x => x.ImageId).HasDefaultValueSql("gen_random_uuid ()").ValueGeneratedOnAdd();
     builder.Property(x => x.ObjectKey).IsRequired();
     builder.Property(x => x.StorageUrl).IsRequired();
     builder.Property(x => x.MimeType).IsRequired();

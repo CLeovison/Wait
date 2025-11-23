@@ -241,8 +241,7 @@ namespace src.Migrations
                 {
                     b.Property<Guid>("ImageId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid ()");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("DateModified")
                         .ValueGeneratedOnUpdate()
