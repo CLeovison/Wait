@@ -17,5 +17,8 @@ public sealed class CategoriesConfiguration : IEntityTypeConfiguration<Category>
         builder.Property(x => x.CreatedAt).ValueGeneratedOnAdd().HasDefaultValueSql("current_date");
         builder.Property(x => x.ModifiedAt).ValueGeneratedOnUpdate().HasDefaultValueSql("current_date");
         builder.HasMany(c => c.Products).WithOne(p => p.Category).HasForeignKey(p => p.CategoryId).OnDelete(DeleteBehavior.Cascade);
+        
+
+        
     }
 }
