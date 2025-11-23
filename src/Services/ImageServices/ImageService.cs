@@ -156,7 +156,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
 
             var imageResult = new ImageResult
             {
-                ImageId = imageId,
+                ImageId = Guid.Parse(imageId),
                 ObjectKey = originalPath,
                 StorageUrl = url,
                 DateUploaded = DateTime.UtcNow,
