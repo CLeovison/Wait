@@ -12,7 +12,7 @@ using Wait.Database;
 namespace src.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251123111402_InitialCreate")]
+    [Migration("20251124133759_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -272,9 +272,6 @@ namespace src.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("StorageUrl")
                         .IsRequired()
                         .HasColumnType("text");
@@ -283,6 +280,8 @@ namespace src.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("ImageId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Image");
                 });
@@ -307,6 +306,17 @@ namespace src.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Wait.Infrastructure.Common.ImageResult", b =>
+                {
+                    b.HasOne("Wait.Domain.Entities.Users", "Users")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Wait.Domain.Entities.Category", b =>

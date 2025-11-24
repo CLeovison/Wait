@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.Extensions.Options;
 
 using SixLabors.ImageSharp;
@@ -153,6 +154,12 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
             var relativePath = Path.Combine("uploads", "images", imageId, fileName).Replace("\\", "/");
             var url = $"{context?.Request.Scheme}://{context?.Request.Host}/{relativePath}";
 
+            var userId = httpContext?.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentException("User ID not found in claims");
+            }
 
             var imageResult = new ImageResult
             {
@@ -160,7 +167,11 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
                 ObjectKey = originalPath,
                 StorageUrl = url,
                 DateUploaded = DateTime.UtcNow,
-                OriginalFileName = file.FileName
+                OriginalFileName = file.FileName,
+                MimeType = file.ContentType,
+                FileExtension = Path.GetExtension(file.FileName),
+                UserId = Guid.Parse(userId)
+
             };
             return await imageRepository.UploadImageAsync(imageResult, ct);
         }

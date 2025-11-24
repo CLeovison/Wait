@@ -36,7 +36,7 @@ public sealed class UploadImageEndpoint : IEndpoint
             }
 
         })
-        .DisableAntiforgery();
+        .DisableAntiforgery().RequireAuthorization();
     }
 
 }
