@@ -103,31 +103,19 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
     {
         try
         {
-            var imageRequest = await imageRepository.GetImageByIdAsync(id, ct);
+            var image = await imageRepository.GetImageByIdAsync(id, ct);
 
-            if (imageRequest is null)
+            if (image is null)
             {
                 throw new FileNotFoundException("The file cannot be found");
             }
 
-            var folderPath = Path.Combine(settings.UploadFolder, "images", id);
+            var filePath = Path.Combine(settings.UploadFolder, image.ObjectKey);
 
-            if (!Directory.Exists(folderPath))
-            {
-                throw new DirectoryNotFoundException("The Directory does not exist");
-            }
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException("File does not exist on disk");
 
-            var pattern = width is null ? $"{id}.*" : $"{id}_w{width}.*";
-            var filePath = Directory.GetFiles(folderPath, pattern).FirstOrDefault();
-
-            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
-            {
-                throw new FileNotFoundException("The File was not exisitng");
-            }
-
-            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            var fetchImageById = await imageRepository.GetImageByIdAsync(id, ct);
-            return fileStream;
+            return new FileStream(filePath, FileMode.Open, FileAccess.Read);
         }
         catch (Exception ex)
         {
@@ -155,6 +143,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
             var url = $"{context?.Request.Scheme}://{context?.Request.Host}/{relativePath}";
 
             var userId = httpContext?.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userName = httpContext?.HttpContext?.User?.Identity?.Name;
 
             if (string.IsNullOrEmpty(userId))
             {
@@ -170,8 +159,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
                 OriginalFileName = file.FileName,
                 MimeType = file.ContentType,
                 FileExtension = Path.GetExtension(file.FileName),
-                UserId = Guid.Parse(userId)
-
+                UserId = Guid.Parse(userId),
             };
             return await imageRepository.UploadImageAsync(imageResult, ct);
         }
