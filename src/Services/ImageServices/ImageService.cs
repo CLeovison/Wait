@@ -158,6 +158,7 @@ public sealed class ImageService(IOptions<UploadDirectoryOptions> options, IHttp
                 DateUploaded = DateTime.UtcNow,
                 OriginalFileName = file.FileName,
                 MimeType = file.ContentType,
+                FileLength = file.Length,
                 FileExtension = Path.GetExtension(file.FileName),
                 UserId = Guid.Parse(userId),
             };

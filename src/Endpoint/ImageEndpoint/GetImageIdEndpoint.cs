@@ -15,7 +15,7 @@ public sealed class GetImageEndpoint : IEndpoint
             {
                 var request = await imageService.GetImageByIdAsync(id, fileName, width, ct);
 
-                return Results.Ok();
+                return Results.Ok(request);
             }
             catch (Exception ex)
             {
