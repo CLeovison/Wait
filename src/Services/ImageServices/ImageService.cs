@@ -101,6 +101,7 @@ public sealed class ImageService(
             throw new Exception("Error generating thumbnails", ex);
         }
     }
+
     public async Task<Stream> GetImageByIdAsync(string id, int? width, CancellationToken ct)
     {
         try
@@ -140,16 +141,15 @@ public sealed class ImageService(
     {
         try
         {
-            var result = await imageRepository.GetImageByIdAsync(id, ct) 
+            var result = await imageRepository.GetImageByIdAsync(id, ct)
             ?? throw new FileNotFoundException("Image metadata not found");
-            
+
             return result;
         }
         catch (Exception ex)
         {
             throw new IOException("Error retrieving image metadata", ex);
         }
-
 
     }
 
@@ -179,8 +179,8 @@ public sealed class ImageService(
             var physicalPath = Path.Combine(physicalFolder, fileName);
 
             // 4. Save the file
-            using (var stream = new FileStream(physicalPath, FileMode.Create))
-                await file.CopyToAsync(stream, ct);
+            using var stream = new FileStream(physicalPath, FileMode.Create);
+            await file.CopyToAsync(stream, ct);
 
             // 5. Build public URL
             var ctx = httpContext.HttpContext!;
@@ -188,14 +188,14 @@ public sealed class ImageService(
 
             // 6. Ensure user identity is present
             var userIdString = ctx.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (userIdString is null)
                 throw new InvalidOperationException("User ID not found in claims.");
 
-            // 7. Create metadata
             var imageResult = new ImageResult
             {
                 ImageId = imageId,
-                ObjectKey = objectKey,                    // <<< relative key only
+                ObjectKey = objectKey,
                 StorageUrl = storageUrl,
                 DateUploaded = DateTime.UtcNow,
                 OriginalFileName = file.FileName,
@@ -227,7 +227,6 @@ public sealed class ImageService(
             throw new DirectoryNotFoundException("The Directory was not existing");
         }
 
-
         try
         {
 
@@ -237,6 +236,7 @@ public sealed class ImageService(
             }
 
             await Task.Run(() => File.Delete(filePath), ct);
+
             return new ImageOperationResult
             {
                 Success = true,
@@ -258,6 +258,4 @@ public sealed class ImageService(
 
         }
     }
-
-
 }
