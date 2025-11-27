@@ -49,6 +49,7 @@ IOptions<UploadDirectoryOptions> options) : IThumbnailGenerationService
             status[job.id] = ThumbnailGenerationStatus.Failed;
             throw new DirectoryNotFoundException("The Thumbnail Cannot be Generated", ex);
         }
+
     }
 
     // public Task GetThumbnailStatusAsync(string id)
