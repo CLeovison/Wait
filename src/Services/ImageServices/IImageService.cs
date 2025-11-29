@@ -13,7 +13,8 @@ public interface IImageService
         int[]? width = null);
 
     Task<ImageResult> UploadImageAsync(IFormFile file, CancellationToken ct);
-    Task<Stream> GetImageByIdAsync(string id, int? width, CancellationToken ct);
-    Task<ImageResult> GetImageMetadataAsync(string id, CancellationToken ct);
+    Task<ImageResult> GetImageObjectKeyAsync(string objectKey, CancellationToken ct);
+    Task<Stream> GetImageStreamAsync(ImageResult image, int? width, CancellationToken ct);
+
     Task<ImageOperationResult> DeleteImageAsync(string id, CancellationToken ct);
 }

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Wait.Database;
 using Wait.Infrastructure.Common;
 
@@ -16,8 +17,11 @@ public sealed class ImageRepository(AppDbContext dbContext) : IImageRepository
     public async Task<ImageResult?> GetImageByIdAsync(string id, CancellationToken ct)
     {
         return await dbContext.Image.FindAsync(id, ct);
+    }
 
-
+    public async Task<ImageResult?> GetImageByObjectKeyAsync(string objectKey, CancellationToken ct)
+    {
+        return await dbContext.Image.FirstOrDefaultAsync(x => x.ObjectKey == objectKey);
     }
 
 }

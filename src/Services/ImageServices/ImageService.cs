@@ -102,57 +102,6 @@ public sealed class ImageService(
         }
     }
 
-    public async Task<Stream> GetImageByIdAsync(string id, int? width, CancellationToken ct)
-    {
-        try
-        {
-            var image = await imageRepository.GetImageByIdAsync(id, ct);
-            if (image is null)
-                throw new FileNotFoundException("Image metadata not found");
-
-            // Build absolute path using UploadFolder + objectKey
-            var fullPath = Path.Combine(settings.UploadFolder, image.ObjectKey);
-
-            // Thumbnail logic (if requested)
-            if (width is not null)
-            {
-                var folder = Path.GetDirectoryName(fullPath)!;
-                var ext = Path.GetExtension(fullPath);
-                var baseName = Path.GetFileNameWithoutExtension(fullPath);
-
-                var thumbPath = Path.Combine(folder, $"{baseName}_w{width}{ext}");
-                if (File.Exists(thumbPath))
-                    fullPath = thumbPath;
-            }
-
-            // Check file existence
-            if (!File.Exists(fullPath))
-                throw new FileNotFoundException($"Image not found at {fullPath}");
-
-            return new FileStream(fullPath, FileMode.Open, FileAccess.Read);
-        }
-        catch (Exception ex)
-        {
-            throw new IOException("Error retrieving image", ex);
-        }
-    }
-
-    public async Task<ImageResult> GetImageMetadataAsync(string id, CancellationToken ct)
-    {
-        try
-        {
-            var result = await imageRepository.GetImageByIdAsync(id, ct)
-            ?? throw new FileNotFoundException("Image metadata not found");
-
-            return result;
-        }
-        catch (Exception ex)
-        {
-            throw new IOException("Error retrieving image metadata", ex);
-        }
-
-    }
-
     public async Task<ImageResult> UploadImageAsync(IFormFile file, CancellationToken ct)
     {
         if (!IsValidImage(file))
@@ -213,28 +162,73 @@ public sealed class ImageService(
         }
     }
 
+    public async Task<ImageResult> GetImageObjectKeyAsync(string objectKey, CancellationToken ct)
+    {
+        try
+        {
+            var request = await imageRepository.GetImageByObjectKeyAsync(objectKey, ct);
+
+            if (request is null)
+            {
+                throw new FileNotFoundException("The Image Metadata does not exists");
+            }
+
+            return request;
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Error retrieving image metadata by objectKey", ex);
+        }
+    }
+
+    public async Task<Stream> GetImageStreamAsync(ImageResult image, int? width, CancellationToken ct)
+    {
+        try
+        {
+            var normalizedKey = image.ObjectKey.Replace("/", Path.DirectorySeparatorChar.ToString());
+            var fullPath = Path.Combine(settings.UploadFolder, normalizedKey);
+
+            if (width is not null)
+            {
+                var folder = Path.GetDirectoryName(fullPath)!;
+                var extension = Path.GetExtension(fullPath);
+                var baseName = Path.GetFileNameWithoutExtension(fullPath);
+
+                var thumbPath = Path.Combine(folder, $"{baseName}_w{extension}");
+
+            }
+
+            if (!File.Exists(fullPath))
+            {
+                throw new FileNotFoundException($"Image not found at {fullPath}");
+            }
+
+            return new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+        }
+        catch (Exception ex)
+        {
+            throw new IOException("Error retrieving image stream", ex);
+        }
+    }
+
+
     public async Task<ImageOperationResult> DeleteImageAsync(string id, CancellationToken ct)
     {
-        if (id is null)
-        {
+        if (string.IsNullOrWhiteSpace(id))
             throw new FileNotFoundException("The Image does not exist");
-        }
 
-        var filePath = Path.Combine(settings.UploadFolder, id);
+        var image = await imageRepository.GetImageByIdAsync(id, ct);
+        if (image is null)
+            throw new FileNotFoundException("Image metadata not found");
 
-        if (!Directory.Exists(filePath))
-        {
-            throw new DirectoryNotFoundException("The Directory was not existing");
-        }
+        var normalizedKey = image.ObjectKey.Replace("/", Path.DirectorySeparatorChar.ToString());
+        var filePath = Path.Combine(settings.UploadFolder, normalizedKey);
+
+        if (!File.Exists(filePath))
+            throw new FileNotFoundException($"Image not found at {filePath}");
 
         try
         {
-
-            if (!File.Exists(filePath))
-            {
-                throw new FileNotFoundException($"Image Not Found {filePath}");
-            }
-
             await Task.Run(() => File.Delete(filePath), ct);
 
             return new ImageOperationResult
@@ -243,7 +237,6 @@ public sealed class ImageService(
                 ImageName = id,
                 Message = "Image deleted successfully."
             };
-
         }
         catch (Exception ex)
         {
@@ -253,9 +246,7 @@ public sealed class ImageService(
                 ImageName = id,
                 Message = $"Error deleting image: {ex.Message}"
             };
-
-            throw new FileNotFoundException("The File is already deleted", ex);
-
         }
     }
+
 }
