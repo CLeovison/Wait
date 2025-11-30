@@ -112,30 +112,26 @@ public sealed class ImageService(
 
         try
         {
-            // 1. Generate ID and sanitized filename
+            
             var imageId = Guid.NewGuid();
             var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-            var fileName = $"{imageId}{extension}";   // clean, stable filename
+            var fileName = $"{imageId}{extension}";   
 
-            // 2. Build relative object key (DB value)
+          
             var objectKey = Path.Combine("images", imageId.ToString(), fileName)
                                 .Replace("\\", "/");
 
-            // 3. Build full physical path
             var physicalFolder = Path.Combine(settings.UploadFolder, "images", imageId.ToString());
             Directory.CreateDirectory(physicalFolder);
 
             var physicalPath = Path.Combine(physicalFolder, fileName);
 
-            // 4. Save the file
             using var stream = new FileStream(physicalPath, FileMode.Create);
             await file.CopyToAsync(stream, ct);
 
-            // 5. Build public URL
             var ctx = httpContext.HttpContext!;
             var storageUrl = $"{ctx.Request.Scheme}://{ctx.Request.Host}/uploads/{objectKey}";
 
-            // 6. Ensure user identity is present
             var userIdString = ctx.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (userIdString is null)
