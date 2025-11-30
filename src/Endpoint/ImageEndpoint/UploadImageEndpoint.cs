@@ -10,7 +10,7 @@ public sealed class UploadImageEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/image/upload", async ([FromServices] IImageService imageService,
+        app.MapPost("   ", async ([FromServices] IImageService imageService,
     [FromForm] IFormFile file,
     CancellationToken ct) =>
         {

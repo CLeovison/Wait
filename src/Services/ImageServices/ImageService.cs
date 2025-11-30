@@ -212,7 +212,7 @@ public sealed class ImageService(
     }
 
 
-    public async Task<ImageOperationResult> DeleteImageAsync(string objectKey, CancellationToken ct)
+    public async Task<bool> DeleteImageAsync(string objectKey, CancellationToken ct)
     {
         try
         {
@@ -220,12 +220,7 @@ public sealed class ImageService(
 
             if (imageObject is null)
             {
-                return new ImageOperationResult
-                {
-                    ImageName = objectKey,
-                    Message = "Image meta data not found",
-                    IsSuccess = false
-                };
+                return false;
             }
 
             var normalizedKey = imageObject.ObjectKey.Replace("/", Path.DirectorySeparatorChar.ToString());
@@ -236,14 +231,7 @@ public sealed class ImageService(
                 File.Delete(filePath);
             }
 
-            await imageRepository.DeleteImageByObjectKeyAsync(objectKey, ct);
-
-            return new ImageOperationResult
-            {
-                ImageName = objectKey,
-                Message = "Image Deleted Successfully",
-                IsSuccess = true
-            };
+            return await imageRepository.DeleteImageByObjectKeyAsync(objectKey, ct);
 
         }
         catch (Exception ex)
