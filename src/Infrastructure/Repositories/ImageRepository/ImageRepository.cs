@@ -24,4 +24,12 @@ public sealed class ImageRepository(AppDbContext dbContext) : IImageRepository
         return await dbContext.Image.FirstOrDefaultAsync(x => x.ObjectKey == objectKey);
     }
 
+    public async Task<bool> DeleteImageByObjectKeyAsync(string objectKey, CancellationToken ct)
+    {
+        var imageKey = await dbContext.Image.FirstAsync(x => x.ObjectKey == objectKey);
+        dbContext.Image.Remove(imageKey);
+        await dbContext.SaveChangesAsync();
+
+        return true;
+    }
 }

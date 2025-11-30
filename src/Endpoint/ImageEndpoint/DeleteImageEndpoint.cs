@@ -8,11 +8,18 @@ public sealed class DeleteImageEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("/api/image/{id}", async (string id, IImageService imageService, CancellationToken ct) =>
+        app.MapDelete("/api/image/{*objectKey}", async (string objectKey, IImageService imageService, CancellationToken ct) =>
         {
-            await imageService.DeleteImageAsync(id, ct);
-
-            return TypedResults.NoContent();
+            try
+            {
+                await imageService.DeleteImageAsync(objectKey, ct);
+                
+                return Results.NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Results.NotFound();
+            }
         });
     }
 }

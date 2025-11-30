@@ -212,40 +212,43 @@ public sealed class ImageService(
     }
 
 
-    public async Task<ImageOperationResult> DeleteImageAsync(string id, CancellationToken ct)
+    public async Task<ImageOperationResult> DeleteImageAsync(string objectKey, CancellationToken ct)
     {
-        if (string.IsNullOrWhiteSpace(id))
-            throw new FileNotFoundException("The Image does not exist");
-
-        var image = await imageRepository.GetImageByIdAsync(id, ct);
-        if (image is null)
-            throw new FileNotFoundException("Image metadata not found");
-
-        var normalizedKey = image.ObjectKey.Replace("/", Path.DirectorySeparatorChar.ToString());
-        var filePath = Path.Combine(settings.UploadFolder, normalizedKey);
-
-        if (!File.Exists(filePath))
-            throw new FileNotFoundException($"Image not found at {filePath}");
-
         try
         {
-            await Task.Run(() => File.Delete(filePath), ct);
+            var imageObject = await imageRepository.GetImageByObjectKeyAsync(objectKey, ct);
+
+            if (imageObject is null)
+            {
+                return new ImageOperationResult
+                {
+                    ImageName = objectKey,
+                    Message = "Image meta data not found",
+                    IsSuccess = false
+                };
+            }
+
+            var normalizedKey = imageObject.ObjectKey.Replace("/", Path.DirectorySeparatorChar.ToString());
+            var filePath = Path.Combine(settings.UploadFolder, normalizedKey);
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            await imageRepository.DeleteImageByObjectKeyAsync(objectKey, ct);
 
             return new ImageOperationResult
             {
-                Success = true,
-                ImageName = id,
-                Message = "Image deleted successfully."
+                ImageName = objectKey,
+                Message = "Image Deleted Successfully",
+                IsSuccess = true
             };
+
         }
         catch (Exception ex)
         {
-            return new ImageOperationResult
-            {
-                Success = false,
-                ImageName = id,
-                Message = $"Error deleting image: {ex.Message}"
-            };
+            throw new FileNotFoundException("The Image File does not exists", ex);
         }
     }
 
