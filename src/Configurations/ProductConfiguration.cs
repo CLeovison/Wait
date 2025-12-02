@@ -23,7 +23,7 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Property(x => x.Color)
         .IsRequired();
-        
+
         builder.Property(x => x.Price)
         .IsRequired();
 
@@ -34,8 +34,6 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         .HasMaxLength(50)
         .IsRequired();
 
-        builder.Property(x => x.ImageName)
-        .IsRequired();
 
         builder.Property(d => d.CreatedAt)
         .ValueGeneratedOnAdd()
@@ -48,5 +46,8 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.HasOne(x => x.Category)
         .WithMany(c => c.Products)
         .HasForeignKey(x => x.CategoryId);
+
+        builder.HasOne(x => x.Image)
+        .WithMany().HasForeignKey(x => x.ImageId);
     }
 }
