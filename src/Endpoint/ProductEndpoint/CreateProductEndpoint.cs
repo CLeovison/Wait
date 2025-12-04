@@ -11,11 +11,18 @@ public class CreateProductEndpoint : IEndpoint
 
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/products", async (IProductService productService, CreateProductRequest req, CancellationToken ct) =>
+        app.MapPost("/api/products", async (IProductService productService, IFormFile file, CreateProductRequest req, CancellationToken ct) =>
         {
-            var productDto = req.ToCreateRequest();
-            var productRequest = await productService.CreateProductAsync(productDto, ct);
-            return productRequest;
+            try
+            {
+                var productDto = req.ToCreateRequest();
+                var productRequest = await productService.CreateProductAsync(productDto, file, ct);
+                return Results.Created($"/products/{productRequest.ProductName}", productRequest);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         })
         .DisableAntiforgery()
         .RequireAuthorization();

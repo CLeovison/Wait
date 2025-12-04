@@ -7,7 +7,7 @@ namespace Wait.Services.ProductServices;
 
 public interface IProductService
 {
-    Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct);
+    Task<ProductDto> CreateProductAsync(ProductDto product, IFormFile file, CancellationToken ct);
     Task<ProductDto?> GetProductByIdAsync(Guid id, CancellationToken ct);
     Task<PaginatedResponse<ProductDto>> GetPaginatedProductAsync(PaginatedRequest req, FilterProductRequest filters, CancellationToken ct);
     Task<bool> DeleteProductAsync(Guid id, CancellationToken ct);
