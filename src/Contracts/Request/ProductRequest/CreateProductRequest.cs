@@ -14,5 +14,5 @@ public sealed class CreateProductRequest
     public Guid CategoryId { get; set; }
     public string CategoryName { get; set; } = string.Empty;
     public int Quantity { get; init; }
-    public DateOnly CreatedAt { get; init; }
+
 }

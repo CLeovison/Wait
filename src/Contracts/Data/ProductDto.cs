@@ -11,6 +11,7 @@ public class ProductDto : AuditableEntity
     public string Color { get; set; } = string.Empty;
     public string Size { get; set; } = string.Empty;
     public string ImageUrl { get; set; } = string.Empty;
+    public Guid ImageId { get; set; }
     public IFormFile? Image { get; set; }
     public decimal Price { get; set; }
     public Guid CategoryId { get; set; }

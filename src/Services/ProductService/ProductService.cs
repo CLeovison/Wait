@@ -4,6 +4,7 @@ using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.ProductRequest;
 using Wait.Contracts.Response;
 using Wait.Helper;
+using Wait.Infrastructure.Common;
 using Wait.Infrastructure.Mapping;
 using Wait.Infrastructure.Repositories.CategoriesRepository;
 using Wait.Infrastructure.Repositories.ProductRepository;
@@ -32,11 +33,24 @@ IConfiguration configuration) : IProductService
             throw new ArgumentNullException("The Category does not exist, please add this shit");
         }
 
-        var imageResult = await imageService.UploadImageAsync(file, ct);
+        ImageResult? imageResult = null;
+
+        if (product.Image is not null)
+        {
+            imageResult = await imageService.UploadImageAsync(file, ct);
+        }
         var createProduct = product.ToCreate(category.CategoryId);
+        if (imageResult is not null)
+        {
+            createProduct.ImageId = imageResult.ImageId;
+        }
+
 
         var request = await productRepository.CreateProductAsync(createProduct, ct);
-        return request.ToDto();
+        var resultDto = request.ToDto();
+        resultDto.ImageUrl = imageResult?.ObjectKey ?? string.Empty;
+        
+        return resultDto;
     }
     public async Task<ProductDto?> GetProductByIdAsync(Guid id, CancellationToken ct)
     {
