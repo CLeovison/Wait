@@ -45,9 +45,13 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasOne(x => x.Category)
         .WithMany(c => c.Products)
-        .HasForeignKey(x => x.CategoryId);
+        .HasForeignKey(x => x.CategoryId)
+        .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Image)
-        .WithMany().HasForeignKey(x => x.ImageId);
+        .WithMany().HasForeignKey(x => x.ImageId)
+        .OnDelete(DeleteBehavior.Restrict);
+
+
     }
 }

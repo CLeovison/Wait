@@ -16,7 +16,7 @@ public class Product : AuditableEntity
     public decimal Price { get; set; }
     public int Quantity { get; set; }
     public Guid ImageId { get; set; }
-    public ImageResult? Image {get; set;}
+    public ICollection<ImageResult?> Image { get; set; } = new List<ImageResult?>();
 
     public Guid CategoryId { get; set; }
     public Category? Category { get; set; }
