@@ -17,4 +17,8 @@ public sealed class ImageResult
     public long FileLength { get; set; }
     public DateTime DateUploaded { get; set; }
     public DateTime DateModified { get; set; }
+
+
+    public Guid ProductId { get; set; }
+    public Product Product { get; set; } = null!;
 }

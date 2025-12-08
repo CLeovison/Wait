@@ -43,7 +43,6 @@ public static class EntitiesToDtoMapper
         {
             CategoryName = category.CategoryName,
             CategoryDescription = category.CategoryDescription,
-
         };
     }
 
