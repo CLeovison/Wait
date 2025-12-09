@@ -9,6 +9,7 @@ public sealed class CategoriesConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
     {
+        builder.HasKey(x => x.CategoryId);
         builder.HasIndex(c => c.CategoryName);
 
         builder.Property(x => x.CategoryId).ValueGeneratedOnAdd();

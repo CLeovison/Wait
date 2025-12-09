@@ -35,21 +35,21 @@ IConfiguration configuration) : IProductService
 
         ImageResult? imageResult = null;
 
-        if (product.Image is not null)
+        if (product.ImageUrl is null)
         {
             imageResult = await imageService.UploadImageAsync(file, ct);
         }
         var createProduct = product.ToCreate(category.CategoryId);
         if (imageResult is not null)
         {
-            createProduct.ImageId = imageResult.ImageId;
+            createProduct.Image = imageResult.ObjectKey;
         }
 
 
         var request = await productRepository.CreateProductAsync(createProduct, ct);
         var resultDto = request.ToDto();
         resultDto.ImageUrl = imageResult?.ObjectKey ?? string.Empty;
-        
+
         return resultDto;
     }
     public async Task<ProductDto?> GetProductByIdAsync(Guid id, CancellationToken ct)

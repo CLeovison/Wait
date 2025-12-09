@@ -8,7 +8,7 @@ public sealed class ImageConfiguration : IEntityTypeConfiguration<ImageResult>
 {
   public void Configure(EntityTypeBuilder<ImageResult> builder)
   {
-    builder.HasKey(x => x.ImageId);
+    builder.HasKey(x => x.ObjectKey);
 
     builder.Property(x => x.ObjectKey).IsRequired();
     builder.Property(x => x.StorageUrl).IsRequired();
