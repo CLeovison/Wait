@@ -17,11 +17,10 @@ namespace Wait.Services.ProductServices;
 public sealed class ProductService(
     IProductRepository productRepository,
 ICategoriesRepository categoriesRepository,
-IImageService imageService,
-IConfiguration configuration) : IProductService
+IImageService imageService) : IProductService
 {
 
-    private readonly string _uploadDirectory = configuration["UploadDirectory : UploadFolder"] ?? "Uploads";
+
     public async Task<ProductDto> CreateProductAsync(ProductDto product, IFormFile file, CancellationToken ct)
     {
 
@@ -30,7 +29,7 @@ IConfiguration configuration) : IProductService
 
         if (category is null)
         {
-            throw new ArgumentNullException("The Category does not exist, please add this shit");
+            throw new InvalidOperationException("The Category does not exist, please add this shit");
         }
 
         ImageResult? imageResult = null;
@@ -39,10 +38,17 @@ IConfiguration configuration) : IProductService
         {
             imageResult = await imageService.UploadImageAsync(file, ct);
         }
+
+        if (file is null)
+        {
+            throw new ArgumentException("Image file must be provided when no ImageUrl exists.");
+        }
+
         var createProduct = product.ToCreate(category.CategoryId);
+        
         if (imageResult is not null)
         {
-            createProduct.Image = imageResult.ObjectKey;
+            createProduct.Image = new List<ImageResult> { imageResult };
         }
 
 
