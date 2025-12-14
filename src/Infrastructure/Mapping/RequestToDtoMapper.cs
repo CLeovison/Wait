@@ -52,7 +52,7 @@ public static class RequestToDtoMapper
             Description = req.Description,
             Size = req.Size,
             Color = req.Color,
-            Image = req.Image,
+            ImageUrl = req.Image is not null ? new List<string> { req.Image.FileName } : new List<string>(),
             CategoryId = req.CategoryId,
             Quantity = req.Quantity,
             CategoryName = req.CategoryName,

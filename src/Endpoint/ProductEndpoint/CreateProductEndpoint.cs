@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Mvc;
 using Wait.Abstract;
 using Wait.Contracts.Request.ProductRequest;
 using Wait.Infrastructure.Mapping;
@@ -11,7 +12,7 @@ public class CreateProductEndpoint : IEndpoint
 
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/products", async (IProductService productService, IFormFile file, CreateProductRequest req, CancellationToken ct) =>
+        app.MapPost("/api/products", async (IProductService productService, IFormFile file, [FromForm] CreateProductRequest req, CancellationToken ct) =>
         {
             try
             {
@@ -24,7 +25,6 @@ public class CreateProductEndpoint : IEndpoint
                 throw;
             }
         })
-        .DisableAntiforgery()
-        .RequireAuthorization();
+        .DisableAntiforgery();
     }
 }

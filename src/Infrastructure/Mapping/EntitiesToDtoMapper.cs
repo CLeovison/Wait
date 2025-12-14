@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Wait.Contracts.Data;
 using Wait.Domain.Entities;
 using Wait.Entities;
+using Wait.Infrastructure.Common;
 
 namespace Wait.Infrastructure.Mapping;
 
@@ -30,7 +31,7 @@ public static class EntitiesToDtoMapper
             Price = productDto.Price,
             Color = productDto.Color,
             Size = productDto.Size,
-            Image = productDto.
+            Image = productDto.ImageUrl.Select(url => new ImageResult { StorageUrl = url }).ToList(),
             CategoryId = categoryId,
             Quantity = productDto.Quantity,
             CreatedAt = productDto.CreatedAt

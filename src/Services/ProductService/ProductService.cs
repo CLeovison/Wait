@@ -13,7 +13,6 @@ using Wait.Services.FileServices;
 
 namespace Wait.Services.ProductServices;
 
-
 public sealed class ProductService(
     IProductRepository productRepository,
 ICategoriesRepository categoriesRepository,
@@ -45,7 +44,7 @@ IImageService imageService) : IProductService
         }
 
         var createProduct = product.ToCreate(category.CategoryId);
-        
+
         if (imageResult is not null)
         {
             createProduct.Image = new List<ImageResult> { imageResult };
@@ -54,7 +53,7 @@ IImageService imageService) : IProductService
 
         var request = await productRepository.CreateProductAsync(createProduct, ct);
         var resultDto = request.ToDto();
-        resultDto.ImageUrl = imageResult?.ObjectKey ?? string.Empty;
+        resultDto.ImageUrl = new List<string> { imageResult?.StorageUrl ?? string.Empty };
 
         return resultDto;
     }
