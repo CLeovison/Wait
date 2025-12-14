@@ -5,13 +5,14 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Wait.Abstract;
 using Wait.Domain.Entities;
+using Wait.Features.Users;
 
 namespace Wait.Infrastructure.Authentication;
 
 public sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
 {
 
-    public string GenerateToken(User users)
+    public string GenerateToken(Users users)
     {
         string? secretKey = configuration["Jwt:SecretKey"]!;
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));

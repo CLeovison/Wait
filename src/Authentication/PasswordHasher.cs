@@ -2,17 +2,18 @@ using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 
 using Wait.Domain.Entities;
+using Wait.Features.Users;
 
 namespace Wait.Infrastructure.Authentication;
 
-public sealed class PasswordHasher : IPasswordHasher<User>
+public sealed class PasswordHasher : IPasswordHasher<Users>
 {
     private const int SaltSize = 16;
     private const int HashSize = 32;
     private const int Iterations = 100000;
     private static readonly HashAlgorithmName Algorithm = HashAlgorithmName.SHA512;
 
-    public string HashPassword(User user, string password)
+    public string HashPassword(Users user, string password)
     {
         byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
         byte[] hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, Algorithm, HashSize);
@@ -21,7 +22,7 @@ public sealed class PasswordHasher : IPasswordHasher<User>
     }
 
 
-    public PasswordVerificationResult VerifyHashedPassword(User user, string password, string hashedPassword)
+    public PasswordVerificationResult VerifyHashedPassword(Users user, string password, string hashedPassword)
     {
         string[] parts = hashedPassword.Split('-');
         byte[] hash = Convert.FromHexString(parts[0]);

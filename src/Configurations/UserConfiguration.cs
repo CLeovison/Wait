@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Wait.Domain.Entities;
+using Wait.Features.Users;
 
 namespace Wait.Configurations;
 

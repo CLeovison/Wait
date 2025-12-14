@@ -1,9 +1,11 @@
 using Wait.Domain.Common;
 
-namespace Wait.Entities;
+namespace Wait.Features.Users;
 
-public sealed class User : AuditableEntity
+public sealed class Users : AuditableEntity
 {
+
+
     public Guid UserId { get; set; }
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
