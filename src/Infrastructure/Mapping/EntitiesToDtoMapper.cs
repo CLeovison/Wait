@@ -31,7 +31,7 @@ public static class EntitiesToDtoMapper
             Price = productDto.Price,
             Color = productDto.Color,
             Size = productDto.Size,
-            Image = productDto.ImageUrl.Select(url => new ImageResult { StorageUrl = url }).ToList(),
+            ImageUrl = productDto.ImageUrl.Select(url => new ImageResult { StorageUrl = url }).ToList(),
             CategoryId = categoryId,
             Quantity = productDto.Quantity,
             CreatedAt = productDto.CreatedAt

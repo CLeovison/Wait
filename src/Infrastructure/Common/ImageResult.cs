@@ -1,4 +1,3 @@
-using Wait.Domain.Entities;
 using Wait.Entities;
 
 namespace Wait.Infrastructure.Common;
@@ -18,7 +17,6 @@ public sealed class ImageResult
     public DateTime DateUploaded { get; set; }
     public DateTime DateModified { get; set; }
 
-
     public Guid ProductId { get; set; }
-    public Product Product { get; set; } = null!;
+    public Product? Product { get; set; }
 }
