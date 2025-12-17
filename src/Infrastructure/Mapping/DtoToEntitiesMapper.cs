@@ -42,7 +42,7 @@ public static class DtoToEntitiesMapper
             Price = product.Price,
             Quantity = product.Quantity,
             Color = product.Color,
-            ImageUrl = new List<string> { product.Image.FirstOrDefault()?.StorageUrl ?? string.Empty },
+            ImageUrl = new List<string> { product.ImageUrl.FirstOrDefault()?.StorageUrl ?? string.Empty },
             Description = product.Description,
             CategoryId = product.CategoryId,
             CategoryName = product.Category?.CategoryName ?? string.Empty,

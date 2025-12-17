@@ -4,23 +4,20 @@ using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.ProductRequest;
 using Wait.Contracts.Response;
 using Wait.Helper;
-using Wait.Infrastructure.Common;
 using Wait.Infrastructure.Mapping;
 using Wait.Infrastructure.Repositories.CategoriesRepository;
 using Wait.Infrastructure.Repositories.ProductRepository;
-using Wait.Services.FileServices;
 
 
 namespace Wait.Services.ProductServices;
 
 public sealed class ProductService(
     IProductRepository productRepository,
-ICategoriesRepository categoriesRepository,
-IImageService imageService) : IProductService
+ICategoriesRepository categoriesRepository) : IProductService
 {
 
 
-    public async Task<ProductDto> CreateProductAsync(ProductDto product, IFormFile file, CancellationToken ct)
+    public async Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct)
     {
 
         var normalizedCategory = product.CategoryName.Trim();
@@ -31,29 +28,11 @@ IImageService imageService) : IProductService
             throw new InvalidOperationException("The Category does not exist, please add this shit");
         }
 
-        ImageResult? imageResult = null;
-
-        if (product.ImageUrl is null)
-        {
-            imageResult = await imageService.UploadImageAsync(file, ct);
-        }
-
-        if (file is null)
-        {
-            throw new ArgumentException("Image file must be provided when no ImageUrl exists.");
-        }
 
         var createProduct = product.ToCreate(category.CategoryId);
 
-        if (imageResult is not null)
-        {
-            createProduct.Image = new List<ImageResult> { imageResult };
-        }
-
-
         var request = await productRepository.CreateProductAsync(createProduct, ct);
         var resultDto = request.ToDto();
-        resultDto.ImageUrl = new List<string> { imageResult?.StorageUrl ?? string.Empty };
 
         return resultDto;
     }
