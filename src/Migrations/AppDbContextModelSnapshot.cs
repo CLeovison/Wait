@@ -17,7 +17,7 @@ namespace src.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "10.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -308,7 +308,7 @@ namespace src.Migrations
             modelBuilder.Entity("Wait.Infrastructure.Common.ImageResult", b =>
                 {
                     b.HasOne("Wait.Entities.Product", "Product")
-                        .WithMany("Image")
+                        .WithMany("ImageUrl")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -323,7 +323,7 @@ namespace src.Migrations
 
             modelBuilder.Entity("Wait.Entities.Product", b =>
                 {
-                    b.Navigation("Image");
+                    b.Navigation("ImageUrl");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,15 +12,15 @@ using Wait.Database;
 namespace src.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251126165049_UpdatedImageConfiguration")]
-    partial class UpdatedImageConfiguration
+    [Migration("20251219170228_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "10.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -178,10 +178,6 @@ namespace src.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -242,9 +238,8 @@ namespace src.Migrations
 
             modelBuilder.Entity("Wait.Infrastructure.Common.ImageResult", b =>
                 {
-                    b.Property<Guid>("ImageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                    b.Property<string>("ObjectKey")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("DateModified")
                         .ValueGeneratedOnUpdate()
@@ -263,17 +258,19 @@ namespace src.Migrations
                     b.Property<long>("FileLength")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("MimeType")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("ObjectKey")
+                    b.Property<string>("MimeType")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("OriginalFileName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
@@ -282,9 +279,9 @@ namespace src.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("ImageId");
+                    b.HasKey("ObjectKey");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Image");
                 });
@@ -305,7 +302,7 @@ namespace src.Migrations
                     b.HasOne("Wait.Domain.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -313,18 +310,23 @@ namespace src.Migrations
 
             modelBuilder.Entity("Wait.Infrastructure.Common.ImageResult", b =>
                 {
-                    b.HasOne("Wait.Domain.Entities.Users", "Users")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Wait.Entities.Product", "Product")
+                        .WithMany("ImageUrl")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Users");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Wait.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Wait.Entities.Product", b =>
+                {
+                    b.Navigation("ImageUrl");
                 });
 #pragma warning restore 612, 618
         }
