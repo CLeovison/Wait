@@ -43,6 +43,8 @@ public static class RequestToDtoMapper
         };
     }
 
+
+   
     public static ProductDto ToCreateRequest(this CreateProductRequest req)
     {
         return new ProductDto

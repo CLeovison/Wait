@@ -19,5 +19,6 @@ public sealed class ImageConfiguration : IEntityTypeConfiguration<ImageResult>
     builder.Property(x => x.DateUploaded).ValueGeneratedOnAdd().HasDefaultValueSql("current_date");
     builder.Property(x => x.DateModified).ValueGeneratedOnUpdate().HasDefaultValueSql("current_date");
     builder.Property(x => x.UserId).IsRequired();
+    builder.HasOne(x => x.Product).WithMany(x => x.ImageUrl);
   }
 }
