@@ -10,7 +10,7 @@ public sealed class UploadImageEndpoint : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/image/upload", async ([FromServices] IImageService imageService,
+        _ = app.MapPost("/api/image/upload", static async ([FromServices] IImageService imageService,
     [FromForm] IFormFile file,
     CancellationToken ct) =>
         {
@@ -29,9 +29,9 @@ public sealed class UploadImageEndpoint : IEndpoint
                 var upload = await imageService.UploadImageAsync(file, ct);
                 return Results.Ok(upload);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return Results.Problem("An error occurred while uploading the image.");
+                return Results.Problem("An error occurred while uploading the image.", ex.ToString());
 
             }
 
