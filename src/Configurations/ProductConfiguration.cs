@@ -34,7 +34,6 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         .HasMaxLength(50)
         .IsRequired();
 
-
         builder.Property(d => d.CreatedAt)
         .ValueGeneratedOnAdd()
         .HasDefaultValueSql("current_date");
@@ -47,12 +46,5 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         .WithMany(c => c.Products)
         .HasForeignKey(x => x.CategoryId)
         .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasMany(x => x.ImageUrl)
-        .WithOne(i => i.Product)
-        .HasForeignKey(i => i.ProductId)
-        .OnDelete(DeleteBehavior.Restrict);
-
-
     }
 }

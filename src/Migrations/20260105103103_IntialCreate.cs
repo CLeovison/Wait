@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace src.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class IntialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -117,21 +117,21 @@ namespace src.Migrations
                 name: "Image",
                 columns: table => new
                 {
-                    ObjectKey = table.Column<string>(type: "text", nullable: false),
                     ImageId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    StorageUrl = table.Column<string>(type: "text", nullable: false),
-                    MimeType = table.Column<string>(type: "text", nullable: false),
-                    FileExtension = table.Column<string>(type: "text", nullable: false),
-                    OriginalFileName = table.Column<string>(type: "text", nullable: false),
+                    ObjectKey = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
+                    StorageUrl = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
+                    MimeType = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    FileExtension = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    OriginalFileName = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     FileLength = table.Column<long>(type: "bigint", nullable: false),
-                    DateUploaded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "current_date"),
-                    DateModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "current_date"),
+                    DateUploaded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    DateModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Image", x => x.ObjectKey);
+                    table.PrimaryKey("PK_Image", x => x.ImageId);
                     table.ForeignKey(
                         name: "FK_Image_Product_ProductId",
                         column: x => x.ProductId,
@@ -146,9 +146,20 @@ namespace src.Migrations
                 column: "CategoryName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Image_ObjectKey",
+                table: "Image",
+                column: "ObjectKey",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Image_ProductId",
                 table: "Image",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_UserId",
+                table: "Image",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_CategoryId",

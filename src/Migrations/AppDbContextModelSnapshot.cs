@@ -236,7 +236,9 @@ namespace src.Migrations
             modelBuilder.Entity("Wait.Infrastructure.Common.ImageResult", b =>
                 {
                     b.Property<Guid>("ImageId")
-                        .HasColumnType("uuid");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<DateTime>("DateModified")
                         .ValueGeneratedOnAddOrUpdate()
@@ -271,7 +273,7 @@ namespace src.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid?>("ProductId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("StorageUrl")
@@ -283,9 +285,6 @@ namespace src.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("ImageId");
-
-                    b.HasIndex("ObjectKey")
-                        .IsUnique();
 
                     b.HasIndex("ProductId");
 
@@ -318,13 +317,9 @@ namespace src.Migrations
 
             modelBuilder.Entity("Wait.Infrastructure.Common.ImageResult", b =>
                 {
-                    b.HasOne("Wait.Entities.Product", "Product")
+                    b.HasOne("Wait.Entities.Product", null)
                         .WithMany("ImageUrl")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Product");
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Wait.Domain.Entities.Category", b =>

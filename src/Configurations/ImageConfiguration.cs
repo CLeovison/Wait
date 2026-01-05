@@ -11,7 +11,8 @@ public sealed class ImageConfiguration : IEntityTypeConfiguration<ImageResult>
               builder.HasKey(x => x.ImageId);
 
               builder.Property(x => x.ImageId)
-                     .ValueGeneratedNever();
+                     .ValueGeneratedOnAdd()
+                     .HasDefaultValueSql("gen_random_uuid()");
 
               builder.Property(x => x.ObjectKey)
                      .IsRequired()
@@ -44,14 +45,6 @@ public sealed class ImageConfiguration : IEntityTypeConfiguration<ImageResult>
                      .HasDefaultValueSql("now()")
                      .ValueGeneratedOnAddOrUpdate();
 
-              builder.HasIndex(x => x.ObjectKey).IsUnique();
-              builder.HasIndex(x => x.ProductId);
               builder.HasIndex(x => x.UserId);
-
-              builder.HasOne(x => x.Product)
-                     .WithMany(p => p.ImageUrl)
-                     .HasForeignKey(x => x.ProductId);
-     
-
-  }
+       }
 }

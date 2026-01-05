@@ -12,7 +12,7 @@ public sealed class PaginatedUserEndpoint : IEndpoint
         app.MapGet("api/users/paginated", async (
             IUserServices userServices,
             [AsParameters] FilterUserRequest filters,
-            string? searchTerm,
+            string searchTerm,
             int page,
             int pageSize,
             string? sortBy,

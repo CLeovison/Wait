@@ -12,8 +12,8 @@ using Wait.Database;
 namespace src.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251221105626_TrialShit")]
-    partial class TrialShit
+    [Migration("20260105121249_IntialCrates")]
+    partial class IntialCrates
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -238,50 +238,60 @@ namespace src.Migrations
 
             modelBuilder.Entity("Wait.Infrastructure.Common.ImageResult", b =>
                 {
-                    b.Property<string>("ObjectKey")
-                        .HasColumnType("text");
+                    b.Property<Guid>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<DateTime>("DateModified")
-                        .ValueGeneratedOnUpdate()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("current_date");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime>("DateUploaded")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("current_date");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<string>("FileExtension")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<long>("FileLength")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid>("ImageId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("MimeType")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("ObjectKey")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
 
                     b.Property<string>("OriginalFileName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid?>("ProductId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("ObjectKey");
+                    b.HasKey("ImageId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Image");
                 });
@@ -310,13 +320,9 @@ namespace src.Migrations
 
             modelBuilder.Entity("Wait.Infrastructure.Common.ImageResult", b =>
                 {
-                    b.HasOne("Wait.Entities.Product", "Product")
+                    b.HasOne("Wait.Entities.Product", null)
                         .WithMany("ImageUrl")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Product");
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Wait.Domain.Entities.Category", b =>

@@ -17,4 +17,5 @@ public interface IImageService
     Task<Stream> GetImageStreamAsync(ImageResult image, int? width, CancellationToken ct);
 
     Task<bool> DeleteImageAsync(string objectKey, CancellationToken ct);
+
 }

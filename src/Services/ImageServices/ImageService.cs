@@ -112,14 +112,13 @@ public sealed class ImageService(
 
         try
         {
-            
+
             var imageId = Guid.NewGuid();
             var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-            var fileName = $"{imageId}{extension}";   
+            var fileName = $"{imageId}{extension}";
 
-          
-            var objectKey = Path.Combine("images", imageId.ToString(), fileName)
-                                .Replace("\\", "/");
+
+            var objectKey = Path.Combine("images", imageId.ToString(), fileName).Replace("\\", "/");
 
             var physicalFolder = Path.Combine(settings.UploadFolder, "images", imageId.ToString());
             Directory.CreateDirectory(physicalFolder);
@@ -147,7 +146,8 @@ public sealed class ImageService(
                 MimeType = file.ContentType,
                 FileLength = file.Length,
                 FileExtension = extension,
-                UserId = Guid.Parse(userIdString)
+                UserId = Guid.Parse(userIdString),
+
             };
 
             return await imageRepository.UploadImageAsync(imageResult, ct);

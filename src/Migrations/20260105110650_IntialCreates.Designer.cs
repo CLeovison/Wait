@@ -12,8 +12,8 @@ using Wait.Database;
 namespace src.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251224180115_TrialFcks")]
-    partial class TrialFcks
+    [Migration("20260105110650_IntialCreates")]
+    partial class IntialCreates
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -274,7 +274,7 @@ namespace src.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid?>("ProductId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("StorageUrl")
@@ -287,7 +287,7 @@ namespace src.Migrations
 
                     b.HasKey("ImageId");
 
-                    b.HasIndex("ObjectKey")
+                    b.HasIndex("ImageId")
                         .IsUnique();
 
                     b.HasIndex("ProductId");
@@ -321,13 +321,9 @@ namespace src.Migrations
 
             modelBuilder.Entity("Wait.Infrastructure.Common.ImageResult", b =>
                 {
-                    b.HasOne("Wait.Entities.Product", "Product")
+                    b.HasOne("Wait.Entities.Product", null)
                         .WithMany("ImageUrl")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Product");
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Wait.Domain.Entities.Category", b =>
