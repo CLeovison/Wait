@@ -7,13 +7,15 @@ using Wait.Helper;
 using Wait.Infrastructure.Mapping;
 using Wait.Infrastructure.Repositories.CategoriesRepository;
 using Wait.Infrastructure.Repositories.ProductRepository;
+using Wait.Services.FileServices;
 
 
 namespace Wait.Services.ProductServices;
 
 public sealed class ProductService(
     IProductRepository productRepository,
-ICategoriesRepository categoriesRepository) : IProductService
+ICategoriesRepository categoriesRepository,
+IImageService imageServices) : IProductService
 {
 
 
