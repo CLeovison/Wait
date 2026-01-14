@@ -4,6 +4,7 @@ using Wait.Contracts.Request.Common;
 using Wait.Contracts.Request.ProductRequest;
 using Wait.Contracts.Response;
 using Wait.Helper;
+using Wait.Infrastructure.Common;
 using Wait.Infrastructure.Mapping;
 using Wait.Infrastructure.Repositories.CategoriesRepository;
 using Wait.Infrastructure.Repositories.ProductRepository;
@@ -14,29 +15,39 @@ namespace Wait.Services.ProductServices;
 
 public sealed class ProductService(
     IProductRepository productRepository,
-ICategoriesRepository categoriesRepository,
-IImageService imageServices) : IProductService
+ICategoriesRepository categoriesRepository) : IProductService
 {
 
 
-    public async Task<ProductDto> CreateProductAsync(ProductDto product, CancellationToken ct)
+    public async Task<ProductDto> CreateProductAsync(ProductDto product, IFormFile? file, CancellationToken ct)
     {
 
-        var normalizedCategory = product.CategoryName.Trim();
-        var category = await categoriesRepository.GetCategoryNameAsync(normalizedCategory, ct);
-
-        if (category is null)
+        try
         {
-            throw new InvalidOperationException("The Category does not exist, please add this shit");
+            var normalizedCategory = product.CategoryName.Trim();
+            var category = await categoriesRepository.GetCategoryNameAsync(normalizedCategory, ct);
+
+            if (category is null)
+            {
+                throw new InvalidOperationException("The Category does not exist, please add this shit");
+            }
+
+            if (file is null)
+            {
+                throw new FileNotFoundException(nameof(file), "The File is required");
+            }
+
+            var createProduct = product.ToCreate(category.CategoryId);
+
+            var request = await productRepository.CreateProductAsync(createProduct, ct);
+            var resultDto = request.ToDto();
+
+            return resultDto;
         }
-
-
-        var createProduct = product.ToCreate(category.CategoryId);
-
-        var request = await productRepository.CreateProductAsync(createProduct, ct);
-        var resultDto = request.ToDto();
-
-        return resultDto;
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("The product cannot be created", ex);
+        }
     }
     public async Task<ProductDto?> GetProductByIdAsync(Guid id, CancellationToken ct)
     {
