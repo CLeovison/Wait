@@ -1,4 +1,4 @@
-namespace Wait.Domain.Entities;
+namespace Wait.Entities;
 
 
 public sealed class Voucher

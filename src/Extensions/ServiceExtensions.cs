@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 using Wait.Abstract;
-using Wait.Domain.Entities;
+using Wait.Features.Users;
 using Wait.Infrastructure.Authentication;
 
 namespace Wait.Extensions;
 
 public static class ServiceCollectionExtensions
 {
- 
+
     public static IServiceCollection AddAuthenticationCollection(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication(option =>
@@ -49,7 +49,7 @@ public static class ServiceCollectionExtensions
 
         });
         services.AddAuthorization();
-        services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+        services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
         services.AddScoped<ITokenProvider, TokenProvider>();
         return services;
     }

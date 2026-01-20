@@ -4,8 +4,6 @@ namespace Wait.Features.Users;
 
 public sealed class Users : AuditableEntity
 {
-
-
     public Guid UserId { get; set; }
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;

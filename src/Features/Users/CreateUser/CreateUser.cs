@@ -30,7 +30,7 @@ public sealed class CreateUser : IEndpoint
     public void Endpoint(IEndpointRouteBuilder app)
     {
 
-        app.MapPost("/api/user", async (CreateUserHandler handler, CreateUserRequest userRequest) =>
+        app.MapPost("/api/v1/user/create", async (CreateUserHandler handler, CreateUserRequest userRequest) =>
         {
             var request = userRequest.ToRequest();
 
