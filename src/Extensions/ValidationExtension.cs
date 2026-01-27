@@ -2,7 +2,6 @@ using FluentValidation;
 
 namespace Wait.Extensions;
 
-
 public class ValidationFilter<TRequest>(IValidator<TRequest> validator) : IEndpointFilter
 {
 
