@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Wait.Abstract;
 using Wait.Database;
+using Wait.Entities;
 using Wait.Extensions;
 
 namespace Wait.Features.Users.CreateUser;
@@ -21,22 +23,15 @@ internal sealed class CreateUserHandler(AppDbContext dbContext)
 {
     public async Task<CreateUserResponse> CreateUserAsync(
         CreateUserRequest request,
-        IPasswordHasher<Users> passwordHasher,
+        IPasswordHasher<User> passwordHasher,
         CancellationToken ct)
     {
         if (await dbContext.User.AnyAsync(u => u.Username == request.Username, ct))
         {
             return new CreateUserResponse("error", "Username already exists", request.Username);
         }
-
-        var user = new Users
-        {
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Username = request.Username,
-            Email = request.Email,
-            Password = passwordHasher.HashPassword(null!, request.Password)
-        };
+        
+        var user = request.ToEntity(passwordHasher);
 
         await dbContext.User.AddAsync(user, ct);
 
@@ -58,16 +53,15 @@ public sealed class CreateUser : IEndpoint
     public void Endpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("/api/v1/user/create", async (
-            CreateUserHandler handler,
             CreateUserRequest request,
-            IPasswordHasher<Users> passwordHasher,
+            CreateUserHandler handler,
+            IPasswordHasher<User> passwordHasher,
             CancellationToken ct) =>
         {
             try
             {
                 var response = await handler.CreateUserAsync(request, passwordHasher, ct);
 
-                // Return 201 Created with Location header pointing to username
                 return Results.Created(
                     $"/api/v1/user/{response.Username}",
                     response

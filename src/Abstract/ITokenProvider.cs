@@ -1,6 +1,6 @@
 using System.Security.Claims;
-using Wait.Domain.Entities;
-using Wait.Features.Users;
+using Wait.Entities;
+
 
 namespace Wait.Abstract;
 
@@ -11,7 +11,7 @@ public interface ITokenProvider
     /// </summary>
     /// <param name="users">The user information to encode in the token, including ID, username, and email verification status.</param>
     /// <returns>A string representing the generated JWT.</returns>
-    string GenerateToken(Users users);
+    string GenerateToken(User users);
 
     /// <summary>
     /// Generates a cryptographically secure, random 32-byte refresh token encoded in Base64 format.

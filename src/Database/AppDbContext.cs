@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using Wait.Entities;
-using Wait.Features.Users;
+
 
 namespace Wait.Database;
 
@@ -26,7 +26,7 @@ public sealed class AppDbContext(DbContextOptions options) : DbContext(options)
     /// </summary>
     /// 
     /// 
-    public required DbSet<Users> User { get; init; }
+    public required DbSet<User> User { get; init; }
     public required DbSet<Product> Product { get; init; }
     public required DbSet<RefreshToken> RefreshToken { get; init; }
     public required DbSet<Category> Category { get; init; }

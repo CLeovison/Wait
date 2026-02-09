@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 using Wait.Abstract;
+using Wait.Entities;
 using Wait.Features.Users;
 using Wait.Infrastructure.Authentication;
 
@@ -49,7 +50,7 @@ public static class ServiceCollectionExtensions
 
         });
         services.AddAuthorization();
-        services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
+        services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         services.AddScoped<ITokenProvider, TokenProvider>();
         return services;
     }

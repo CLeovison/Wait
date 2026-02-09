@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Wait.Domain.Entities;
-using Wait.Features.Users;
+using Wait.Entities;
+
 
 namespace Wait.Configurations;
 
-public sealed class UserConfiguration : IEntityTypeConfiguration<Users>
+public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<Users> builder)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
 
         builder.HasKey(c => c.UserId);
