@@ -7,27 +7,37 @@ namespace Wait.Features.Users.GetAlluser;
 
 internal sealed class GetAllUserHandler(AppDbContext dbContext)
 {
-
-    public async Task<User> GetAllUserAsync(int pageNumber, int pageSize, string search, User user, CancellationToken ct)
+    public async Task<IReadOnlyList<User>> GetAllUserAsync(int pageNumber,
+    int pageSize,
+    string? searchTerm,
+    UserFilter filter,
+    CancellationToken ct)
     {
-        IQueryable<User> userQuery = dbContext.User;
-        if (string.IsNullOrWhiteSpace(search))
+        var query = dbContext.User.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            return user;
+            query = query.Where(x => x.Username.Contains(searchTerm) || x.FirstName.Contains(searchTerm));
+        }
+        if (!string.IsNullOrWhiteSpace(filter.FirstName))
+        {
+            query = query.Where(x => x.FirstName.Contains(filter.FirstName));
         }
 
-        var lowerCase = search.Trim().ToLower();
+        if (!string.IsNullOrWhiteSpace(filter.Username))
+        {
+            query = query.Where(x => x.Username.Contains(filter.Username));
+        }
 
-        var users = await userQuery
+
+        var lowerCase = searchTerm?.Trim().ToLower();
+
+        return await query
         .OrderBy(x => x.Username)
-        .Skip(pageNumber)
+        .ThenBy(x => x.UserId)
+        .Skip((pageNumber - 1) * pageSize)
         .Take(pageSize)
-        .OrderByDescending(x => x.Username)
-        .Where(x => x.FirstName.Contains(lowerCase) || x.Username.Contains(lowerCase))
         .ToListAsync(ct);
-
-
-
     }
 
 }
@@ -37,6 +47,22 @@ public sealed class GetAllUser : IEndpoint
 {
     public void Endpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("/api/v1/user", async)
+        app.MapGet("/api/v1/users", async (
+            GetAllUserHandler handler,
+            [AsParameters] UserFilter filter,
+            CancellationToken ct,
+            int pageNumber = 1,
+            int pageSize = 10,
+            string? searchTerm = null) =>
+        {
+            var users = await handler.GetAllUserAsync(
+                pageNumber,
+                pageSize,
+                searchTerm,
+                filter,
+                ct);
+
+            return Results.Ok(users);
+        });
     }
 }
