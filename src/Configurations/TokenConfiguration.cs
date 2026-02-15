@@ -28,7 +28,7 @@ public sealed class TokenConfiguration : IEntityTypeConfiguration<RefreshToken>
         builder.Property(x => x.ExpiresAt)
         .HasDefaultValueSql("current_date");
 
-        builder.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId);
+        builder.HasOne(x => x.Users).WithMany().HasForeignKey(x => x.UserId);
 
     }
 }

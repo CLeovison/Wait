@@ -15,9 +15,11 @@ internal sealed class GetAllUserHandler(AppDbContext dbContext)
     {
         var query = dbContext.User.AsNoTracking();
 
-        if (!string.IsNullOrWhiteSpace(searchTerm))
+        var lowerCase = searchTerm?.Trim().ToLower();
+
+        if (!string.IsNullOrWhiteSpace(lowerCase))
         {
-            query = query.Where(x => x.Username.Contains(searchTerm) || x.FirstName.Contains(searchTerm));
+            query = query.Where(x => x.Username.Contains(lowerCase) || x.FirstName.Contains(lowerCase));
         }
         if (!string.IsNullOrWhiteSpace(filter.FirstName))
         {
@@ -28,9 +30,6 @@ internal sealed class GetAllUserHandler(AppDbContext dbContext)
         {
             query = query.Where(x => x.Username.Contains(filter.Username));
         }
-
-
-        var lowerCase = searchTerm?.Trim().ToLower();
 
         return await query
         .OrderBy(x => x.Username)
